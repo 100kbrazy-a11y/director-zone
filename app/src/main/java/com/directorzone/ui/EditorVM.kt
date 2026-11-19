@@ -310,6 +310,50 @@ class EditorVM(app: Application) : AndroidViewModel(app) {
         }
     }
 
+    var downloading by mutableStateOf<String?>(null)
+
+    /** Downloads a free-to-use track from the open library and drops it on the timeline at the playhead. */
+    fun addOpenTrack(t: OpenAudio.Track) {
+        if (downloading != null) { toast = "Another download is running"; return }
+        downloading = t.id
+        viewModelScope.launch {
+            try {
+                val f = OpenAudio.download(ctx, t)
+                val src = Uri.fromFile(f).toString()
+                val d = withContext(Dispatchers.IO) { durationOf(src) }.let { if (it > 0) it else t.durationMs }.coerceAtLeast(300)
+                val s = SoundItem(name = t.title, source = src, kind = "music", startMs = posMs, durMs = d, srcMs = d, volume = 0.6f, credit = if (t.needsCredit) t.credit else "")
+                edit { it.copy(sounds = it.sounds + s) }
+                selSound = s.id; selText = null
+                loadWave(s.source)
+                toast = "Added at playhead"
+            } catch (e: Exception) { toast = "Download failed. Check your connection." }
+            finally { downloading = null }
+        }
+    }
+
+    /** Songs picked from the phone's music/files (any app that exposes audio through the system picker). */
+    fun importAudios(uris: List<Uri>) {
+        if (uris.isEmpty()) return
+        viewModelScope.launch {
+            var at = posMs
+            var last: SoundItem? = null
+            for (u in uris) {
+                val name = withContext(Dispatchers.IO) {
+                    try { ctx.contentResolver.query(u, arrayOf(android.provider.OpenableColumns.DISPLAY_NAME), null, null, null)?.use { c -> if (c.moveToFirst()) c.getString(0) else null } } catch (e: Exception) { null }
+                }?.substringBeforeLast('.')?.ifBlank { null } ?: "My audio"
+                val f = withContext(Dispatchers.IO) {
+                    val out = File(File(ctx.filesDir, "media").apply { mkdirs() }, "a_${System.nanoTime()}.m4a")
+                    try { ctx.contentResolver.openInputStream(u)?.use { i -> out.outputStream().use { o -> i.copyTo(o) } }; out } catch (e: Exception) { null }
+                } ?: continue
+                val d = withContext(Dispatchers.IO) { durationOf(Uri.fromFile(f).toString()) }.coerceAtLeast(300)
+                val s = SoundItem(name = name, source = Uri.fromFile(f).toString(), kind = "music", startMs = at, durMs = d, srcMs = d, volume = 0.7f)
+                edit { it.copy(sounds = it.sounds + s) }
+                loadWave(s.source); at += d; last = s
+            }
+            last?.let { selSound = it.id; selText = null; toast = if (uris.size > 1) "${uris.size} songs added" else "Added at playhead" }
+        }
+    }
+
     fun importAudio(uri: Uri) {
         viewModelScope.launch {
             val f = withContext(Dispatchers.IO) {

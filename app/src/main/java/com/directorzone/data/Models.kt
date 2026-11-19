@@ -80,6 +80,7 @@ data class SoundItem(
     val loop: Boolean = false,
     val inMs: Long = 0,             // trim: offset into the source file
     val srcMs: Long = 0,            // full source length (0 = same as durMs)
+    val credit: String = "",         // attribution text for openly licensed tracks
 )
 
 @Serializable

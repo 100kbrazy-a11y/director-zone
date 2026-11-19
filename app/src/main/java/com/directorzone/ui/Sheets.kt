@@ -122,7 +122,7 @@ object Previewer {
     var playing by mutableStateOf<String?>(null); private set
     fun toggle(ctx: android.content.Context, m: SoundMeta) {
         if (playing == m.name) { stop(); return }
-        stop()
+        stop(); OnlinePreview.stop()
         try {
             val fd = ctx.assets.openFd("sfx/${m.file}")
             mp = MediaPlayer().apply { setDataSource(fd.fileDescriptor, fd.startOffset, fd.length); isLooping = false; prepare(); start(); setOnCompletionListener { stop() } }
@@ -147,16 +147,19 @@ fun AudioSheet(vm: EditorVM, close: () -> Unit) {
     val sel = vm.sound
     Column(Modifier.fillMaxSize()) {
         SheetHeader("Audio", close) {
-            IconButton(onClick = { search = !search; if (!search) query = "" }, modifier = Modifier.size(40.dp)) { Icon(Icons.Rounded.Search, null, tint = if (search) DZ.accent else DZ.text) }
+            if (tab < 2 || tab == 5) IconButton(onClick = { search = !search; if (!search) query = "" }, modifier = Modifier.size(40.dp)) { Icon(Icons.Rounded.Search, null, tint = if (search) DZ.accent else DZ.text) }
         }
-        TextTabs(listOf("Music Library", "Sound Effects", "Recent", "Voiceover"), tab) { tab = it; cat = "All" }
-        if (search) BasicTextField(query, { query = it }, Modifier.fillMaxWidth().padding(horizontal = 18.dp, vertical = 6.dp).clip(RoundedCornerShape(12.dp)).background(DZ.card).padding(12.dp),
+        TextTabs(listOf("Music Library", "Sound Effects", "Free Music", "Free SFX", "Your Music", "Recent", "Voiceover"), tab) { tab = it; cat = "All" }
+        if (search && tab < 2 || search && tab == 5) BasicTextField(query, { query = it }, Modifier.fillMaxWidth().padding(horizontal = 18.dp, vertical = 6.dp).clip(RoundedCornerShape(12.dp)).background(DZ.card).padding(12.dp),
             textStyle = TextStyle(color = DZ.text, fontSize = 15.sp), cursorBrush = SolidColor(DZ.accent), decorationBox = { if (query.isEmpty()) Text("Search sounds", color = DZ.sub, fontSize = 15.sp); it() })
         if (sel != null) {
             Column(Modifier.padding(horizontal = 18.dp, vertical = 4.dp).clip(RoundedCornerShape(14.dp)).background(DZ.card).padding(12.dp)) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Icon(Icons.Rounded.GraphicEq, null, tint = DZ.accent2, modifier = Modifier.size(18.dp)); Spacer(Modifier.width(8.dp))
-                    Text(sel.name, color = DZ.text, fontWeight = FontWeight.SemiBold, fontSize = 14.sp, modifier = Modifier.weight(1f), maxLines = 1)
+                    Column(Modifier.weight(1f)) {
+                        Text(sel.name, color = DZ.text, fontWeight = FontWeight.SemiBold, fontSize = 14.sp, maxLines = 1)
+                        if (sel.credit.isNotBlank()) Text(sel.credit, color = DZ.sub, fontSize = 10.sp, maxLines = 1)
+                    }
                     IconButton(onClick = { vm.moveSound(sel.id, vm.posMs) }, modifier = Modifier.size(34.dp)) { Icon(Icons.Rounded.PlaylistAdd, null, tint = DZ.text, modifier = Modifier.size(20.dp)) }
                     IconButton(onClick = { vm.splitSound() }, modifier = Modifier.size(34.dp)) { Icon(Icons.Rounded.CallSplit, null, tint = DZ.text, modifier = Modifier.size(20.dp)) }
                     IconButton(onClick = { vm.duplicateSound() }, modifier = Modifier.size(34.dp)) { Icon(Icons.Rounded.ContentCopy, null, tint = DZ.text, modifier = Modifier.size(20.dp)) }
@@ -171,7 +174,10 @@ fun AudioSheet(vm: EditorVM, close: () -> Unit) {
             }
         }
         when (tab) {
-            3 -> Column(Modifier.weight(1f).verticalScroll(rememberScrollState()).padding(18.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+            2 -> OpenMusicTab(vm, false, Modifier.weight(1f))
+            3 -> OpenMusicTab(vm, true, Modifier.weight(1f))
+            4 -> DeviceMusicTab(vm, Modifier.weight(1f))
+            6 -> Column(Modifier.weight(1f).verticalScroll(rememberScrollState()).padding(18.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
                 BigButton(if (recording) "Stop recording" else "Record voiceover at playhead", if (recording) Icons.Rounded.Stop else Icons.Rounded.Mic, Modifier.fillMaxWidth(), filled = !recording) {
                     if (recording) { rec.stop()?.let { vm.addAudioFile(it, "Voiceover", "voice") }; recording = false }
                     else if (ContextCompat.checkSelfPermission(ctx, Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED) { if (rec.start()) recording = true else vm.toast = "Couldn't start recording" }
@@ -186,10 +192,10 @@ fun AudioSheet(vm: EditorVM, close: () -> Unit) {
                     1 -> SoundLib.all.filter { !it.loop }
                     else -> Prefs.str("recent", "").split("|").filter { it.isNotEmpty() }.mapNotNull { SoundLib.byName(it) }
                 }
-                val cats = if (tab == 2) emptyList() else listOf("All") + base.map { it.cat }.distinct().sortedBy { SoundLib.ORDER.indexOf(it) }
+                val cats = if (tab == 5) emptyList() else listOf("All") + base.map { it.cat }.distinct().sortedBy { SoundLib.ORDER.indexOf(it) }
                 if (cats.isNotEmpty()) Box(Modifier.padding(vertical = 8.dp, horizontal = 16.dp)) { Chips(cats, cat) { cat = it } }
                 val list = base.filter { (cat == "All" || it.cat == cat) && (query.isBlank() || it.name.contains(query, true)) }
-                if (list.isEmpty()) Hint(if (tab == 2) "Sounds you add will show up here." else "No sounds match.")
+                if (list.isEmpty()) Hint(if (tab == 5) "Sounds you add will show up here." else "No sounds match.")
                 LazyColumn(Modifier.weight(1f), contentPadding = PaddingValues(horizontal = 14.dp, vertical = 4.dp)) {
                     items(list, key = { it.name }) { m ->
                         val on = Previewer.playing == m.name

@@ -105,6 +105,19 @@ fun ExportScreen(vm: EditorVM) {
                     Spacer(Modifier.height(18.dp))
                     Row { Text("Bitrate", color = DZ.text, fontSize = 16.sp, modifier = Modifier.weight(1f)); Text("${if (o.bitrateMbps < 8) "Standard" else if (o.bitrateMbps < 20) "High" else "Ultra"} · ${o.bitrateMbps} Mbps", color = DZ.sub, fontSize = 14.sp) }
                     Slider(o.bitrateMbps.toFloat(), { vm.exportOpts = o.copy(bitrateMbps = it.toInt()) }, valueRange = 3f..60f, colors = SliderDefaults.colors(thumbColor = DZ.accent, activeTrackColor = DZ.accent, inactiveTrackColor = DZ.card2))
+                    val credits = p.sounds.map { it.credit }.filter { it.isNotBlank() }.distinct()
+                    if (credits.isNotEmpty()) {
+                        Spacer(Modifier.height(14.dp))
+                        Column(Modifier.fillMaxWidth().clip(RoundedCornerShape(14.dp)).background(DZ.card).padding(14.dp)) {
+                            Text("Music credits", color = DZ.text, fontSize = 15.sp, fontWeight = FontWeight.SemiBold)
+                            Text("These tracks are Creative Commons licensed and need attribution. Paste this in your video's description.", color = DZ.sub, fontSize = 12.sp, modifier = Modifier.padding(top = 2.dp, bottom = 8.dp))
+                            Text(credits.joinToString("\n"), color = DZ.text, fontSize = 12.sp)
+                            TextButton(onClick = {
+                                (ctx.getSystemService(android.content.Context.CLIPBOARD_SERVICE) as android.content.ClipboardManager).setPrimaryClip(android.content.ClipData.newPlainText("credits", credits.joinToString("\n")))
+                                vm.toast = "Credits copied"
+                            }) { Text("Copy credits", color = DZ.accent) }
+                        }
+                    }
                     if (!okSize[sizes.indexOfFirst { it.first == o.shortSide }.coerceAtLeast(0)]) Text("This device's encoder may not support ${sizes.first { it.first == o.shortSide }.second}; it will fall back to the closest size.", color = DZ.sub, fontSize = 12.sp)
                 }
             }
