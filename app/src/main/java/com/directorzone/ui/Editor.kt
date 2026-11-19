@@ -4,6 +4,7 @@ import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
@@ -69,6 +70,7 @@ fun EditorScreen(vm: EditorVM) {
     fun pickMedia() = addMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageAndVideo))
     val p = vm.project
     val screenH = LocalConfiguration.current.screenHeightDp
+    val th = (screenH * 0.30f).coerceIn(150f, 250f)
     val haptic = rememberHaptic()
 
     Box(Modifier.fillMaxSize().background(DZ.bg)) {
@@ -114,29 +116,31 @@ fun EditorScreen(vm: EditorVM) {
                 IconButton(onClick = { zoom = (zoom / 1.3f).coerceAtLeast(12f) }, modifier = Modifier.size(34.dp)) { Icon(Icons.Rounded.ZoomOut, null, tint = DZ.sub, modifier = Modifier.size(20.dp)) }
                 IconButton(onClick = { zoom = (zoom * 1.3f).coerceAtMost(320f) }, modifier = Modifier.size(34.dp)) { Icon(Icons.Rounded.ZoomIn, null, tint = DZ.sub, modifier = Modifier.size(20.dp)) }
             }
-            // ------------------------------------------------ timeline + toolbar, or the active sheet
-            AnimatedContent(
-                vm.sheet, label = "bottom",
-                transitionSpec = { (fadeIn(tween(Motion.ms(200))) + slideInVertically(tween(Motion.ms(240))) { it / 10 }) togetherWith fadeOut(tween(Motion.ms(120))) },
-            ) { sh ->
-                if (sh == null) {
-                    Column(Modifier.fillMaxWidth()) {
-                        val th = (screenH * 0.30f).coerceIn(150f, 250f)
-                        Timeline(vm, zoom, onMenu = { a -> openMenu(vm, a)?.let { menu = it } }, onAddMedia = { pickMedia() }, modifier = Modifier.fillMaxWidth().height(th.dp))
-                        Row(Modifier.fillMaxWidth().height((60 * dens).dp).background(DZ.bg).border(0.5.dp, DZ.line)) {
-                            LazyRow(Modifier.fillMaxSize(), contentPadding = PaddingValues(horizontal = 4.dp), horizontalArrangement = Arrangement.spacedBy(0.dp), verticalAlignment = Alignment.CenterVertically) {
-                                items(TOOLS) { t ->
-                                    IconTextButton(t.icon, t.label, Modifier.width(68.dp), tint = DZ.text) { if (t.sheet == Sheet.Media && p.clips.isEmpty()) pickMedia() else openSheet(vm, t.sheet) }
-                                }
-                            }
+            // ------------------------------------------------ timeline + toolbar (always laid out, so the preview never resizes)
+            Column(Modifier.fillMaxWidth()) {
+                Timeline(vm, zoom, onMenu = { a -> openMenu(vm, a)?.let { menu = it } }, onAddMedia = { pickMedia() }, modifier = Modifier.fillMaxWidth().height(th.dp))
+                Row(Modifier.fillMaxWidth().height((60 * dens).dp).background(DZ.bg).border(0.5.dp, DZ.line)) {
+                    LazyRow(Modifier.fillMaxSize(), contentPadding = PaddingValues(horizontal = 4.dp), horizontalArrangement = Arrangement.spacedBy(0.dp), verticalAlignment = Alignment.CenterVertically) {
+                        items(TOOLS) { t ->
+                            IconTextButton(t.icon, t.label, Modifier.width(68.dp), tint = DZ.text) { if (t.sheet == Sheet.Media && p.clips.isEmpty()) pickMedia() else openSheet(vm, t.sheet) }
                         }
                     }
-                } else {
-                    val h = (screenH * (if (vm.sheetExpanded) 0.62f else 0.42f)).dp
-                    SheetFrame(h, vm.sheetExpanded, { vm.sheetExpanded = it }, { vm.sheet = null }) {
-                        SheetHost(vm, sh, ::pickMedia)
-                    }
                 }
+            }
+        }
+
+        // ------------------------------------------------ bottom sheet: slides over the timeline, the preview keeps its size
+        val sh = vm.sheet
+        var lastSheet by remember { mutableStateOf(sh) }
+        if (sh != null) lastSheet = sh
+        AnimatedVisibility(
+            sh != null, Modifier.align(Alignment.BottomCenter).navigationBarsPadding(),
+            enter = slideInVertically(tween(Motion.ms(260))) { it } + fadeIn(tween(Motion.ms(160))),
+            exit = slideOutVertically(tween(Motion.ms(200))) { it } + fadeOut(tween(Motion.ms(160))),
+        ) {
+            val h = if (vm.sheetExpanded) (screenH * 0.62f).dp else (th + 60 * dens).dp
+            SheetFrame(h, vm.sheetExpanded, { vm.sheetExpanded = it }, { vm.sheet = null }) {
+                lastSheet?.let { SheetHost(vm, it, ::pickMedia) }
             }
         }
 
