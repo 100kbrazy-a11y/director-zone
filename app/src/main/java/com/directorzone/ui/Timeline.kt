@@ -41,7 +41,7 @@ import kotlin.math.ceil
 enum class ItemKind { Clip, Text, Sound }
 class MenuAnchor(val kind: ItemKind, val id: String, val bounds: Rect)
 
-private val HEADER_W = 46.dp
+private val HEADER_W = 76.dp
 
 private fun <T> rowsOf(items: List<T>, start: (T) -> Long, end: (T) -> Long, max: Int): List<List<T>> {
     val rows = ArrayList<MutableList<T>>()
@@ -168,9 +168,9 @@ fun Timeline(vm: EditorVM, dpPerSec: Float, onMenu: (MenuAnchor) -> Unit, onAddM
 @Composable
 private fun HeaderCell(h: Dp, lockIcon: androidx.compose.ui.graphics.vector.ImageVector, second: androidx.compose.ui.graphics.vector.ImageVector?, label: String, locked: Boolean, off: Boolean, onSecond: () -> Unit = {}, onLock: () -> Unit) {
     Row(Modifier.height(h).padding(start = 6.dp, end = 2.dp), verticalAlignment = Alignment.CenterVertically) {
-        Column(Modifier.clip(RoundedCornerShape(8.dp)), verticalArrangement = Arrangement.Center) {
-            Icon(lockIcon, null, tint = if (locked) DZ.text else DZ.sub, modifier = Modifier.size(17.dp).clickable(onClick = onLock))
-            if (second != null) { Spacer(Modifier.height(5.dp)); Icon(second, null, tint = if (off) DZ.text else DZ.sub, modifier = Modifier.size(17.dp).clickable(onClick = onSecond)) }
+        Row(Modifier.clip(RoundedCornerShape(8.dp)), verticalAlignment = Alignment.CenterVertically) {
+            Icon(lockIcon, null, tint = if (locked) DZ.text else DZ.sub, modifier = Modifier.size(18.dp).clickable(onClick = onLock))
+            if (second != null) { Spacer(Modifier.width(8.dp)); Icon(second, null, tint = if (off) DZ.text else DZ.sub, modifier = Modifier.size(18.dp).clickable(onClick = onSecond)) }
         }
         Spacer(Modifier.width(5.dp))
         Text(label, color = DZ.sub, fontSize = 10.sp, fontWeight = FontWeight.SemiBold)
