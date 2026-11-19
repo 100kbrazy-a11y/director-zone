@@ -1,0 +1,563 @@
+--------- beginning of main
+11-19 21:11:08.812  2511  2511 I DZTEST  : PREVIEW short side = 540
+11-19 21:11:08.818  2511  2511 I DZTEST  : PROJECT duration=15000
+11-19 21:11:09.013  2511  2511 I DZ      : state=BUFFERING pos=0 dur=15000
+11-19 21:11:09.014  2511  2511 I DZ      : discontinuity reason=1 0->0
+11-19 21:11:09.015  2511  2511 I DZ      : built composition in 197ms clips=3 dur=15000 resumeAt=0 play=false
+11-19 21:11:10.453  2511  2511 I DZ      : state=READY pos=0 dur=15000
+11-19 21:11:10.453  2511  2511 I DZ      : FIRST_FRAME pos=0
+11-19 21:11:11.023  2511  2511 I DZTEST  : READY timeline=0 player=0 state=READY playing=false error=null frameRendered=true
+11-19 21:11:11.263  2511  2511 I DZTEST  : RESULT PASS T0 initial frame shows clip A  rgb(209,32,34)
+11-19 21:11:11.264  2511  2511 I DZ      : pause() at 0
+11-19 21:11:11.267  2511  2511 I DZ      : discontinuity reason=1 0->0
+11-19 21:11:11.267  2511  2511 I DZ      : state=BUFFERING pos=0 dur=15000
+11-19 21:11:11.270  2511  2511 I DZ      : state=READY pos=0 dur=15000
+11-19 21:11:11.274  2511  2511 I DZ      : state=BUFFERING pos=0 dur=5000
+11-19 21:11:11.276  2511  2511 I DZ      : discontinuity reason=1 0->0
+11-19 21:11:11.277  2511  2511 I DZ      : built composition in 10ms clips=1 dur=5000 resumeAt=0 play=false
+11-19 21:11:12.088  2511  2703 W MediaCodec: no metrics handle found
+11-19 21:11:12.136  2511  2676 W MediaCodec: no metrics handle found
+11-19 21:11:12.205  2511  2636 W MediaCodec: no metrics handle found
+11-19 21:11:12.339  2511  2511 I DZ      : state=READY pos=0 dur=5000
+11-19 21:11:12.340  2511  2511 I DZ      : FIRST_FRAME pos=0
+11-19 21:11:12.485  2511  2584 W MediaCodec: no metrics handle found
+11-19 21:11:12.887  2511  2511 I DZ      : discontinuity reason=1 0->0
+11-19 21:11:12.887  2511  2511 I DZ      : state=BUFFERING pos=0 dur=5000
+11-19 21:11:12.888  2511  2511 I DZ      : state=READY pos=0 dur=5000
+11-19 21:11:13.488  2511  2511 I DZ      : isPlaying=true pos=0
+11-19 21:11:13.489  2511  2511 I DZ      : play() at 0
+11-19 21:11:14.270  2511  2511 I DZTEST  : RATE single-A-noaudio wall=781 tl=676 videoSec=0.37037036
+11-19 21:11:15.010  2511  2511 I DZTEST  : RATE single-A-noaudio wall=1521 tl=1428 videoSec=1.037037
+11-19 21:11:15.821  2511  2511 I DZTEST  : RATE single-A-noaudio wall=2332 tl=2223 videoSec=1.7962962
+11-19 21:11:16.599  2511  2511 I DZTEST  : RATE single-A-noaudio wall=3110 tl=3032 videoSec=2.2685184
+11-19 21:11:17.276  2511  2511 I DZTEST  : RATE single-A-noaudio wall=3787 tl=3721 videoSec=2.9629629
+11-19 21:11:17.928  2511  2511 I DZTEST  : RATE single-A-noaudio wall=4439 tl=4378 videoSec=3.6296296
+11-19 21:11:18.648  2511  2511 I DZTEST  : RATE single-A-noaudio wall=5159 tl=5000 videoSec=4.4074073
+11-19 21:11:18.650  2511  2511 I DZ      : isPlaying=false pos=5128
+11-19 21:11:18.650  2511  2511 I DZ      : pause() at 5000
+11-19 21:11:18.950  2511  2511 I DZ      : pause() at 5000
+11-19 21:11:18.952  2511  2511 I DZ      : discontinuity reason=1 5128->0
+11-19 21:11:18.952  2511  2511 I DZ      : state=BUFFERING pos=0 dur=5000
+11-19 21:11:18.955  2511  2511 I DZ      : state=BUFFERING pos=0 dur=15000
+11-19 21:11:18.956  2511  2511 I DZ      : discontinuity reason=1 0->0
+11-19 21:11:18.956  2511  2511 I DZ      : built composition in 4ms clips=3 dur=15000 resumeAt=0 play=false
+11-19 21:11:19.836  2511  2792 W MediaCodec: no metrics handle found
+11-19 21:11:20.070  2511  2511 I DZ      : state=READY pos=0 dur=15000
+11-19 21:11:20.070  2511  2511 I DZ      : FIRST_FRAME pos=0
+11-19 21:11:20.714  2511  2511 I DZ      : discontinuity reason=1 0->0
+11-19 21:11:20.714  2511  2511 I DZ      : state=BUFFERING pos=0 dur=15000
+11-19 21:11:20.715  2511  2511 I DZ      : state=READY pos=0 dur=15000
+11-19 21:11:21.316  2511  2511 I DZ      : isPlaying=true pos=0
+11-19 21:11:21.317  2511  2511 I DZ      : play() at 0
+11-19 21:11:22.077  2511  2511 I DZTEST  : RATE ABC-noaudio wall=760 tl=608 videoSec=0.2685185
+11-19 21:11:22.834  2511  2511 I DZTEST  : RATE ABC-noaudio wall=1517 tl=1415 videoSec=1.1018518
+11-19 21:11:23.542  2511  2511 I DZTEST  : RATE ABC-noaudio wall=2225 tl=2094 videoSec=1.7962962
+11-19 21:11:24.262  2511  2511 I DZTEST  : RATE ABC-noaudio wall=2945 tl=2837 videoSec=2.4351852
+11-19 21:11:24.928  2511  2511 I DZTEST  : RATE ABC-noaudio wall=3611 tl=3503 videoSec=3.1296296
+11-19 21:11:25.666  2511  2511 I DZTEST  : RATE ABC-noaudio wall=4349 tl=4216 videoSec=3.8703704
+11-19 21:11:26.387  2511  2511 I DZTEST  : RATE ABC-noaudio wall=5069 tl=4947 videoSec=4.703704
+11-19 21:11:26.419  2511  2511 I DZ      : isPlaying=false pos=4966
+11-19 21:11:26.419  2511  2511 I DZ      : pause() at 4966
+11-19 21:11:26.720  2511  2511 I DZ      : pause() at 4966
+11-19 21:11:26.722  2511  2511 I DZ      : discontinuity reason=1 4966->0
+11-19 21:11:26.722  2511  2511 I DZ      : state=BUFFERING pos=0 dur=15000
+11-19 21:11:26.742  2511  2511 I DZ      : state=BUFFERING pos=0 dur=15000
+11-19 21:11:26.747  2511  2511 I DZ      : discontinuity reason=1 0->0
+11-19 21:11:26.747  2511  2511 I DZ      : built composition in 26ms clips=3 dur=15000 resumeAt=0 play=false
+11-19 21:11:26.767  2511  2902 W MediaCodec: no metrics handle found
+11-19 21:11:27.395  2511  2942 W MediaCodec: no metrics handle found
+11-19 21:11:27.442  2511  2893 W MediaCodec: no metrics handle found
+11-19 21:11:27.715  2511  2511 I DZ      : state=READY pos=0 dur=15000
+11-19 21:11:27.716  2511  2511 I DZ      : FIRST_FRAME pos=0
+11-19 21:11:28.356  2511  2511 I DZ      : discontinuity reason=1 0->0
+11-19 21:11:28.356  2511  2511 I DZ      : state=BUFFERING pos=0 dur=15000
+11-19 21:11:28.358  2511  2511 I DZ      : state=READY pos=0 dur=15000
+11-19 21:11:29.160  2511  2511 I DZ      : isPlaying=true pos=0
+11-19 21:11:29.160  2511  2511 I DZ      : play() at 0
+11-19 21:11:29.313  2511  2511 I DZTEST  : PROBE tl=0 player=87 state=READY clip=A videoSec=0.0
+11-19 21:11:29.843  2511  2511 I DZTEST  : PROBE tl=380 player=615 state=READY clip=A videoSec=0.4074074
+11-19 21:11:30.343  2511  2511 I DZTEST  : PROBE tl=927 player=1100 state=READY clip=A videoSec=0.7962963
+11-19 21:11:30.884  2511  2511 I DZTEST  : PROBE tl=1421 player=1630 state=READY clip=A videoSec=1.2037038
+11-19 21:11:31.409  2511  2511 I DZTEST  : PROBE tl=1940 player=2179 state=READY clip=A videoSec=1.3703704
+11-19 21:11:31.846  2511  2511 I DZTEST  : PROBE tl=2484 player=2614 state=READY clip=A videoSec=1.962963
+11-19 21:11:32.366  2511  2511 I DZTEST  : PROBE tl=2910 player=3107 state=READY clip=A videoSec=2.4629629
+11-19 21:11:32.887  2511  2511 I DZTEST  : PROBE tl=3438 player=3657 state=READY clip=A videoSec=2.7685184
+11-19 21:11:33.500  2511  2511 I DZTEST  : PROBE tl=3965 player=4264 state=READY clip=A videoSec=3.2407408
+11-19 21:11:34.008  2511  2511 I DZTEST  : PROBE tl=4572 player=4771 state=READY clip=A videoSec=3.7037036
+11-19 21:11:34.576  2511  2511 I DZTEST  : PROBE tl=5128 player=5346 state=READY clip=A videoSec=4.240741
+11-19 21:11:35.127  2511  2511 I DZTEST  : PROBE tl=5668 player=5891 state=READY clip=A videoSec=4.703704
+11-19 21:11:35.457  2511  2930 W MediaCodec: no metrics handle found
+11-19 21:11:35.460  2511  2511 I DZTEST  : PROBE tl=6028 player=6028 state=READY clip=A videoSec=4.962963
+11-19 21:11:35.486  2511  2511 I DZ      : state=BUFFERING pos=6250 dur=15000
+11-19 21:11:35.486  2511  2511 I DZ      : isPlaying=false pos=6250
+11-19 21:11:35.640  2511  2511 I DZ      : state=READY pos=6250 dur=15000
+11-19 21:11:35.640  2511  2511 I DZ      : isPlaying=true pos=6250
+11-19 21:11:35.641  2511  2511 I DZ      : FIRST_FRAME pos=6250
+11-19 21:11:36.008  2511  2511 I DZTEST  : PROBE tl=6250 player=6356 state=READY clip=A videoSec=4.962963
+11-19 21:11:37.078  2511  2511 I DZTEST  : PROBE tl=6726 player=7450 state=READY clip=B videoSec=0.37037036
+11-19 21:11:37.635  2511  2511 I DZTEST  : PROBE tl=7854 player=7998 state=READY clip=B videoSec=1.1388888
+11-19 21:11:38.115  2511  2511 I DZTEST  : PROBE tl=8298 player=8482 state=READY clip=B videoSec=1.6666666
+11-19 21:11:38.607  2511  2511 I DZTEST  : PROBE tl=8817 player=8980 state=READY clip=B videoSec=2.3055556
+11-19 21:11:39.119  2511  2511 I DZTEST  : PROBE tl=9266 player=9485 state=READY clip=B videoSec=2.7037036
+11-19 21:11:39.643  2511  2511 I DZTEST  : PROBE tl=9810 player=10016 state=READY clip=B videoSec=3.2407408
+11-19 21:11:40.179  2511  2511 I DZTEST  : PROBE tl=10379 player=10494 state=READY clip=B videoSec=3.8333333
+11-19 21:11:40.649  2511  2511 I DZTEST  : PROBE tl=10841 player=10970 state=READY clip=B videoSec=4.3703704
+11-19 21:11:40.856  2511  2950 W MediaCodec: no metrics handle found
+11-19 21:11:40.859  2511  2511 I DZ      : state=BUFFERING pos=10970 dur=15000
+11-19 21:11:40.859  2511  2511 I DZ      : isPlaying=false pos=10970
+11-19 21:11:40.860  2511  2511 I DZ      : FIRST_FRAME pos=10970
+11-19 21:11:40.862  2511  2511 I DZ      : state=READY pos=10971 dur=15000
+11-19 21:11:40.862  2511  2511 I DZ      : isPlaying=true pos=10971
+11-19 21:11:41.254  2511  2511 I DZTEST  : PROBE tl=10972 player=10972 state=READY clip=C videoSec=0.2037037
+11-19 21:11:41.567  2511  2511 I DZTEST  : PROBE tl=10972 player=10972 state=READY clip=C videoSec=1.037037
+11-19 21:11:42.143  2511  2511 I DZTEST  : PROBE tl=11287 player=11497 state=READY clip=C videoSec=1.2407408
+11-19 21:11:42.746  2511  2511 I DZTEST  : PROBE tl=11856 player=12100 state=READY clip=C videoSec=1.7407408
+11-19 21:11:43.246  2511  2511 I DZTEST  : PROBE tl=12411 player=12604 state=READY clip=C videoSec=2.2037036
+11-19 21:11:43.795  2511  2511 I DZTEST  : PROBE tl=13018 player=13145 state=READY clip=C videoSec=2.574074
+11-19 21:11:44.338  2511  2511 I DZTEST  : PROBE tl=13452 player=13669 state=READY clip=C videoSec=2.8055556
+11-19 21:11:44.872  2511  2511 I DZTEST  : PROBE tl=13963 player=14228 state=READY clip=C videoSec=3.1296296
+11-19 21:11:45.332  2511  2511 I DZTEST  : PROBE tl=14534 player=14689 state=READY clip=C videoSec=3.6296296
+11-19 21:11:45.860  2511  2511 I DZTEST  : PROBE tl=14998 player=15212 state=READY clip=C videoSec=4.3703704
+11-19 21:11:45.861  2511  2511 I DZTEST  : RESULT PASS T1a play shows A first  seenAt=0
+11-19 21:11:45.861  2511  2511 I DZTEST  : RESULT PASS T1b play continues into B at the cut  seenAt=6726 (cut at 5000; video lag 1726ms) order=ABC
+11-19 21:11:45.861  2511  2511 I DZTEST  : RESULT PASS T1c play continues into C at the cut  seenAt=10972 (cut at 10000; video lag 972ms) order=ABC
+11-19 21:11:45.861  2511  2511 I DZTEST  : RESULT PASS T1d playhead advanced monotonically to the end, no player error  maxT=14998 wall=16701ms monotonic=true order=ABC err=null timeline=15000 player=15212 state=READY playing=true
+11-19 21:11:46.005  2511  2511 I DZ      : state=ENDED pos=15361 dur=15000
+11-19 21:11:46.005  2511  2511 I DZ      : isPlaying=false pos=15361
+11-19 21:11:46.363  2511  2511 I DZ      : discontinuity reason=1 15361->0
+11-19 21:11:46.363  2511  2511 I DZ      : state=BUFFERING pos=0 dur=15000
+11-19 21:11:46.642  2511  2511 I DZ      : state=READY pos=0 dur=15000
+11-19 21:11:46.643  2511  2511 I DZ      : isPlaying=true pos=0
+11-19 21:11:46.644  2511  2511 I DZ      : FIRST_FRAME pos=0
+11-19 21:11:47.633  2511  2511 I DZ      : play() at 584
+11-19 21:11:50.025  2511  2511 I DZ      : isPlaying=false pos=3063
+11-19 21:11:50.025  2511  2511 I DZ      : pause() at 3063
+11-19 21:11:52.243  2511  2511 I DZTEST  : RESULT PASS T2 pause holds frame (A) and playhead  tl=3063/3063 rgb(209,32,34) rgb(209,32,34) timeline=3063 player=3063 state=READY playing=false
+11-19 21:11:52.244  2511  2511 I DZ      : discontinuity reason=1 3063->8000
+11-19 21:11:52.245  2511  2511 I DZ      : state=BUFFERING pos=8000 dur=15000
+11-19 21:11:52.330  2511  2987 W MediaCodec: no metrics handle found
+11-19 21:11:52.587  2511  2511 I DZ      : state=READY pos=8000 dur=15000
+11-19 21:11:52.587  2511  2511 I DZ      : FIRST_FRAME pos=8000
+11-19 21:11:53.154  2511  2511 I DZTEST  : SEEK 06_seek_8s target=8000 timeline=8000 player=8000 state=READY playing=false color=rgb(33,176,49)
+11-19 21:11:53.355  2511  2511 I DZTEST  : RESULT PASS T3 seek 8s shows B  rgb(33,176,49) timeline=8000 player=8000 state=READY playing=false
+11-19 21:11:53.357  2511  2511 I DZ      : discontinuity reason=1 8000->1000
+11-19 21:11:53.357  2511  2511 I DZ      : state=BUFFERING pos=1000 dur=15000
+11-19 21:11:53.561  2511  3002 W MediaCodec: no metrics handle found
+11-19 21:11:53.809  2511  2511 I DZ      : discontinuity reason=1 1000->4000
+11-19 21:11:54.136  2511  3015 W MediaCodec: no metrics handle found
+11-19 21:11:54.139  2511  2511 I DZ      : discontinuity reason=1 4000->12000
+11-19 21:11:54.460  2511  2511 I DZ      : state=READY pos=12000 dur=15000
+11-19 21:11:54.460  2511  2511 I DZ      : FIRST_FRAME pos=12000
+11-19 21:11:54.489  2511  2511 I DZ      : discontinuity reason=1 12000->6000
+11-19 21:11:54.489  2511  2511 I DZ      : state=BUFFERING pos=6000 dur=15000
+11-19 21:11:54.857  2511  2511 I DZ      : state=READY pos=6000 dur=15000
+11-19 21:11:54.857  2511  2511 I DZ      : FIRST_FRAME pos=6000
+11-19 21:11:55.464  2511  2511 I DZTEST  : RESULT FAIL T4 rapid seeks end on 6s (B)  timeline=6000 player=6000 state=READY playing=false rgb(33,79,224)
+11-19 21:11:55.465  2511  2511 I DZ      : discontinuity reason=1 6000->1000
+11-19 21:11:55.465  2511  2511 I DZ      : state=BUFFERING pos=1000 dur=15000
+11-19 21:11:55.682  2511  3029 W MediaCodec: no metrics handle found
+11-19 21:11:55.889  2511  2511 I DZ      : state=READY pos=1000 dur=15000
+11-19 21:11:55.890  2511  2511 I DZ      : FIRST_FRAME pos=1000
+11-19 21:11:56.505  2511  2511 I DZTEST  : SEEK 08_seq_0 target=1000 timeline=1000 player=1000 state=READY playing=false color=rgb(209,32,34)
+11-19 21:11:56.507  2511  2511 I DZ      : discontinuity reason=1 1000->10200
+11-19 21:11:56.507  2511  2511 I DZ      : state=BUFFERING pos=10200 dur=15000
+11-19 21:11:56.609  2511  3040 W MediaCodec: no metrics handle found
+11-19 21:11:56.878  2511  2511 I DZ      : state=READY pos=10200 dur=15000
+11-19 21:11:56.878  2511  2511 I DZ      : FIRST_FRAME pos=10200
+11-19 21:11:57.427  2511  2511 I DZTEST  : SEEK 08_seq_1 target=10200 timeline=10200 player=10200 state=READY playing=false color=rgb(33,79,224)
+11-19 21:11:57.428  2511  2511 I DZ      : discontinuity reason=1 10200->4000
+11-19 21:11:57.428  2511  2511 I DZ      : state=BUFFERING pos=4000 dur=15000
+11-19 21:11:57.832  2511  2511 I DZ      : state=READY pos=4000 dur=15000
+11-19 21:11:57.832  2511  2511 I DZ      : FIRST_FRAME pos=4000
+11-19 21:11:58.319  2511  2511 I DZTEST  : SEEK 08_seq_2 target=4000 timeline=4000 player=4000 state=READY playing=false color=rgb(209,32,34)
+11-19 21:11:58.376  2511  2511 I DZ      : discontinuity reason=1 4000->12000
+11-19 21:11:58.376  2511  2511 I DZ      : state=BUFFERING pos=12000 dur=15000
+11-19 21:11:58.472  2511  3056 W MediaCodec: no metrics handle found
+11-19 21:11:58.652  2511  2511 I DZ      : state=READY pos=12000 dur=15000
+11-19 21:11:58.652  2511  2511 I DZ      : FIRST_FRAME pos=12000
+11-19 21:11:59.226  2511  2511 I DZTEST  : SEEK 08_seq_3 target=12000 timeline=12000 player=12000 state=READY playing=false color=rgb(33,79,224)
+11-19 21:11:59.227  2511  2511 I DZ      : discontinuity reason=1 12000->6000
+11-19 21:11:59.227  2511  2511 I DZ      : state=BUFFERING pos=6000 dur=15000
+11-19 21:11:59.505  2511  2511 I DZ      : state=READY pos=6000 dur=15000
+11-19 21:11:59.520  2511  2511 I DZ      : FIRST_FRAME pos=6000
+11-19 21:12:00.073  2511  2511 I DZTEST  : SEEK 08_seq_4 target=6000 timeline=6000 player=6000 state=READY playing=false color=rgb(33,176,49)
+11-19 21:12:00.094  2511  2511 I DZTEST  : RESULT PASS T4b each seek in sequence renders its frame  1000:ok(rgb(209,32,34)) 10200:ok(rgb(33,79,224)) 4000:ok(rgb(209,32,34)) 12000:ok(rgb(33,79,224)) 6000:ok(rgb(33,176,49)) 
+11-19 21:12:00.096  2511  2511 I DZ      : discontinuity reason=1 6000->6000
+11-19 21:12:00.096  2511  2511 I DZ      : state=BUFFERING pos=6000 dur=15000
+11-19 21:12:00.099  2511  2511 I DZ      : state=READY pos=6000 dur=15000
+11-19 21:12:00.799  2511  2511 I DZ      : isPlaying=true pos=6000
+11-19 21:12:00.799  2511  2511 I DZ      : play() at 6000
+11-19 21:12:02.746  2511  2511 I DZTEST  : RESULT PASS T5 play resumes from the scrubbed position  timeline=7797 player=7940 state=READY playing=true rgb(33,176,49)
+11-19 21:12:02.747  2511  2511 I DZ      : isPlaying=false pos=7940
+11-19 21:12:02.748  2511  2511 I DZ      : pause() at 7940
+11-19 21:12:03.250  2511  2511 I DZ      : discontinuity reason=1 7940->1000
+11-19 21:12:03.250  2511  2511 I DZ      : state=BUFFERING pos=1000 dur=15000
+11-19 21:12:03.275  2511  3068 W MediaCodec: no metrics handle found
+11-19 21:12:03.610  2511  2511 I DZ      : state=READY pos=1000 dur=15000
+11-19 21:12:03.611  2511  2511 I DZ      : FIRST_FRAME pos=1000
+11-19 21:12:03.803  2511  2511 I DZ      : discontinuity reason=1 1000->5001
+11-19 21:12:03.803  2511  2511 I DZ      : state=BUFFERING pos=5001 dur=15000
+11-19 21:12:03.993  2511  3084 W MediaCodec: no metrics handle found
+11-19 21:12:04.179  2511  2511 I DZ      : state=READY pos=5001 dur=15000
+11-19 21:12:04.263  2511  2511 I DZ      : FIRST_FRAME pos=5001
+11-19 21:12:05.052  2511  2511 I DZTEST  : RESULT PASS T6 selecting clip B moves the playhead into B and the preview follows  timeline=5001 player=5001 state=READY playing=false rgb(33,176,49)
+11-19 21:12:05.308  2511  2511 I DZ      : state=BUFFERING pos=0 dur=15000
+11-19 21:12:05.308  2511  2511 I DZ      : discontinuity reason=1 0->5001
+11-19 21:12:05.308  2511  2511 I DZ      : built composition in 5ms clips=3 dur=15000 resumeAt=5001 play=false
+11-19 21:12:05.949  2511  3093 W MediaCodec: no metrics handle found
+11-19 21:12:05.990  2511  2968 W MediaCodec: no metrics handle found
+11-19 21:12:06.006  2511  2935 W MediaCodec: no metrics handle found
+11-19 21:12:06.882  2511  2511 I DZ      : state=READY pos=5001 dur=15000
+11-19 21:12:06.882  2511  2511 I DZ      : FIRST_FRAME pos=5001
+11-19 21:12:07.411  2511  2511 I DZ      : discontinuity reason=1 5001->7000
+11-19 21:12:07.411  2511  2511 I DZ      : state=BUFFERING pos=7000 dur=15000
+11-19 21:12:07.433  2511  3114 W MediaCodec: no metrics handle found
+11-19 21:12:07.607  2511  2511 I DZ      : state=READY pos=7000 dur=15000
+11-19 21:12:07.655  2511  2511 I DZ      : FIRST_FRAME pos=7000
+11-19 21:12:08.649  2511  2511 I DZTEST  : SEEK 11_filter_noir target=7000 timeline=7000 player=7000 state=READY playing=false color=rgb(112,112,112)
+11-19 21:12:08.649  2511  2511 I DZTEST  : RESULT PASS T7 Noir filter on B is visible in the preview (grayscale)  rgb(112,112,112) timeline=7000 player=7000 state=READY playing=false
+11-19 21:12:08.905  2511  2511 I DZ      : state=BUFFERING pos=0 dur=15000
+11-19 21:12:08.905  2511  2511 I DZ      : discontinuity reason=1 0->7000
+11-19 21:12:08.905  2511  2511 I DZ      : built composition in 6ms clips=3 dur=15000 resumeAt=7000 play=false
+11-19 21:12:09.781  2511  3132 W MediaCodec: no metrics handle found
+11-19 21:12:09.860  2511  3103 W MediaCodec: no metrics handle found
+11-19 21:12:09.973  2511  3109 W MediaCodec: no metrics handle found
+11-19 21:12:10.695  2511  2511 I DZ      : state=READY pos=7000 dur=15000
+11-19 21:12:10.695  2511  2511 I DZ      : FIRST_FRAME pos=7000
+11-19 21:12:11.280  2511  2511 I DZ      : discontinuity reason=1 7000->10200
+11-19 21:12:11.280  2511  2511 I DZ      : state=BUFFERING pos=10200 dur=15000
+11-19 21:12:11.373  2511  3155 W MediaCodec: no metrics handle found
+11-19 21:12:12.035  2511  2511 I DZ      : state=READY pos=10200 dur=15000
+11-19 21:12:12.036  2511  2511 I DZ      : FIRST_FRAME pos=10200
+11-19 21:12:12.432  2511  2511 I DZTEST  : SEEK 12_transition_flash target=10200 timeline=10200 player=10200 state=READY playing=false color=rgb(255,255,255)
+11-19 21:12:12.432  2511  2511 I DZTEST  : RESULT PASS T8 Flash transition brightens the first frames of C  rgb(255,255,255) timeline=10200 player=10200 state=READY playing=false
+11-19 21:12:12.433  2511  2511 I DZ      : discontinuity reason=1 10200->13000
+11-19 21:12:12.433  2511  2511 I DZ      : state=BUFFERING pos=13000 dur=15000
+11-19 21:12:12.528  2511  2511 I DZ      : state=READY pos=13000 dur=15000
+11-19 21:12:12.528  2511  2511 I DZ      : FIRST_FRAME pos=13000
+11-19 21:12:13.094  2511  2511 I DZTEST  : SEEK 13_after_transition target=13000 timeline=13000 player=13000 state=READY playing=false color=rgb(33,79,224)
+11-19 21:12:13.094  2511  2511 I DZTEST  : RESULT PASS T8b C is back to normal after the transition, content time matches position  rgb(33,79,224) sourceSec@13s=3.0 (expect ~3.0)
+11-19 21:12:13.350  2511  2511 I DZ      : state=BUFFERING pos=0 dur=12500
+11-19 21:12:13.350  2511  2511 I DZ      : discontinuity reason=1 0->12380
+11-19 21:12:13.350  2511  2511 I DZ      : built composition in 4ms clips=3 dur=12500 resumeAt=12380 play=false
+11-19 21:12:13.570  2511  2511 I DZ      : state=READY pos=12380 dur=12500
+11-19 21:12:13.802  2511  3145 W MediaCodec: no metrics handle found
+11-19 21:12:13.805  2511  3150 W MediaCodec: no metrics handle found
+11-19 21:12:14.872  2511  2511 I DZ      : FIRST_FRAME pos=12380
+11-19 21:12:15.422  2511  2511 I DZTEST  : SPEED duration project=12500 engine=12500 player=12500
+11-19 21:12:15.423  2511  2511 I DZ      : discontinuity reason=1 12380->10300
+11-19 21:12:15.423  2511  2511 I DZ      : state=BUFFERING pos=10300 dur=12500
+11-19 21:12:15.609  2511  2511 I DZ      : state=READY pos=10300 dur=12500
+11-19 21:12:15.610  2511  2511 I DZ      : FIRST_FRAME pos=10300
+11-19 21:12:16.066  2511  2511 I DZTEST  : SEEK 15_speed_10300 target=10300 timeline=10300 player=10300 state=READY playing=false color=rgb(255,255,255)
+11-19 21:12:16.066  2511  2511 I DZTEST  : SPEEDPOS 10300 -> rgb(255,255,255) bar=5.0
+11-19 21:12:16.068  2511  2511 I DZ      : discontinuity reason=1 10300->10800
+11-19 21:12:16.068  2511  2511 I DZ      : state=BUFFERING pos=10800 dur=12500
+11-19 21:12:16.188  2511  2511 I DZ      : state=READY pos=10800 dur=12500
+11-19 21:12:16.188  2511  2511 I DZ      : FIRST_FRAME pos=10800
+11-19 21:12:16.728  2511  2511 I DZTEST  : SEEK 15_speed_10800 target=10800 timeline=10800 player=10800 state=READY playing=false color=rgb(88,123,232)
+11-19 21:12:16.728  2511  2511 I DZTEST  : SPEEDPOS 10800 -> rgb(88,123,232) bar=1.6018518
+11-19 21:12:16.729  2511  2511 I DZ      : discontinuity reason=1 10800->11200
+11-19 21:12:16.729  2511  2511 I DZ      : state=BUFFERING pos=11200 dur=12500
+11-19 21:12:16.859  2511  2511 I DZ      : state=READY pos=11200 dur=12500
+11-19 21:12:16.860  2511  2511 I DZ      : FIRST_FRAME pos=11200
+11-19 21:12:17.392  2511  2511 I DZTEST  : SEEK 15_speed_11200 target=11200 timeline=11200 player=11200 state=READY playing=false color=rgb(33,79,224)
+11-19 21:12:17.392  2511  2511 I DZTEST  : SPEEDPOS 11200 -> rgb(33,79,224) bar=2.4074075
+11-19 21:12:17.393  2511  2511 I DZ      : discontinuity reason=1 11200->12000
+11-19 21:12:17.393  2511  2511 I DZ      : state=BUFFERING pos=12000 dur=12500
+11-19 21:12:17.495  2511  2511 I DZ      : state=READY pos=12000 dur=12500
+11-19 21:12:17.495  2511  2511 I DZ      : FIRST_FRAME pos=12000
+11-19 21:12:18.054  2511  2511 I DZTEST  : SEEK 15_speed_12000 target=12000 timeline=12000 player=12000 state=READY playing=false color=rgb(33,79,224)
+11-19 21:12:18.054  2511  2511 I DZTEST  : SPEEDPOS 12000 -> rgb(33,79,224) bar=4.0
+11-19 21:12:18.056  2511  2511 I DZ      : discontinuity reason=1 12000->12380
+11-19 21:12:18.056  2511  2511 I DZ      : state=BUFFERING pos=12380 dur=12500
+11-19 21:12:18.148  2511  2511 I DZ      : state=READY pos=12380 dur=12500
+11-19 21:12:18.189  2511  2511 I DZ      : FIRST_FRAME pos=12380
+11-19 21:12:18.716  2511  2511 I DZTEST  : SEEK 15_speed_12400 target=12400 timeline=12380 player=12380 state=READY playing=false color=rgb(33,79,224)
+11-19 21:12:18.716  2511  2511 I DZTEST  : SPEEDPOS 12400 -> rgb(33,79,224) bar=4.7685184
+11-19 21:12:18.716  2511  2511 I DZTEST  : RESULT PASS T9 speed 2x → timeline 12.5s and player duration matches  project=12500 player=12500 rgb(33,79,224) sourceSec@12s=4.0 (expect ~4.0 at 2x)
+11-19 21:12:18.717  2511  2511 I DZ      : discontinuity reason=1 12380->10000
+11-19 21:12:18.717  2511  2511 I DZ      : state=BUFFERING pos=10000 dur=12500
+11-19 21:12:18.827  2511  2511 I DZ      : state=READY pos=10000 dur=12500
+11-19 21:12:18.827  2511  2511 I DZ      : FIRST_FRAME pos=10000
+11-19 21:12:19.420  2511  2511 I DZ      : isPlaying=true pos=10000
+11-19 21:12:19.420  2511  2511 I DZ      : play() at 10000
+11-19 21:12:21.035  2511  2511 I DZ      : isPlaying=false pos=11602
+11-19 21:12:21.035  2511  2511 I DZ      : pause() at 11602
+11-19 21:12:21.035  2511  2511 I DZTEST  : RESULT PASS T9b playback at 2x finishes C sooner (timeline advances 1x, content 2x)  pos=11460 timeline=11602 player=11602 state=READY playing=false
+11-19 21:12:21.294  2511  2511 I DZ      : state=BUFFERING pos=0 dur=15000
+11-19 21:12:21.295  2511  2511 I DZ      : discontinuity reason=1 0->11602
+11-19 21:12:21.295  2511  2511 I DZ      : built composition in 9ms clips=3 dur=15000 resumeAt=11602 play=false
+11-19 21:12:21.984  2511  3179 W MediaCodec: no metrics handle found
+11-19 21:12:22.066  2511  3184 W MediaCodec: no metrics handle found
+11-19 21:12:22.314  2511  2511 I DZ      : state=READY pos=11602 dur=15000
+11-19 21:12:22.314  2511  2511 I DZ      : FIRST_FRAME pos=11602
+11-19 21:12:22.874  2511  2511 I DZ      : pause() at 11602
+11-19 21:12:22.875  2511  2511 I DZ      : discontinuity reason=1 11602->0
+11-19 21:12:22.875  2511  2511 I DZ      : state=BUFFERING pos=0 dur=15000
+11-19 21:12:22.878  2511  2511 I DZ      : state=BUFFERING pos=0 dur=5000
+11-19 21:12:22.878  2511  2511 I DZ      : discontinuity reason=1 0->0
+11-19 21:12:22.879  2511  2511 I DZ      : built composition in 4ms clips=1 dur=5000 resumeAt=0 play=false
+11-19 21:12:23.560  2511  3245 W MediaCodec: no metrics handle found
+11-19 21:12:23.630  2511  3212 W MediaCodec: no metrics handle found
+11-19 21:12:23.667  2511  3217 W MediaCodec: no metrics handle found
+11-19 21:12:23.783  2511  2511 I DZ      : state=READY pos=0 dur=5000
+11-19 21:12:23.784  2511  2511 I DZ      : FIRST_FRAME pos=0
+11-19 21:12:24.401  2511  3235 W MediaCodec: no metrics handle found
+11-19 21:12:26.484  2511  3279 W MediaCodec: no metrics handle found
+11-19 21:12:26.485  2511  3262 W MediaCodec: no metrics handle found
+11-19 21:12:26.489  2511  3264 W MediaCodec: no metrics handle found
+11-19 21:12:26.494  2511  2511 I DZ      : state=BUFFERING pos=0 dur=5000
+11-19 21:12:26.494  2511  2511 I DZ      : discontinuity reason=1 0->0
+11-19 21:12:26.494  2511  2511 I DZ      : built composition in 2ms clips=1 dur=5000 resumeAt=0 play=false
+11-19 21:12:26.914  2511  2511 I DZTEST  : EXPORTPROBE A-only-video ok=true err=null took=2502ms
+11-19 21:12:26.927  2511  2511 I DZ      : pause() at 0
+11-19 21:12:26.928  2511  2511 I DZ      : discontinuity reason=1 0->0
+11-19 21:12:26.931  2511  2511 I DZ      : state=BUFFERING pos=0 dur=15000
+11-19 21:12:26.931  2511  2511 I DZ      : discontinuity reason=1 0->0
+11-19 21:12:26.931  2511  2511 I DZ      : built composition in 4ms clips=3 dur=15000 resumeAt=0 play=false
+11-19 21:12:27.432  2511  4032 W MediaCodec: no metrics handle found
+11-19 21:12:27.778  2511  2511 I DZ      : state=READY pos=0 dur=15000
+11-19 21:12:27.778  2511  2511 I DZ      : FIRST_FRAME pos=0
+11-19 21:12:28.632  2511  4059 W MediaCodec: no metrics handle found
+11-19 21:12:28.637  2511  4045 W MediaCodec: no metrics handle found
+11-19 21:12:30.753  2511  4076 W MediaCodec: no metrics handle found
+11-19 21:12:32.434  2511  4822 W MediaCodec: no metrics handle found
+11-19 21:12:34.251  2511  4093 W MediaCodec: no metrics handle found
+11-19 21:12:34.252  2511  4074 W MediaCodec: no metrics handle found
+11-19 21:12:34.255  2511  5554 W MediaCodec: no metrics handle found
+11-19 21:12:34.263  2511  2511 I DZ      : state=BUFFERING pos=0 dur=15000
+11-19 21:12:34.263  2511  2511 I DZ      : discontinuity reason=1 0->0
+11-19 21:12:34.263  2511  2511 I DZ      : built composition in 3ms clips=3 dur=15000 resumeAt=0 play=false
+11-19 21:12:34.681  2511  2511 I DZTEST  : EXPORTPROBE ABC-video ok=true err=null took=6035ms
+11-19 21:12:34.682  2511  2511 I DZ      : pause() at 0
+11-19 21:12:34.683  2511  2511 I DZ      : discontinuity reason=1 0->0
+11-19 21:12:34.684  2511  2511 I DZ      : FIRST_FRAME pos=0
+11-19 21:12:34.688  2511  2511 I DZ      : state=BUFFERING pos=0 dur=5000
+11-19 21:12:34.688  2511  2511 I DZ      : discontinuity reason=1 0->0
+11-19 21:12:34.688  2511  2511 I DZ      : built composition in 5ms clips=1 dur=5000 resumeAt=0 play=false
+11-19 21:12:35.682  2511  6367 W MediaCodec: no metrics handle found
+11-19 21:12:35.723  2511  6358 W MediaCodec: no metrics handle found
+11-19 21:12:36.432  2511  2511 I DZ      : state=READY pos=0 dur=5000
+11-19 21:12:36.432  2511  2511 I DZ      : FIRST_FRAME pos=0
+11-19 21:12:37.025  2511  6376 W MediaCodec: no metrics handle found
+11-19 21:12:43.094  2511  6418 W MediaCodec: no metrics handle found
+11-19 21:12:43.094  2511  6395 W MediaCodec: no metrics handle found
+11-19 21:12:43.101  2511  6397 W MediaCodec: no metrics handle found
+11-19 21:12:43.110  2511  2511 I DZ      : state=BUFFERING pos=0 dur=5000
+11-19 21:12:43.110  2511  2511 I DZ      : discontinuity reason=1 0->0
+11-19 21:12:43.110  2511  2511 I DZ      : built composition in 2ms clips=1 dur=5000 resumeAt=0 play=false
+11-19 21:12:43.538  2511  2511 I DZTEST  : EXPORTPROBE B-noir ok=true err=null took=6509ms
+11-19 21:12:43.569  2511  2511 I DZ      : pause() at 0
+11-19 21:12:43.570  2511  2511 I DZ      : discontinuity reason=1 0->0
+11-19 21:12:43.719  2511  2511 I DZ      : state=BUFFERING pos=0 dur=5000
+11-19 21:12:43.719  2511  2511 I DZ      : discontinuity reason=1 0->0
+11-19 21:12:43.719  2511  2511 I DZ      : built composition in 148ms clips=1 dur=5000 resumeAt=0 play=false
+11-19 21:12:44.831  2511  7172 W MediaCodec: no metrics handle found
+11-19 21:12:44.915  2511  2511 I DZ      : state=READY pos=0 dur=5000
+11-19 21:12:44.916  2511  2511 I DZ      : FIRST_FRAME pos=0
+11-19 21:12:45.497  2511  7183 W MediaCodec: no metrics handle found
+11-19 21:12:47.591  2511  7218 W MediaCodec: no metrics handle found
+11-19 21:12:47.592  2511  7200 W MediaCodec: no metrics handle found
+11-19 21:12:47.596  2511  7202 W MediaCodec: no metrics handle found
+11-19 21:12:47.603  2511  2511 I DZ      : state=BUFFERING pos=0 dur=5000
+11-19 21:12:47.603  2511  2511 I DZ      : discontinuity reason=1 0->0
+11-19 21:12:47.603  2511  2511 I DZ      : built composition in 2ms clips=1 dur=5000 resumeAt=0 play=false
+11-19 21:12:48.009  2511  2511 I DZTEST  : EXPORTPROBE C-flash ok=true err=null took=2503ms
+11-19 21:12:48.009  2511  2511 I DZ      : pause() at 0
+11-19 21:12:48.010  2511  2511 I DZ      : discontinuity reason=1 0->0
+11-19 21:12:48.054  2511  2511 I DZ      : state=BUFFERING pos=0 dur=10000
+11-19 21:12:48.054  2511  2511 I DZ      : discontinuity reason=1 0->0
+11-19 21:12:48.054  2511  2511 I DZ      : built composition in 44ms clips=2 dur=10000 resumeAt=0 play=false
+11-19 21:12:48.661  2511  7973 W MediaCodec: no metrics handle found
+11-19 21:12:49.716  2511  2511 I DZ      : state=READY pos=0 dur=10000
+11-19 21:12:49.716  2511  2511 I DZ      : FIRST_FRAME pos=0
+11-19 21:12:50.328  2511  7984 W MediaCodec: no metrics handle found
+11-19 21:12:50.331  2511  7992 W MediaCodec: no metrics handle found
+11-19 21:12:53.208  2511  8011 W MediaCodec: no metrics handle found
+11-19 21:12:55.680  2511  8009 W MediaCodec: no metrics handle found
+11-19 21:12:55.681  2511  8030 W MediaCodec: no metrics handle found
+11-19 21:12:55.687  2511  8766 W MediaCodec: no metrics handle found
+11-19 21:12:55.693  2511  2511 I DZ      : state=BUFFERING pos=0 dur=10000
+11-19 21:12:55.694  2511  2511 I DZ      : discontinuity reason=1 0->0
+11-19 21:12:55.694  2511  2511 I DZ      : built composition in 3ms clips=2 dur=10000 resumeAt=0 play=false
+11-19 21:12:55.850  2511  2511 I DZTEST  : EXPORTPROBE A+B-flash ok=true err=null took=5508ms
+11-19 21:12:55.850  2511  2511 I DZ      : pause() at 0
+11-19 21:12:55.850  2511  2511 I DZ      : discontinuity reason=1 0->0
+11-19 21:12:55.853  2511  2511 I DZ      : state=BUFFERING pos=0 dur=5000
+11-19 21:12:55.853  2511  2511 I DZ      : discontinuity reason=1 0->0
+11-19 21:12:55.853  2511  2511 I DZ      : built composition in 2ms clips=1 dur=5000 resumeAt=0 play=false
+11-19 21:12:56.813  2511  9546 W MediaCodec: no metrics handle found
+11-19 21:12:56.855  2511  9538 W MediaCodec: no metrics handle found
+11-19 21:12:57.429  2511  2511 I DZ      : state=READY pos=0 dur=5000
+11-19 21:12:57.430  2511  2511 I DZ      : FIRST_FRAME pos=0
+11-19 21:12:57.991  2511  9556 W MediaCodec: no metrics handle found
+11-19 21:13:03.977  2511  9577 W MediaCodec: no metrics handle found
+11-19 21:13:03.978  2511  9594 W MediaCodec: no metrics handle found
+11-19 21:13:03.982  2511  9579 W MediaCodec: no metrics handle found
+11-19 21:13:03.993  2511  2511 I DZ      : state=BUFFERING pos=0 dur=5000
+11-19 21:13:03.993  2511  2511 I DZ      : discontinuity reason=1 0->0
+11-19 21:13:03.994  2511  2511 I DZ      : built composition in 3ms clips=1 dur=5000 resumeAt=0 play=false
+11-19 21:13:04.013  2511  2511 I DZTEST  : EXPORTPROBE B-noir+in-flash ok=true err=null took=6012ms
+11-19 21:13:04.013  2511  2511 I DZ      : pause() at 0
+11-19 21:13:04.014  2511  2511 I DZ      : discontinuity reason=1 0->0
+11-19 21:13:04.016  2511  2511 I DZ      : state=BUFFERING pos=0 dur=10000
+11-19 21:13:04.016  2511  2511 I DZ      : discontinuity reason=1 0->0
+11-19 21:13:04.016  2511  2511 I DZ      : built composition in 2ms clips=2 dur=10000 resumeAt=0 play=false
+11-19 21:13:04.781  2511 10350 W MediaCodec: no metrics handle found
+11-19 21:13:05.905  2511  2511 I DZ      : state=READY pos=0 dur=10000
+11-19 21:13:05.906  2511  2511 I DZ      : FIRST_FRAME pos=0
+11-19 21:13:06.549  2511 10358 W MediaCodec: no metrics handle found
+11-19 21:13:06.550  2511 10369 W MediaCodec: no metrics handle found
+11-19 21:13:09.257  2511 10388 W MediaCodec: no metrics handle found
+11-19 21:13:11.690  2511 10405 W MediaCodec: no metrics handle found
+11-19 21:13:11.691  2511 10386 W MediaCodec: no metrics handle found
+11-19 21:13:11.694  2511 11134 W MediaCodec: no metrics handle found
+11-19 21:13:11.702  2511  2511 I DZ      : state=BUFFERING pos=0 dur=10000
+11-19 21:13:11.702  2511  2511 I DZ      : discontinuity reason=1 0->0
+11-19 21:13:11.702  2511  2511 I DZ      : built composition in 2ms clips=2 dur=10000 resumeAt=0 play=false
+11-19 21:13:12.073  2511  2511 I DZTEST  : EXPORTPROBE B+C-flash(out on B) ok=true err=null took=5515ms
+11-19 21:13:12.073  2511  2511 I DZ      : pause() at 0
+11-19 21:13:12.109  2511  2511 I DZ      : discontinuity reason=1 0->0
+11-19 21:13:12.291  2511  2511 I DZ      : state=BUFFERING pos=0 dur=15000
+11-19 21:13:12.292  2511  2511 I DZ      : discontinuity reason=1 0->0
+11-19 21:13:12.292  2511  2511 I DZ      : built composition in 182ms clips=3 dur=15000 resumeAt=0 play=false
+11-19 21:13:13.133  2511 11914 W MediaCodec: no metrics handle found
+11-19 21:13:13.137  2511 11922 W MediaCodec: no metrics handle found
+11-19 21:13:13.339  2511  2511 I DZ      : state=READY pos=0 dur=15000
+11-19 21:13:13.340  2511  2511 I DZ      : FIRST_FRAME pos=0
+11-19 21:13:14.053  2511 11944 W MediaCodec: no metrics handle found
+11-19 21:13:14.058  2511 11932 W MediaCodec: no metrics handle found
+11-19 21:13:16.008  2511 11964 W MediaCodec: no metrics handle found
+11-19 21:13:21.710  2511 13470 W MediaCodec: no metrics handle found
+11-19 21:13:23.418  2511 11962 W MediaCodec: no metrics handle found
+11-19 21:13:23.418  2511 11981 W MediaCodec: no metrics handle found
+11-19 21:13:23.423  2511 13475 W MediaCodec: no metrics handle found
+11-19 21:13:23.439  2511  2511 I DZ      : state=BUFFERING pos=0 dur=15000
+11-19 21:13:23.439  2511  2511 I DZ      : discontinuity reason=1 0->0
+11-19 21:13:23.439  2511  2511 I DZ      : built composition in 3ms clips=3 dur=15000 resumeAt=0 play=false
+11-19 21:13:23.608  2511  2511 I DZTEST  : EXPORTPROBE A+B-noir+C ok=true err=null took=9542ms
+11-19 21:13:23.609  2511  2511 I DZ      : pause() at 0
+11-19 21:13:23.609  2511  2511 I DZ      : discontinuity reason=1 0->0
+11-19 21:13:23.646  2511  2511 I DZ      : state=BUFFERING pos=0 dur=15000
+11-19 21:13:23.647  2511  2511 I DZ      : discontinuity reason=1 0->0
+11-19 21:13:23.647  2511  2511 I DZ      : built composition in 37ms clips=3 dur=15000 resumeAt=0 play=false
+11-19 21:13:24.214  2511 14264 W MediaCodec: no metrics handle found
+11-19 21:13:24.234  2511 14253 W MediaCodec: no metrics handle found
+11-19 21:13:24.535  2511  2511 I DZ      : state=READY pos=0 dur=15000
+11-19 21:13:24.535  2511  2511 I DZ      : FIRST_FRAME pos=0
+11-19 21:13:25.313  2511 14281 W MediaCodec: no metrics handle found
+11-19 21:13:25.319  2511 14270 W MediaCodec: no metrics handle found
+11-19 21:13:27.335  2511 14301 W MediaCodec: no metrics handle found
+11-19 21:13:29.795  2511 15065 W MediaCodec: no metrics handle found
+11-19 21:13:32.311  2511 14318 W MediaCodec: no metrics handle found
+11-19 21:13:32.312  2511 14299 W MediaCodec: no metrics handle found
+11-19 21:13:32.315  2511 15779 W MediaCodec: no metrics handle found
+11-19 21:13:32.322  2511  2511 I DZ      : state=BUFFERING pos=0 dur=15000
+11-19 21:13:32.323  2511  2511 I DZ      : discontinuity reason=1 0->0
+11-19 21:13:32.323  2511  2511 I DZ      : built composition in 3ms clips=3 dur=15000 resumeAt=0 play=false
+11-19 21:13:32.343  2511  2511 I DZTEST  : EXPORTPROBE A+B+C-flash ok=true err=null took=7014ms
+11-19 21:13:32.343  2511  2511 I DZ      : pause() at 0
+11-19 21:13:32.344  2511  2511 I DZ      : discontinuity reason=1 0->0
+11-19 21:13:32.350  2511  2511 I DZ      : state=BUFFERING pos=0 dur=15000
+11-19 21:13:32.350  2511  2511 I DZ      : discontinuity reason=1 0->0
+11-19 21:13:32.350  2511  2511 I DZ      : built composition in 6ms clips=3 dur=15000 resumeAt=0 play=false
+11-19 21:13:33.074  2511 16606 W MediaCodec: no metrics handle found
+11-19 21:13:33.181  2511 16587 W MediaCodec: no metrics handle found
+11-19 21:13:33.265  2511  2511 I DZ      : state=READY pos=0 dur=15000
+11-19 21:13:33.266  2511  2511 I DZ      : FIRST_FRAME pos=0
+11-19 21:13:33.942  2511 16608 W MediaCodec: no metrics handle found
+11-19 21:13:33.953  2511 16591 W MediaCodec: no metrics handle found
+11-19 21:13:36.025  2511 16635 W MediaCodec: no metrics handle found
+11-19 21:13:42.203  2511 17357 W MediaCodec: no metrics handle found
+11-19 21:13:44.676  2511 16652 W MediaCodec: no metrics handle found
+11-19 21:13:44.678  2511 16633 W MediaCodec: no metrics handle found
+11-19 21:13:44.682  2511 18155 W MediaCodec: no metrics handle found
+11-19 21:13:44.700  2511  2511 I DZ      : state=BUFFERING pos=0 dur=15000
+11-19 21:13:44.700  2511  2511 I DZ      : discontinuity reason=1 0->0
+11-19 21:13:44.700  2511  2511 I DZ      : built composition in 4ms clips=3 dur=15000 resumeAt=0 play=false
+11-19 21:13:44.984  2511  2511 I DZTEST  : EXPORTPROBE main-without-tone ok=true err=null took=11022ms
+11-19 21:13:44.992  2511  2511 I DZ      : pause() at 0
+11-19 21:13:44.993  2511  2511 I DZ      : discontinuity reason=1 0->0
+11-19 21:13:45.116  2511  2511 I DZ      : state=BUFFERING pos=0 dur=5000
+11-19 21:13:45.116  2511  2511 I DZ      : discontinuity reason=1 0->0
+11-19 21:13:45.116  2511  2511 I DZ      : built composition in 86ms clips=1 dur=5000 resumeAt=0 play=false
+11-19 21:13:45.764  2511 18929 W MediaCodec: no metrics handle found
+11-19 21:13:45.771  2511 18921 W MediaCodec: no metrics handle found
+11-19 21:13:46.089  2511  2511 I DZ      : state=READY pos=0 dur=5000
+11-19 21:13:46.090  2511  2511 I DZ      : FIRST_FRAME pos=0
+11-19 21:13:46.637  2511 18944 W MediaCodec: no metrics handle found
+11-19 21:13:46.643  2511 18939 W MediaCodec: no metrics handle found
+11-19 21:13:48.785  2511 18986 W MediaCodec: no metrics handle found
+11-19 21:13:48.785  2511 18967 W MediaCodec: no metrics handle found
+11-19 21:13:48.790  2511 18969 W MediaCodec: no metrics handle found
+11-19 21:13:48.792  2511 18964 W MediaCodec: no metrics handle found
+11-19 21:13:48.798  2511  2511 I DZ      : state=BUFFERING pos=0 dur=5000
+11-19 21:13:48.798  2511  2511 I DZ      : discontinuity reason=1 0->0
+11-19 21:13:48.799  2511  2511 I DZ      : built composition in 4ms clips=1 dur=5000 resumeAt=0 play=false
+11-19 21:13:49.165  2511  2511 I DZTEST  : EXPORTPROBE A-with-tone ok=true err=null took=2514ms
+11-19 21:13:49.165  2511  2511 I DZ      : pause() at 0
+11-19 21:13:49.166  2511  2511 I DZ      : discontinuity reason=1 0->0
+11-19 21:13:49.186  2511  2511 I DZ      : state=BUFFERING pos=0 dur=15000
+11-19 21:13:49.187  2511  2511 I DZ      : discontinuity reason=1 0->0
+11-19 21:13:49.187  2511  2511 I DZ      : built composition in 22ms clips=3 dur=15000 resumeAt=0 play=false
+11-19 21:13:49.665  2511 19739 W MediaCodec: no metrics handle found
+11-19 21:13:49.668  2511 19744 W MediaCodec: no metrics handle found
+11-19 21:13:50.020  2511  2511 I DZ      : state=READY pos=0 dur=15000
+11-19 21:13:50.020  2511  2511 I DZ      : FIRST_FRAME pos=0
+11-19 21:13:50.829  2511 19771 W MediaCodec: no metrics handle found
+11-19 21:13:50.837  2511 19758 W MediaCodec: no metrics handle found
+11-19 21:13:50.839  2511 19764 W MediaCodec: no metrics handle found
+11-19 21:13:52.914  2511 19796 W MediaCodec: no metrics handle found
+11-19 21:13:58.984  2511 20560 W MediaCodec: no metrics handle found
+11-19 21:14:01.568  2511 19794 W MediaCodec: no metrics handle found
+11-19 21:14:01.569  2511 19813 W MediaCodec: no metrics handle found
+11-19 21:14:01.573  2511 21313 W MediaCodec: no metrics handle found
+11-19 21:14:01.574  2511 19791 W MediaCodec: no metrics handle found
+11-19 21:14:01.590  2511  2511 I DZ      : state=BUFFERING pos=0 dur=15000
+11-19 21:14:01.590  2511  2511 I DZ      : discontinuity reason=1 0->0
+11-19 21:14:01.590  2511  2511 I DZ      : built composition in 4ms clips=3 dur=15000 resumeAt=0 play=false
+11-19 21:14:01.890  2511  2511 I DZTEST  : EXPORT file=/data/user/0/com.directorzone.app/cache/exports/DirectorZone_1795122830845.mp4 error=null took=11043ms size=10026221
+11-19 21:14:03.174  2511  2511 I DZTEST  : RESULT PASS T10a export is ~15s with audio  dur=15000 640x360 audio=yes size=9791KB
+11-19 21:14:03.174  2511  2511 I DZTEST  : RESULT PASS T10b exported frames match the preview (A red, B noir, C blue, flash at cut)  A=rgb(214,32,33) B=rgb(107,113,107) C=rgb(33,77,222) flash=rgb(214,223,247)
+11-19 21:14:03.175  2511  2511 I DZ      : pause() at 0
+11-19 21:14:03.176  2511  2511 I DZ      : discontinuity reason=1 0->0
+11-19 21:14:03.180  2511  2511 I DZ      : state=BUFFERING pos=0 dur=2500
+11-19 21:14:03.180  2511  2511 I DZ      : discontinuity reason=1 0->0
+11-19 21:14:03.180  2511  2511 I DZ      : built composition in 4ms clips=1 dur=2500 resumeAt=0 play=false
+11-19 21:14:03.983  2511 22097 W MediaCodec: no metrics handle found
+11-19 21:14:04.011  2511 22084 W MediaCodec: no metrics handle found
+11-19 21:14:04.017  2511 22090 W MediaCodec: no metrics handle found
+11-19 21:14:04.148  2511  2511 I DZ      : state=READY pos=0 dur=2500
+11-19 21:14:04.148  2511  2511 I DZ      : FIRST_FRAME pos=0
+11-19 21:14:04.689  2511 22197 W MediaCodec: no metrics handle found
+11-19 21:14:06.739  2511 22237 W MediaCodec: no metrics handle found
+11-19 21:14:06.740  2511 22220 W MediaCodec: no metrics handle found
+11-19 21:14:06.744  2511 22222 W MediaCodec: no metrics handle found
+11-19 21:14:06.749  2511  2511 I DZ      : state=BUFFERING pos=0 dur=2500
+11-19 21:14:06.749  2511  2511 I DZ      : discontinuity reason=1 0->0
+11-19 21:14:06.749  2511  2511 I DZ      : built composition in 2ms clips=1 dur=2500 resumeAt=0 play=false
+11-19 21:14:07.539  2511  2511 I DZTEST  : RESULT PASS T10c export at 2x speed: 2.5 s long, content advances 2x  dur=2500 sourceSec@2.0s=4.0 (expect ~4.0)
+11-19 21:14:07.539  2511  2511 I DZTEST  : SUMMARY
+11-19 21:14:07.539  2511  2511 I DZTEST  : PASS T0 initial frame shows clip A  rgb(209,32,34)
+11-19 21:14:07.539  2511  2511 I DZTEST  : PASS T1a play shows A first  seenAt=0
+11-19 21:14:07.539  2511  2511 I DZTEST  : PASS T1b play continues into B at the cut  seenAt=6726 (cut at 5000; video lag 1726ms) order=ABC
+11-19 21:14:07.539  2511  2511 I DZTEST  : PASS T1c play continues into C at the cut  seenAt=10972 (cut at 10000; video lag 972ms) order=ABC
+11-19 21:14:07.539  2511  2511 I DZTEST  : PASS T1d playhead advanced monotonically to the end, no player error  maxT=14998 wall=16701ms monotonic=true order=ABC err=null timeline=15000 player=15212 state=READY playing=true
+11-19 21:14:07.539  2511  2511 I DZTEST  : PASS T2 pause holds frame (A) and playhead  tl=3063/3063 rgb(209,32,34) rgb(209,32,34) timeline=3063 player=3063 state=READY playing=false
+11-19 21:14:07.539  2511  2511 I DZTEST  : PASS T3 seek 8s shows B  rgb(33,176,49) timeline=8000 player=8000 state=READY playing=false
+11-19 21:14:07.539  2511  2511 I DZTEST  : FAIL T4 rapid seeks end on 6s (B)  timeline=6000 player=6000 state=READY playing=false rgb(33,79,224)
+11-19 21:14:07.539  2511  2511 I DZTEST  : PASS T4b each seek in sequence renders its frame  1000:ok(rgb(209,32,34)) 10200:ok(rgb(33,79,224)) 4000:ok(rgb(209,32,34)) 12000:ok(rgb(33,79,224)) 6000:ok(rgb(33,176,49)) 
+11-19 21:14:07.539  2511  2511 I DZTEST  : PASS T5 play resumes from the scrubbed position  timeline=7797 player=7940 state=READY playing=true rgb(33,176,49)
+11-19 21:14:07.539  2511  2511 I DZTEST  : PASS T6 selecting clip B moves the playhead into B and the preview follows  timeline=5001 player=5001 state=READY playing=false rgb(33,176,49)
+11-19 21:14:07.539  2511  2511 I DZTEST  : PASS T7 Noir filter on B is visible in the preview (grayscale)  rgb(112,112,112) timeline=7000 player=7000 state=READY playing=false
+11-19 21:14:07.539  2511  2511 I DZTEST  : PASS T8 Flash transition brightens the first frames of C  rgb(255,255,255) timeline=10200 player=10200 state=READY playing=false
+11-19 21:14:07.539  2511  2511 I DZTEST  : PASS T8b C is back to normal after the transition, content time matches position  rgb(33,79,224) sourceSec@13s=3.0 (expect ~3.0)
+11-19 21:14:07.539  2511  2511 I DZTEST  : PASS T9 speed 2x → timeline 12.5s and player duration matches  project=12500 player=12500 rgb(33,79,224) sourceSec@12s=4.0 (expect ~4.0 at 2x)
+11-19 21:14:07.539  2511  2511 I DZTEST  : PASS T9b playback at 2x finishes C sooner (timeline advances 1x, content 2x)  pos=11460 timeline=11602 player=11602 state=READY playing=false
+11-19 21:14:07.539  2511  2511 I DZTEST  : PASS T10a export is ~15s with audio  dur=15000 640x360 audio=yes size=9791KB
+11-19 21:14:07.539  2511  2511 I DZTEST  : PASS T10b exported frames match the preview (A red, B noir, C blue, flash at cut)  A=rgb(214,32,33) B=rgb(107,113,107) C=rgb(33,77,222) flash=rgb(214,223,247)
+11-19 21:14:07.539  2511  2511 I DZTEST  : PASS T10c export at 2x speed: 2.5 s long, content advances 2x  dur=2500 sourceSec@2.0s=4.0 (expect ~4.0)
+11-19 21:14:07.539  2511  2511 I DZTEST  : DONE
+11-19 21:14:07.540  2511  2511 I DZ      : state=READY pos=0 dur=2500
+11-19 21:14:07.540  2511  2511 I DZ      : FIRST_FRAME pos=0

@@ -1,0 +1,1 @@
+/sdcard/Android/data/com.directorzone.app/files/dztest_out/: 27 files pulled, 0 skipped. 44.4 MB/s (3327472 bytes in 0.071s)
