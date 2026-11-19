@@ -6,7 +6,7 @@ plugins {
 
 android {
     namespace = "com.directorzone"
-    compileSdk = 34
+    compileSdk = 35
     defaultConfig {
         applicationId = "com.directorzone.app"
         minSdk = 26
