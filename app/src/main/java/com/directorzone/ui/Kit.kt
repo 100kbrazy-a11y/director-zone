@@ -11,6 +11,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Check
+import androidx.compose.material.icons.rounded.ChevronRight
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
@@ -113,7 +114,7 @@ fun SettingRow(title: String, value: String? = null, subtitle: String? = null, t
         }
         if (value != null) Text(value, color = DZ.sub, fontSize = 15.sp)
         if (trailing != null) { Spacer(Modifier.width(8.dp)); trailing() }
-        if (onClick != null && trailing == null) Icon(androidx.compose.material.icons.Icons.Rounded.ChevronRight, null, tint = DZ.sub, modifier = Modifier.size(20.dp))
+        if (onClick != null && trailing == null) Icon(Icons.Rounded.ChevronRight, null, tint = DZ.sub, modifier = Modifier.size(20.dp))
     }
 }
 
