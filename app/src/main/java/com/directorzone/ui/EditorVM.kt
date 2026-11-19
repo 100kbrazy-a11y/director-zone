@@ -90,7 +90,7 @@ class EditorVM(app: Application) : AndroidViewModel(app) {
     fun newProject(): Project { openProject(Project(name = "Project ${recents.size + 1}")); return project }
     fun openProject(p: Project) {
         project = p; undo.clear(); redo.clear(); canUndo = false; canRedo = false
-        selClip = p.clips.firstOrNull()?.id; selText = null; selSound = null; sheet = null; sheetExpanded = false; showExport = false; inEditor = true; engine.pause(); engine.seek(0); engine.load(p, 0)
+        selClip = null; selText = null; selSound = null; sheet = null; sheetExpanded = false; showExport = false; inEditor = true; engine.pause(); engine.seek(0); engine.load(p, 0)
         export = ExportUi()
         p.clips.forEach { loadThumb(it); loadStrip(it); loadWave(it.uri) }
         p.sounds.forEach { loadWave(it.source) }
@@ -120,7 +120,7 @@ class EditorVM(app: Application) : AndroidViewModel(app) {
     fun undo() { if (undo.isEmpty()) return; redo.add(project); project = undo.removeAt(undo.size - 1); fixSel(); engine.load(project); canUndo = undo.isNotEmpty(); canRedo = redo.isNotEmpty(); lastPush = 0 }
     fun redo() { if (redo.isEmpty()) return; undo.add(project); project = redo.removeAt(redo.size - 1); fixSel(); engine.load(project); canUndo = undo.isNotEmpty(); canRedo = redo.isNotEmpty(); lastPush = 0 }
     private fun fixSel() {
-        if (project.clips.none { it.id == selClip }) selClip = project.clips.firstOrNull()?.id
+        if (project.clips.none { it.id == selClip }) selClip = null
         if (project.texts.none { it.id == selText }) selText = null
         if (project.sounds.none { it.id == selSound }) selSound = null
     }
@@ -133,6 +133,9 @@ class EditorVM(app: Application) : AndroidViewModel(app) {
     fun togglePlay() = engine.toggle()
 
     /** Selecting a clip also makes the preview show it: playhead jumps into the clip if it isn't already inside. */
+    fun deselectAll() { selClip = null; selText = null; selSound = null }
+    fun selectText(id: String) { selText = id; selClip = null; selSound = null }
+
     fun selectClip(id: String) {
         selClip = id; selText = null; selSound = null
         val st = clipStart(id); val c = project.clips.firstOrNull { it.id == id } ?: return
@@ -168,7 +171,7 @@ class EditorVM(app: Application) : AndroidViewModel(app) {
     fun deleteClip() {
         val c = clip ?: return
         edit { p -> p.copy(clips = p.clips.filter { it.id != c.id }) }
-        selClip = project.clips.firstOrNull()?.id
+        selClip = null
         if (posMs > project.durationMs) engine.seek(project.durationMs)
     }
     fun setTrim(id: String, inMs: Long, outMs: Long) = updateClip(id) { it.copy(inMs = inMs, outMs = outMs) }

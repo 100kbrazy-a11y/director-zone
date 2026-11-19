@@ -56,11 +56,29 @@ fun PreviewPane(vm: EditorVM, modifier: Modifier = Modifier) {
         if (vm.project.clips.isEmpty()) Text("Add media to start", color = DZ.sub)
         if (eng.building) CircularProgressIndicator(Modifier.align(Alignment.TopEnd).padding(10.dp).size(18.dp), color = DZ.text, strokeWidth = 2.dp)
         eng.error?.let { Text("Preview error: $it", color = DZ.danger, modifier = Modifier.padding(16.dp)) }
+        // tap the preview: pause while playing; otherwise select the text/sticker under the finger, or deselect everything
+        val arT = ratioById(vm.project.ratio).let { it.w.toFloat() / it.h }
+        Box(Modifier.fillMaxSize().pointerInput(arT) {
+            detectTapGestures { off ->
+                if (eng.isPlaying) { eng.pause(); return@detectTapGestures }
+                val w = size.width.toFloat(); val h = size.height.toFloat()
+                val fwP = if (w / h > arT) h * arT else w; val fhP = if (w / h > arT) h else w / arT
+                val ox = (w - fwP) / 2f; val oy = (h - fhP) / 2f
+                val pm = vm.posMs
+                val hit = if (vm.project.lockT || vm.project.hideT) null else vm.project.texts.lastOrNull { t ->
+                    if (pm < t.startMs || pm >= t.startMs + t.durMs) return@lastOrNull false
+                    val (wU, hU) = textBox(t, arT)
+                    val bw = ((wU + 0.024f) * fhP).coerceAtLeast(40f * density); val bh = ((hU + 0.024f) * fhP).coerceAtLeast(30f * density)
+                    kotlin.math.abs(off.x - (ox + t.x * fwP)) <= bw / 2f && kotlin.math.abs(off.y - (oy + t.y * fhP)) <= bh / 2f
+                }
+                if (hit != null) vm.selectText(hit.id) else vm.deselectAll()
+            }
+        })
         if (pl != null && !eng.isPlaying) {
             Box(Modifier.size(58.dp).clip(CircleShape).background(Color.Black.copy(alpha = 0.45f)).clickable { eng.play() }, contentAlignment = Alignment.Center) {
                 Icon(Icons.Rounded.PlayArrow, null, tint = Color.White, modifier = Modifier.size(34.dp))
             }
-        } else if (pl != null) Box(Modifier.fillMaxSize().clickable { eng.pause() })
+        }
 
         // ---- direct manipulation of the selected text / sticker, over the video frame
         val r = ratioById(vm.project.ratio)

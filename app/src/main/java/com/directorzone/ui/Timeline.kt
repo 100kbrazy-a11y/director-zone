@@ -122,7 +122,7 @@ fun Timeline(vm: EditorVM, dpPerSec: Float, onMenu: (MenuAnchor) -> Unit, onAddM
                 Spacer(Modifier.height(30.dp))
             }
             // ---------------- tracks
-            Box(Modifier.weight(1f)) {
+            Box(Modifier.weight(1f).pointerInput(Unit) { detectTapGestures(onTap = { vm.deselectAll() }) }) {
                 Row(Modifier.horizontalScroll(scroll).padding(start = half, end = half)) {
                     Column(Modifier.width((totalMs * dpPerMs).dp)) {
                         Ruler(totalMs, dpPerSec)
