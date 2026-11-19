@@ -14,6 +14,8 @@ jobs:
     timeout-minutes: 40
     steps:
       - uses: actions/checkout@v4
+      - name: Validate shaders
+        run: sudo apt-get install -y glslang-tools >/dev/null && python3 tools/check_shaders.py
       - uses: actions/setup-java@v4
         with: { distribution: temurin, java-version: 17 }
       - uses: gradle/actions/setup-gradle@v4
