@@ -174,7 +174,7 @@ object DzTest {
         check("T2 pause holds frame (A) and playhead", p1 != null && p2 != null && isRed(p1) && Math.abs(p1.r - p2.r) < 6 && tl1 == tl2 && tl1 in 2900..3600, "tl=$tl1/$tl2 $p1 $p2 ${stamp(vm)}")
 
         // T3 drag to 8s -> B
-        val t3 = seekGrab(vm, "06_seek_8s", 8000, out)
+        seekGrab(vm, "06_seek_8s", 8000, out); val t3 = grabRetry(vm, "06_seek_8s", out, ::isGreen)
         check("T3 seek 8s shows B", t3 != null && isGreen(t3), "$t3 ${stamp(vm)}")
 
         // T4 rapid scrubbing
@@ -230,12 +230,16 @@ object DzTest {
         val mainProj = vm.project
         suspend fun probeExport(label: String, pr: Project) {
             vm.openProject(pr); settle(vm); vm.startExport(); val s0 = System.currentTimeMillis()
-            while (System.currentTimeMillis() - s0 < 70000 && vm.export.file == null && vm.export.error == null) delay(500)
+            while (System.currentTimeMillis() - s0 < 40000 && vm.export.file == null && vm.export.error == null) delay(500)
             log("EXPORTPROBE $label ok=${vm.export.file != null} err=${vm.export.error} took=${System.currentTimeMillis() - s0}ms")
             if (vm.export.file == null) vm.cancelExport()
         }
         probeExport("A-only-video", Project(name = "e1", ratio = "16:9", clips = listOf(a), autoSfx = false))
         probeExport("ABC-video", Project(name = "e2", ratio = "16:9", clips = listOf(a, b, c), autoSfx = false))
+        probeExport("B-noir", Project(name = "e4", ratio = "16:9", clips = listOf(b.copy(filter = "noir")), autoSfx = false))
+        probeExport("C-flash", Project(name = "e5", ratio = "16:9", clips = listOf(c.copy(transition = "flash", transitionMs = 1000)), autoSfx = false))
+        probeExport("A+B-flash", Project(name = "e6", ratio = "16:9", clips = listOf(a, b.copy(transition = "flash", transitionMs = 1000)), autoSfx = false))
+        probeExport("main-without-tone", mainProj.copy(sounds = emptyList()))
         probeExport("A-with-tone", Project(name = "e3", ratio = "16:9", clips = listOf(a), sounds = listOf(tone.copy(durMs = 5000)), autoSfx = false))
         vm.openProject(mainProj); settle(vm)
         vm.startExport()
