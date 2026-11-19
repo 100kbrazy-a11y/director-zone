@@ -65,7 +65,7 @@ object UiTour {
         vm.selectClip(a.id); vm.seek(1000)
         vm.updateClip(a.id) { it.copy(adjust = Adjust(grain = 1f)) }
         vm.sheet = null; vm.sheetExpanded = false
-        step("140_grain_full", 2500)
+        step("140_grain_full", 7000)
         vm.updateClip(a.id) { it.copy(adjust = Adjust()) }
         vm.sheetExpanded = true; vm.sheet = Sheet.Color
         step("200_sheet_color_expanded")

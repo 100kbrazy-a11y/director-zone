@@ -143,7 +143,8 @@ fun AudioSheet(vm: EditorVM, close: () -> Unit) {
     var recording by remember { mutableStateOf(false) }
     val pickAudio = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { u -> if (u != null) vm.importAudio(u) }
     val askMic = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { ok -> if (ok && rec.start()) recording = true else vm.toast = "Microphone permission needed" }
-    DisposableEffect(Unit) { onDispose { Previewer.stop(); if (recording) rec.stop() } }
+    DisposableEffect(Unit) { onDispose { Previewer.stop(); OnlinePreview.stop(); if (recording) rec.stop() } }
+    LaunchedEffect(tab) { if (tab == 2 || tab == 3) vm.sheetExpanded = true }
     val sel = vm.sound
     Column(Modifier.fillMaxSize()) {
         SheetHeader("Audio", close) {

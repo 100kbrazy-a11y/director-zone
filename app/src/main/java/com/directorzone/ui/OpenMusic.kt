@@ -88,7 +88,7 @@ fun OpenMusicTab(vm: EditorVM, sfx: Boolean, modifier: Modifier = Modifier) {
         Box(Modifier.padding(horizontal = 16.dp, vertical = 4.dp)) {
             Chips(if (sfx) listOf("All", "Whoosh", "Impact", "Click", "Nature", "Crowd", "Ambience", "Glitch") else QUICK, chip) { chip = it; text = ""; run(if (it == "All") "" else it) }
         }
-        Text("Creative Commons & public-domain audio via Openverse. Licences that allow commercial use are shown on every track.", color = DZ.sub, fontSize = 11.sp, modifier = Modifier.padding(horizontal = 18.dp, vertical = 2.dp))
+        Text("Free to use (Creative Commons / public domain) via Openverse", color = DZ.sub, fontSize = 11.sp, maxLines = 1, modifier = Modifier.padding(horizontal = 18.dp, vertical = 2.dp))
         when {
             error != null && tracks.isEmpty() -> Column(Modifier.padding(18.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
                 Text(error!!, color = DZ.sub, fontSize = 14.sp)
