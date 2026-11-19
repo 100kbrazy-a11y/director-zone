@@ -31,6 +31,23 @@ vec3 hueRot(vec3 c, float a) {
                 0.299 - 0.300 * cs + 1.250 * sn, 0.587 - 0.588 * cs - 1.050 * sn, 0.114 + 0.886 * cs - 0.203 * sn);
   return c * m;
 }
+float h13(vec3 p3) { p3 = fract(p3 * 0.1031); p3 += dot(p3, p3.zyx + 31.32); return fract((p3.x + p3.y) * p3.z); }
+float gnoise(vec2 p, float t) {
+  vec2 i = floor(p); vec2 f = fract(p); f = f * f * (3.0 - 2.0 * f);
+  float a = h13(vec3(i, t)); float b = h13(vec3(i + vec2(1.0, 0.0), t));
+  float c = h13(vec3(i + vec2(0.0, 1.0), t)); float d = h13(vec3(i + vec2(1.0, 1.0), t));
+  return mix(mix(a, b, f.x), mix(c, d, f.x), f.y);
+}
+// Soft, film-like grain: clumped (not per-pixel), re-rolled at 24 fps, strongest in the mids and gentle in highlights, with a touch of colour.
+vec3 filmGrain(vec2 uv, float lum) {
+  float cell = max(1.15, 1.7 * uRes.y / 1080.0);
+  vec2 p = uv * uRes / cell;
+  float t = floor(uTime * 24.0);
+  float n = (gnoise(p, t) + 0.6 * gnoise(p * 2.07 + 17.0, t + 3.0)) / 1.6 - 0.5;
+  vec3 col = vec3(gnoise(p + 41.0, t + 9.0), gnoise(p + 83.0, t + 21.0), gnoise(p + 127.0, t + 33.0)) - 0.5;
+  float w = 0.3 + 0.7 * 4.0 * lum * (1.0 - lum);
+  return (vec3(n) + col * 0.28) * w;
+}
 void main() {
   vec2 uv = (vUv - 0.5) / (1.0 + uKen) + 0.5;
   if (uFx > 0.5 && uFx < 1.5) {
@@ -75,7 +92,7 @@ void main() {
   if (uFx > 0.5 && uFx < 1.5) c *= 0.93 + 0.07 * sin(vUv.y * uRes.y * 1.4);
   float v = distance(vUv, vec2(0.5)) * 1.35;
   c *= 1.0 - uVig * smoothstep(0.35, 1.0, v);
-  c += (hash(vUv * uRes + fract(uTime) * 91.7) - 0.5) * uGrain * 0.3;
+  if (uGrain > 0.001) c += filmGrain(vUv, dot(c, vec3(0.299, 0.587, 0.114))) * uGrain * 0.75;
   gl_FragColor = vec4(clamp(c, 0.0, 1.0), 1.0);
 }
 """
