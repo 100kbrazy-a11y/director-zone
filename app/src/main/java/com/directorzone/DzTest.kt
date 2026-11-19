@@ -120,7 +120,7 @@ object DzTest {
         log("PROJECT duration=${vm.project.durationMs}")
         settle(vm)
         log("READY ${stamp(vm)} error=${vm.engine.error} frameRendered=${vm.engine.frameRendered}")
-        val first = grab(vm, "00_initial", out)
+        val first = grabRetry(vm, "00_initial", out, ::isRed)
         check("T0 initial frame shows clip A", first != null && isRed(first), "$first")
 
         // baseline: how fast does the emulator render video at all? (single clip, no audio) vs the full project
@@ -219,6 +219,7 @@ object DzTest {
         val dur9 = vm.project.durationMs
         log("SPEED duration project=$dur9 engine=${vm.engine.durationMs} player=${vm.engine.player?.duration}")
         val t9 = seekGrab(vm, "14_speed_2x", 11500, out, 1200)
+        for (ms in listOf(10300L, 10800L, 11200L, 12000L, 12400L)) { val cc = seekGrab(vm, "15_speed_$ms", ms, out); log("SPEEDPOS $ms -> $cc") }
         check("T9 speed 2x → timeline 12.5s and player duration matches", dur9 == 12500L && (vm.engine.player?.duration ?: 0) in 12300..12700 && t9 != null && isBlue(t9), "project=$dur9 player=${vm.engine.player?.duration} $t9")
         vm.seek(10000); delay(700); vm.engine.play(); delay(1500); val p9 = vm.engine.timelineMs; vm.engine.pause()
         check("T9b playback at 2x finishes C sooner (timeline advances 1x, content 2x)", p9 in 11200..11900, "pos=$p9 ${stamp(vm)}")
@@ -226,6 +227,17 @@ object DzTest {
 
         // T10 export
         vm.exportOpts = ExportOptions(shortSide = 360, fps = 30, bitrateMbps = 8, hevc = false)
+        val mainProj = vm.project
+        suspend fun probeExport(label: String, pr: Project) {
+            vm.openProject(pr); settle(vm); vm.startExport(); val s0 = System.currentTimeMillis()
+            while (System.currentTimeMillis() - s0 < 70000 && vm.export.file == null && vm.export.error == null) delay(500)
+            log("EXPORTPROBE $label ok=${vm.export.file != null} err=${vm.export.error} took=${System.currentTimeMillis() - s0}ms")
+            if (vm.export.file == null) vm.cancelExport()
+        }
+        probeExport("A-only-video", Project(name = "e1", ratio = "16:9", clips = listOf(a), autoSfx = false))
+        probeExport("ABC-video", Project(name = "e2", ratio = "16:9", clips = listOf(a, b, c), autoSfx = false))
+        probeExport("A-with-tone", Project(name = "e3", ratio = "16:9", clips = listOf(a), sounds = listOf(tone.copy(durMs = 5000)), autoSfx = false))
+        vm.openProject(mainProj); settle(vm)
         vm.startExport()
         val e0 = System.currentTimeMillis()
         while (System.currentTimeMillis() - e0 < 300000 && vm.export.file == null && vm.export.error == null) { delay(500) }
