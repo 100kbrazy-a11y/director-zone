@@ -1,0 +1,408 @@
+[
+ {
+  "name": "Pop",
+  "cat": "UI",
+  "file": "pop.wav",
+  "ms": 250,
+  "loop": false
+ },
+ {
+  "name": "Tap",
+  "cat": "UI",
+  "file": "tap.wav",
+  "ms": 300,
+  "loop": false
+ },
+ {
+  "name": "Soft Click",
+  "cat": "UI",
+  "file": "soft_click.wav",
+  "ms": 200,
+  "loop": false
+ },
+ {
+  "name": "Toggle On",
+  "cat": "UI",
+  "file": "toggle_on.wav",
+  "ms": 312,
+  "loop": false
+ },
+ {
+  "name": "Toggle Off",
+  "cat": "UI",
+  "file": "toggle_off.wav",
+  "ms": 309,
+  "loop": false
+ },
+ {
+  "name": "Tick",
+  "cat": "UI",
+  "file": "tick.wav",
+  "ms": 120,
+  "loop": false
+ },
+ {
+  "name": "Switch",
+  "cat": "UI",
+  "file": "switch.wav",
+  "ms": 320,
+  "loop": false
+ },
+ {
+  "name": "Select",
+  "cat": "UI",
+  "file": "select.wav",
+  "ms": 355,
+  "loop": false
+ },
+ {
+  "name": "Back",
+  "cat": "UI",
+  "file": "back.wav",
+  "ms": 370,
+  "loop": false
+ },
+ {
+  "name": "Slider Tick",
+  "cat": "UI",
+  "file": "slider_tick.wav",
+  "ms": 80,
+  "loop": false
+ },
+ {
+  "name": "Double Tap",
+  "cat": "UI",
+  "file": "double_tap.wav",
+  "ms": 410,
+  "loop": false
+ },
+ {
+  "name": "Soft Whoosh",
+  "cat": "Whoosh",
+  "file": "soft_whoosh.wav",
+  "ms": 900,
+  "loop": false
+ },
+ {
+  "name": "Fast Whoosh",
+  "cat": "Whoosh",
+  "file": "fast_whoosh.wav",
+  "ms": 450,
+  "loop": false
+ },
+ {
+  "name": "Air Whoosh",
+  "cat": "Whoosh",
+  "file": "air_whoosh.wav",
+  "ms": 1200,
+  "loop": false
+ },
+ {
+  "name": "Swipe Left",
+  "cat": "Whoosh",
+  "file": "swipe_left.wav",
+  "ms": 400,
+  "loop": false
+ },
+ {
+  "name": "Swipe Right",
+  "cat": "Whoosh",
+  "file": "swipe_right.wav",
+  "ms": 400,
+  "loop": false
+ },
+ {
+  "name": "Flip",
+  "cat": "Whoosh",
+  "file": "flip.wav",
+  "ms": 730,
+  "loop": false
+ },
+ {
+  "name": "Spin",
+  "cat": "Whoosh",
+  "file": "spin.wav",
+  "ms": 1000,
+  "loop": false
+ },
+ {
+  "name": "Rewind",
+  "cat": "Whoosh",
+  "file": "rewind.wav",
+  "ms": 800,
+  "loop": false
+ },
+ {
+  "name": "Cinematic Whoosh",
+  "cat": "Whoosh",
+  "file": "cinematic_whoosh.wav",
+  "ms": 1600,
+  "loop": false
+ },
+ {
+  "name": "Thud",
+  "cat": "Impact",
+  "file": "thud.wav",
+  "ms": 600,
+  "loop": false
+ },
+ {
+  "name": "Hit",
+  "cat": "Impact",
+  "file": "hit.wav",
+  "ms": 600,
+  "loop": false
+ },
+ {
+  "name": "Boom",
+  "cat": "Impact",
+  "file": "boom.wav",
+  "ms": 1800,
+  "loop": false
+ },
+ {
+  "name": "Bass Drop",
+  "cat": "Impact",
+  "file": "bass_drop.wav",
+  "ms": 2400,
+  "loop": false
+ },
+ {
+  "name": "Glass Hit",
+  "cat": "Impact",
+  "file": "glass_hit.wav",
+  "ms": 1300,
+  "loop": false
+ },
+ {
+  "name": "Slam",
+  "cat": "Impact",
+  "file": "slam.wav",
+  "ms": 900,
+  "loop": false
+ },
+ {
+  "name": "Punch",
+  "cat": "Impact",
+  "file": "punch.wav",
+  "ms": 400,
+  "loop": false
+ },
+ {
+  "name": "Riser Short",
+  "cat": "Riser",
+  "file": "riser_short.wav",
+  "ms": 1400,
+  "loop": false
+ },
+ {
+  "name": "Riser Long",
+  "cat": "Riser",
+  "file": "riser_long.wav",
+  "ms": 3000,
+  "loop": false
+ },
+ {
+  "name": "Dreamy Swell",
+  "cat": "Riser",
+  "file": "dreamy_swell.wav",
+  "ms": 3000,
+  "loop": false
+ },
+ {
+  "name": "Reverse Cymbal",
+  "cat": "Riser",
+  "file": "reverse_cymbal.wav",
+  "ms": 2000,
+  "loop": false
+ },
+ {
+  "name": "Ding",
+  "cat": "Chime",
+  "file": "ding.wav",
+  "ms": 1400,
+  "loop": false
+ },
+ {
+  "name": "Bell",
+  "cat": "Chime",
+  "file": "bell.wav",
+  "ms": 2200,
+  "loop": false
+ },
+ {
+  "name": "Success",
+  "cat": "Chime",
+  "file": "success.wav",
+  "ms": 1440,
+  "loop": false
+ },
+ {
+  "name": "Error",
+  "cat": "Chime",
+  "file": "error.wav",
+  "ms": 840,
+  "loop": false
+ },
+ {
+  "name": "Notify",
+  "cat": "Chime",
+  "file": "notify.wav",
+  "ms": 1100,
+  "loop": false
+ },
+ {
+  "name": "Sparkle",
+  "cat": "Chime",
+  "file": "sparkle.wav",
+  "ms": 770,
+  "loop": false
+ },
+ {
+  "name": "Coin",
+  "cat": "Chime",
+  "file": "coin.wav",
+  "ms": 670,
+  "loop": false
+ },
+ {
+  "name": "Level Up",
+  "cat": "Chime",
+  "file": "level_up.wav",
+  "ms": 960,
+  "loop": false
+ },
+ {
+  "name": "Shutter",
+  "cat": "Camera",
+  "file": "shutter.wav",
+  "ms": 260,
+  "loop": false
+ },
+ {
+  "name": "Key Press",
+  "cat": "Camera",
+  "file": "key_press.wav",
+  "ms": 150,
+  "loop": false
+ },
+ {
+  "name": "Mouse Click",
+  "cat": "Camera",
+  "file": "mouse_click.wav",
+  "ms": 170,
+  "loop": false
+ },
+ {
+  "name": "Typewriter",
+  "cat": "Camera",
+  "file": "typewriter.wav",
+  "ms": 929,
+  "loop": false
+ },
+ {
+  "name": "Swish In",
+  "cat": "Camera",
+  "file": "swish_in.wav",
+  "ms": 350,
+  "loop": false
+ },
+ {
+  "name": "Glitch",
+  "cat": "Glitch",
+  "file": "glitch.wav",
+  "ms": 400,
+  "loop": false
+ },
+ {
+  "name": "Zap",
+  "cat": "Glitch",
+  "file": "zap.wav",
+  "ms": 350,
+  "loop": false
+ },
+ {
+  "name": "Static Burst",
+  "cat": "Glitch",
+  "file": "static_burst.wav",
+  "ms": 500,
+  "loop": false
+ },
+ {
+  "name": "Digital Blip",
+  "cat": "Glitch",
+  "file": "digital_blip.wav",
+  "ms": 210,
+  "loop": false
+ },
+ {
+  "name": "Power Up",
+  "cat": "Glitch",
+  "file": "power_up.wav",
+  "ms": 800,
+  "loop": false
+ },
+ {
+  "name": "Power Down",
+  "cat": "Glitch",
+  "file": "power_down.wav",
+  "ms": 800,
+  "loop": false
+ },
+ {
+  "name": "Calm Pad",
+  "cat": "Ambience",
+  "file": "calm_pad.wav",
+  "ms": 10000,
+  "loop": true
+ },
+ {
+  "name": "Dreamy Pad",
+  "cat": "Ambience",
+  "file": "dreamy_pad.wav",
+  "ms": 10000,
+  "loop": true
+ },
+ {
+  "name": "Tech Pad",
+  "cat": "Ambience",
+  "file": "tech_pad.wav",
+  "ms": 10000,
+  "loop": true
+ },
+ {
+  "name": "Cinematic Pad",
+  "cat": "Ambience",
+  "file": "cinematic_pad.wav",
+  "ms": 12000,
+  "loop": true
+ },
+ {
+  "name": "Lofi Beat",
+  "cat": "Beats",
+  "file": "lofi_beat.wav",
+  "ms": 11707,
+  "loop": true
+ },
+ {
+  "name": "House Beat",
+  "cat": "Beats",
+  "file": "house_beat.wav",
+  "ms": 7868,
+  "loop": true
+ },
+ {
+  "name": "Trap Beat",
+  "cat": "Beats",
+  "file": "trap_beat.wav",
+  "ms": 13714,
+  "loop": true
+ },
+ {
+  "name": "Chill Groove",
+  "cat": "Beats",
+  "file": "chill_groove.wav",
+  "ms": 10000,
+  "loop": true
+ }
+]
