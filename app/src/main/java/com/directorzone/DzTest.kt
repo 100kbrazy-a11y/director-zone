@@ -44,14 +44,23 @@ object DzTest {
         return Rgb(rs[m], gs[m], bs[m])
     }
 
-    private suspend fun grab(vm: EditorVM, name: String, out: File): Rgb? = suspendCancellableCoroutine { cont ->
+    private var lastBarSec = -1f
+    private fun barSec(b: Bitmap): Float {
+        val y = (b.height * 0.935f).toInt().coerceIn(0, b.height - 1); var white = 0; var vid = 0
+        for (x in 0 until b.width step 2) { val c = b.getPixel(x, y); val r = (c shr 16) and 255; val g = (c shr 8) and 255; val bl = c and 255
+            if (r + g + bl > 60) vid++; if (r > 230 && g > 230 && bl > 230) white++ }
+        return if (vid == 0) -1f else 5f * white / vid
+    }
+
+    private suspend fun grab(vm: EditorVM, name: String, out: File, save: Boolean = true): Rgb? = suspendCancellableCoroutine { cont ->
         val sv = vm.engine.hostView?.videoSurfaceView as? SurfaceView
         if (sv == null || sv.width == 0 || sv.height == 0) { log("grab $name: no surface"); cont.resume(null); return@suspendCancellableCoroutine }
         val bmp = Bitmap.createBitmap(sv.width, sv.height, Bitmap.Config.ARGB_8888)
         try {
             PixelCopy.request(sv, bmp, { r ->
                 if (r == PixelCopy.SUCCESS) {
-                    try { File(out, "$name.png").outputStream().use { bmp.compress(Bitmap.CompressFormat.PNG, 90, it) } } catch (_: Exception) {}
+                    lastBarSec = barSec(bmp)
+                    if (save) try { File(out, "$name.png").outputStream().use { bmp.compress(Bitmap.CompressFormat.PNG, 90, it) } } catch (_: Exception) {}
                     cont.resume(median(bmp))
                 } else { log("grab $name: PixelCopy result=$r"); cont.resume(null) }
             }, Handler(Looper.getMainLooper()))
@@ -107,7 +116,7 @@ object DzTest {
         fun clip(n: String) = Clip(uri = Uri.fromFile(File(work, "$n.mp4")).toString(), srcDurMs = 5000, outMs = 5000)
         val a = clip("A"); val b = clip("B"); val c = clip("C")
         val tone = SoundItem(name = "tone", source = Uri.fromFile(File(work, "tone.m4a")).toString(), kind = "music", startMs = 0, durMs = 15000)
-        vm.openProject(Project(name = "DZ test", clips = listOf(a, b, c), sounds = listOf(tone), autoSfx = false))
+        vm.openProject(Project(name = "DZ test", ratio = "16:9", clips = listOf(a, b, c), sounds = listOf(tone), autoSfx = false))
         log("PROJECT duration=${vm.project.durationMs}")
         settle(vm)
         log("READY ${stamp(vm)} error=${vm.engine.error} frameRendered=${vm.engine.frameRendered}")
@@ -117,6 +126,7 @@ object DzTest {
         // T1 play A -> B -> C
         vm.engine.play()
         val t0 = System.currentTimeMillis()
+        var lastProbe = 0L
         var gotA = false; var gotB = false; var gotC = false; var maxT = 0L; var monotonic = true; var last = -1L
         while (System.currentTimeMillis() - t0 < 19000) {
             val t = vm.engine.timelineMs
@@ -126,6 +136,7 @@ object DzTest {
             if (!gotB && t >= 7500) { gotB = true; val col = grabRetry(vm, "02_play_B", out, ::isGreen); check("T1b playing @7.5s shows B", col != null && isGreen(col), "${stamp(vm)} $col") }
             if (!gotC && t >= 12500) { gotC = true; val col = grabRetry(vm, "03_play_C", out, ::isBlue); check("T1c playing @12.5s shows C", col != null && isBlue(col), "${stamp(vm)} $col") }
             if (!vm.engine.isPlaying && t > 1000) break
+            if (System.currentTimeMillis() - lastProbe > 700) { lastProbe = System.currentTimeMillis(); val pc = grab(vm, "probe", out, false); log("PROBE tl=$t player=${vm.engine.positionNow()} clip=${pc?.let { if (isRed(it)) "A" else if (isGreen(it)) "B" else if (isBlue(it)) "C" else "?" }} videoSec=$lastBarSec") }
             delay(120)
         }
         val wall = System.currentTimeMillis() - t0
