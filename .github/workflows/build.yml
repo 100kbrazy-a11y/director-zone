@@ -63,6 +63,8 @@ jobs:
   playback-test:
     runs-on: ubuntu-latest
     timeout-minutes: 45
+    env:
+      PREVIEW_SIDE: "270"
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-java@v4
@@ -76,6 +78,7 @@ jobs:
           mk() { ffmpeg -y -loglevel error -f lavfi -i "color=c=$2:s=1280x720:r=30:d=5" -vf "drawtext=fontfile=$FONT:text='$1  %{pts\\:hms}':fontsize=110:fontcolor=white:x=60:y=60,geq=lum='if(gt(Y,H*0.88)*lt(X,W*T/5),255,lum(X,Y))':cb='if(gt(Y,H*0.88)*lt(X,W*T/5),128,cb(X,Y))':cr='if(gt(Y,H*0.88)*lt(X,W*T/5),128,cr(X,Y))'" -c:v libx264 -pix_fmt yuv420p -g 15 -an ci_assets/dztest/$1.mp4; }
           mk A 0xD02020; mk B 0x20B030; mk C 0x2050E0
           ffmpeg -y -loglevel error -f lavfi -i "sine=frequency=440:duration=15" -c:a aac -b:a 96k ci_assets/dztest/tone.m4a
+          echo "${PREVIEW_SIDE:-540}" > ci_assets/dztest/side.txt
           ls -la ci_assets/dztest
       - name: Build test APK
         run: chmod +x gradlew && ./gradlew --no-daemon assembleRelease -PdzTest=true && cp $(find app/build/outputs/apk/release -name '*.apk' | head -1) Director-Zone-test.apk

@@ -34,6 +34,7 @@ class Exporter(private val ctx: Context) {
                     handler.removeCallbacksAndMessages(null); onProgress(1f); onDone(Result.success(out))
                 }
                 override fun onError(composition: Composition, exportResult: ExportResult, exportException: ExportException) {
+                    android.util.Log.e("DZ", "export failed code=${exportException.errorCode} ${exportException.errorCodeName}", exportException)
                     handler.removeCallbacksAndMessages(null); onDone(Result.failure(exportException))
                 }
             }).build()

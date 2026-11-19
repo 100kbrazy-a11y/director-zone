@@ -101,7 +101,9 @@ object DzTest {
     private suspend fun script(ctx: Context, vm: EditorVM) {
         val out = File(ctx.getExternalFilesDir(null), "dztest_out").apply { deleteRecursively(); mkdirs() }
         val work = File(ctx.filesDir, "dztest").apply { mkdirs() }
+        File(work, "side.txt").delete()
         for (n in ctx.assets.list("dztest")!!) ctx.assets.open("dztest/$n").use { i -> File(work, n).outputStream().use { o -> i.copyTo(o) } }
+        File(work, "side.txt").takeIf { it.exists() }?.readText()?.trim()?.toIntOrNull()?.let { vm.engine.previewShortSide = it; log("PREVIEW short side = $it") }
         fun clip(n: String) = Clip(uri = Uri.fromFile(File(work, "$n.mp4")).toString(), srcDurMs = 5000, outMs = 5000)
         val a = clip("A"); val b = clip("B"); val c = clip("C")
         val tone = SoundItem(name = "tone", source = Uri.fromFile(File(work, "tone.m4a")).toString(), kind = "music", startMs = 0, durMs = 15000)
