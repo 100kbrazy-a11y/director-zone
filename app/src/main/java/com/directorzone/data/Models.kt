@@ -11,7 +11,11 @@ data class Adjust(
     val warmth: Float = 0f, val tint: Float = 0f, val highlights: Float = 0f, val shadows: Float = 0f,
     val vignette: Float = 0f, val grain: Float = 0f, val fade: Float = 0f, val hue: Float = 0f,
     val glow: Float = 0f, val chroma: Float = 0f, val sharpen: Float = 0f,
-)
+) {
+    operator fun plus(o: Adjust) = Adjust(exposure + o.exposure, contrast + o.contrast, saturation + o.saturation, warmth + o.warmth, tint + o.tint, highlights + o.highlights, shadows + o.shadows,
+        vignette + o.vignette, grain + o.grain, fade + o.fade, hue + o.hue, glow + o.glow, chroma + o.chroma, sharpen + o.sharpen)
+    fun scaled(k: Float) = Adjust(exposure * k, contrast * k, saturation * k, warmth * k, tint * k, highlights * k, shadows * k, vignette * k, grain * k, fade * k, hue * k, glow * k, chroma * k, sharpen * k)
+}
 
 @Serializable
 data class Clip(
@@ -29,6 +33,8 @@ data class Clip(
     val transition: String = "none",   // transition INTO this clip from the previous one
     val transitionMs: Int = 600,
     val kenBurns: Boolean = false,
+    val effect: String = "none",       // look preset from the Effects sheet, stacked on top of filter + adjust
+    val effectAmount: Float = 0.7f,
 ) {
     /** Length on the timeline, after speed. */
     val lengthMs: Long get() = ((outMs - inMs) / speed).toLong().coerceAtLeast(100)
@@ -72,6 +78,8 @@ data class SoundItem(
     val fadeInMs: Int = 0,
     val fadeOutMs: Int = 0,
     val loop: Boolean = false,
+    val inMs: Long = 0,             // trim: offset into the source file
+    val srcMs: Long = 0,            // full source length (0 = same as durMs)
 )
 
 @Serializable

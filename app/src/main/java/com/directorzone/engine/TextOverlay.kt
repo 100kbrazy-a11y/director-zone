@@ -31,14 +31,27 @@ object TextPainter {
     private fun outBack(x: Float): Float { val c = x.coerceIn(0f, 1f); val s = 1.70158f; val k = c - 1f; return 1f + (s + 1f) * k * k * k + s * k * k }
     private fun hash(a: Int): Float { var x = a * 374761393 + 668265263; x = (x xor (x shr 13)) * 1274126177; return ((x xor (x shr 16)) and 0xFFFF) / 65535f }
 
-    fun typeface(font: String): Typeface = when (font) {
-        "black" -> Typeface.create("sans-serif-black", Typeface.NORMAL)
-        "light" -> Typeface.create("sans-serif-light", Typeface.NORMAL)
-        "serif" -> Typeface.create(Typeface.SERIF, Typeface.BOLD)
-        "mono" -> Typeface.create(Typeface.MONOSPACE, Typeface.BOLD)
-        "script" -> Typeface.create("cursive", Typeface.BOLD)
-        "condensed" -> Typeface.create("sans-serif-condensed", Typeface.BOLD)
-        else -> Typeface.create(Typeface.SANS_SERIF, Typeface.BOLD)
+    /** set once from the Application so bundled fonts can be loaded from assets/fonts */
+    var assets: android.content.res.AssetManager? = null
+    private val cache = HashMap<String, Typeface>()
+    val FILES = mapOf("anton" to "anton", "bebas" to "bebas", "pacifico" to "pacifico", "arcade" to "arcade", "righteous" to "righteous", "bangers" to "bangers",
+        "lobster" to "lobster", "poppins" to "poppins", "abril" to "abril", "monoton" to "monoton", "fugaz" to "fugaz", "playfair" to "playfair",
+        "montserrat" to "montserrat", "oswald" to "oswald", "orbitron" to "orbitron", "caveat" to "caveat")
+
+    fun typeface(font: String): Typeface = cache.getOrPut(font) {
+        val f = FILES[font]
+        val am = assets
+        if (f != null && am != null) try { Typeface.createFromAsset(am, "fonts/$f.ttf") } catch (e: Exception) { Typeface.DEFAULT_BOLD }
+        else when (font) {
+            "black" -> Typeface.create("sans-serif-black", Typeface.NORMAL)
+            "light" -> Typeface.create("sans-serif-light", Typeface.NORMAL)
+            "serif" -> Typeface.create(Typeface.SERIF, Typeface.BOLD)
+            "mono" -> Typeface.create(Typeface.MONOSPACE, Typeface.BOLD)
+            "script" -> Typeface.create("cursive", Typeface.BOLD)
+            "condensed" -> Typeface.create("sans-serif-condensed", Typeface.BOLD)
+            "medium" -> Typeface.create("sans-serif-medium", Typeface.NORMAL)
+            else -> Typeface.create(Typeface.SANS_SERIF, Typeface.BOLD)
+        }
     }
 
     private fun parse(hex: String): Int = try { Color.parseColor("#$hex") } catch (e: Exception) { Color.WHITE }

@@ -54,8 +54,10 @@ object ProjectBuilder {
                 fx.add(Presentation.createForWidthAndHeight(canvas.width, canvas.height, if (p.fit) Presentation.LAYOUT_SCALE_TO_FIT else Presentation.LAYOUT_SCALE_TO_FIT_WITH_CROP))
             }
             // skip the colour pass entirely when it would be an identity (keeps preview light)
-            if (clip.filter != "none" || clip.adjust != Adjust() || clip.kenBurns || clip.isImage)
-                fx.add(GradeEffect(filterById(clip.filter), clip.filterAmount, clip.adjust, clip.kenBurns || clip.isImage, clipSec))
+            val efx = fxById(clip.effect)
+            val adjAll = if (efx.id == "none") clip.adjust else clip.adjust + efx.a.scaled(clip.effectAmount)
+            if (clip.filter != "none" || adjAll != Adjust() || efx.fx != 0 || clip.kenBurns || clip.isImage)
+                fx.add(GradeEffect(filterById(clip.filter), clip.filterAmount, adjAll, clip.kenBurns || clip.isImage, clipSec, efx.fx))
             if (p.phone.enabled) fx.add(PhoneEffect(p.phone, canvas, clipSec))
             // transition halves
             val tIn = if (i > 0) transitionById(clip.transition) else TRANSITIONS[0]
@@ -105,8 +107,8 @@ object ProjectBuilder {
                 val lane = lanes.firstOrNull { it.end <= pc.startMs } ?: Lane().also { lanes.add(it) }
                 val item = EditedMediaItem.Builder(
                     MediaItem.Builder().setUri(Uri.parse(pc.source))
-                        .setClippingConfiguration(MediaItem.ClippingConfiguration.Builder().setStartPositionMs(0).setEndPositionMs(len).build()).build()
-                ).setRemoveVideo(true).setDurationUs(pc.durMs * 1000)
+                        .setClippingConfiguration(MediaItem.ClippingConfiguration.Builder().setStartPositionMs(pc.inMs).setEndPositionMs(pc.inMs + len).build()).build()
+                ).setRemoveVideo(true).setDurationUs((if (pc.srcMs > 0) pc.srcMs else pc.durMs) * 1000)
                     .setEffects(Effects(listOf<AudioProcessor>(GainProcessor(pc.volume, pc.fadeInMs, pc.fadeOutMs, len)), ImmutableList.of<Effect>()))
                     .build()
                 lane.parts.add((pc.startMs - lane.end) to item)

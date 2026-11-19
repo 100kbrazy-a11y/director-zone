@@ -36,16 +36,18 @@ data class Palette(
 
 private fun c(v: Long) = Color(v)
 val PALETTES = listOf(
-    Palette("obsidian", "Obsidian", true, c(0xFF0B0B0D), c(0xFF141416), c(0xFF1D1D20), c(0xFF29292D), c(0xFFF5F5F7), c(0xFF9A9AA2), c(0xFFFFFFFF), c(0xFFB9BCC4), c(0xFF0B0B0D)),
-    Palette("midnight", "Midnight", true, c(0xFF080C18), c(0xFF0F1526), c(0xFF171F36), c(0xFF222C49), c(0xFFEEF2FF), c(0xFF8E9BC0), c(0xFF7B93FF), c(0xFF5BD6FF), c(0xFF081030)),
-    Palette("crimson", "Crimson", true, c(0xFF0E0708), c(0xFF171011), c(0xFF21161A), c(0xFF2E2025), c(0xFFFBEFF1), c(0xFFB09097), c(0xFFFF4B5F), c(0xFFFF8A5B), c(0xFFFFFFFF)),
-    Palette("emerald", "Emerald", true, c(0xFF060F0C), c(0xFF0E1814), c(0xFF152620), c(0xFF1F362E), c(0xFFEBFAF4), c(0xFF86AFA0), c(0xFF2FD99A), c(0xFF9BF0C6), c(0xFF04130C)),
-    Palette("ocean", "Ocean", true, c(0xFF050E17), c(0xFF0C1824), c(0xFF13263A), c(0xFF1C364F), c(0xFFEAF5FF), c(0xFF86A8C4), c(0xFF33AFFF), c(0xFF5CF0E0), c(0xFF031422)),
-    Palette("violet", "Violet", true, c(0xFF0C0813), c(0xFF150F20), c(0xFF1F1730), c(0xFF2C2142), c(0xFFF3EEFF), c(0xFF9F92C2), c(0xFF9468FF), c(0xFFFF6BD0), c(0xFFFFFFFF)),
-    Palette("amber", "Amber", true, c(0xFF100C05), c(0xFF191409), c(0xFF251D0E), c(0xFF342914), c(0xFFFFF6E6), c(0xFFB5A27F), c(0xFFFFB224), c(0xFFFF7A3D), c(0xFF1B1000)),
-    Palette("rose", "Rose", true, c(0xFF110910), c(0xFF1B0F19), c(0xFF281825), c(0xFF38222F), c(0xFFFFEFF6), c(0xFFBB93A8), c(0xFFFF6FA5), c(0xFFFFB38A), c(0xFF230613)),
-    Palette("arctic", "Arctic", false, c(0xFFF2F5F9), c(0xFFFFFFFF), c(0xFFE9EEF4), c(0xFFDCE3EC), c(0xFF0E1726), c(0xFF5F6C80), c(0xFF2563EB), c(0xFF0EA5E9), c(0xFFFFFFFF)),
+    Palette("midnight", "Midnight", true, c(0xFF0A0A0B), c(0xFF141416), c(0xFF1D1D20), c(0xFF29292D), c(0xFFF5F5F7), c(0xFF9A9AA2), c(0xFFFFFFFF), c(0xFFD7D9DE), c(0xFF0A0A0B)),
+    Palette("obsidian", "Obsidian", true, c(0xFF0C0C0E), c(0xFF161618), c(0xFF202023), c(0xFF2C2C30), c(0xFFEDEDF0), c(0xFF8F9097), c(0xFFB4B8C2), c(0xFF8B8F9A), c(0xFF0C0C0E)),
+    Palette("crimson", "Crimson", true, c(0xFF0E0708), c(0xFF171011), c(0xFF21161A), c(0xFF2E2025), c(0xFFFBEFF1), c(0xFFB09097), c(0xFFE23A50), c(0xFFFF7A5B), c(0xFFFFFFFF)),
+    Palette("emerald", "Emerald", true, c(0xFF060F0C), c(0xFF0E1814), c(0xFF152620), c(0xFF1F362E), c(0xFFEBFAF4), c(0xFF86AFA0), c(0xFF22C58B), c(0xFF8FE9C0), c(0xFF04130C)),
+    Palette("ocean", "Ocean", true, c(0xFF0B0F14), c(0xFF131A22), c(0xFF1B2631), c(0xFF26343F), c(0xFFEAF3FB), c(0xFF8BA3B8), c(0xFF2E8BF0), c(0xFF5CC6F0), c(0xFFFFFFFF)),
+    Palette("violet", "Violet", true, c(0xFF0D0C11), c(0xFF16151C), c(0xFF201E29), c(0xFF2C2937), c(0xFFF1EEFA), c(0xFF9C97B3), c(0xFF8F6BF2), c(0xFFC48BFF), c(0xFFFFFFFF)),
+    Palette("amber", "Amber", true, c(0xFF0F0E0C), c(0xFF181714), c(0xFF22201B), c(0xFF302D26), c(0xFFFFF6E6), c(0xFFB5A58A), c(0xFFF2A81D), c(0xFFFF7A3D), c(0xFF1B1000)),
+    Palette("rose", "Rose", true, c(0xFF100D0F), c(0xFF191518), c(0xFF241E22), c(0xFF322A2F), c(0xFFFFEFF5), c(0xFFB59AA8), c(0xFFE8628F), c(0xFFFFA89A), c(0xFF230613)),
+    Palette("arctic", "Arctic", true, c(0xFF0C0F11), c(0xFF151A1D), c(0xFF1E2529), c(0xFF29323A), c(0xFFEAF6F8), c(0xFF8EA6AE), c(0xFF7FE3F0), c(0xFFB5F0F7), c(0xFF06161A)),
 )
+val THEME_DESC = mapOf("midnight" to "Black · White", "obsidian" to "Black · Graphite", "crimson" to "Black · Deep Red", "emerald" to "Black · Deep Green", "ocean" to "Graphite · Deep Blue",
+    "violet" to "Graphite · Muted Violet", "amber" to "Graphite · Warm Amber", "rose" to "Graphite · Muted Rose", "arctic" to "Graphite · Icy Cyan")
 fun paletteById(id: String) = PALETTES.firstOrNull { it.id == id } ?: PALETTES[0]
 
 object DZ {

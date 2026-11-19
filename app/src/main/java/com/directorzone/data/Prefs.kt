@@ -22,7 +22,7 @@ object Prefs {
     fun put(k: String, v: Int) = put(k, v.toString())
 
     // Appearance
-    val theme get() = str("theme", "obsidian")
+    val theme get() = str("theme", "midnight")
     val compact get() = str("density", "comfortable") == "compact"
     /** 0 = off, 1 = standard, 2 = high */
     val animQuality get() = int("anim", 2)

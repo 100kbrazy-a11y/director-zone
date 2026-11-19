@@ -65,7 +65,7 @@ internal abstract class FxProgram(fragment: String, private val outSize: (Int, I
 }
 
 /** Colour grade + filter + Ken Burns. Clip-local time drives grain / VHS jitter. */
-class GradeEffect(private val filter: FilterDef, private val amount: Float, private val adj: Adjust, private val kenBurns: Boolean, private val clipSec: Float) : GlEffect {
+class GradeEffect(private val filter: FilterDef, private val amount: Float, private val adj: Adjust, private val kenBurns: Boolean, private val clipSec: Float, private val fxExtra: Int = 0) : GlEffect {
     override fun toGlShaderProgram(context: Context, useHdr: Boolean): BaseGlShaderProgram =
         object : FxProgram(Shaders.GRADE, { w, h -> Size(w, h) }) {
             override fun uniforms(p: GlProgram, t: Float) {
@@ -84,7 +84,7 @@ class GradeEffect(private val filter: FilterDef, private val amount: Float, priv
                 p.u("uGlow", f.glow * a + adj.glow)
                 p.u("uChroma", f.chroma * a + adj.chroma)
                 p.u("uSharp", adj.sharpen)
-                p.u("uFx", filter.fx.toFloat())
+                p.u("uFx", max(filter.fx, fxExtra).toFloat())
                 p.u("uDuo", filter.duo * a)
                 p.setFloatsUniformIfPresent("uDuoA", argb3(filter.duoA))
                 p.setFloatsUniformIfPresent("uDuoB", argb3(filter.duoB))

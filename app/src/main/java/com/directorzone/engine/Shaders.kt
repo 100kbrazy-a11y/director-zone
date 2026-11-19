@@ -88,6 +88,12 @@ vec3 blurDir(vec2 uv, vec2 dir) {
   return s / 12.0;
 }
 vec2 rot(vec2 p, float a) { float c = cos(a), s = sin(a); return vec2(c * p.x - s * p.y, s * p.x + c * p.y); }
+float wv(float pos, float e) {
+  float s = 0.012;
+  float ee = e * (1.0 + 2.0 * s) - s;
+  if (uIn > 0.5) return 1.0 - smoothstep(1.0 - ee - s, 1.0 - ee + s, pos);
+  return smoothstep(ee - s, ee + s, pos);
+}
 void main() {
   vec2 uv = vUv;
   float q = clamp(uQ, 0.0, 1.0);
@@ -186,11 +192,58 @@ void main() {
     vec3 leak = mix(vec3(1.0, 0.35, 0.1), vec3(1.0, 0.8, 0.4), band);
     c += leak * e * (0.5 + 0.5 * (1.0 - uv.y)) * 1.1;
   }
-  else {
+  else if (m == 21) {
     vec2 u2 = vec2(uv.x, 0.5 + (uv.y - 0.5) * (1.0 + e * 1.4));
     c = tex(u2) * (1.0 - e * 0.55);
     c = mix(c, vec3(1.0), smoothstep(0.85, 1.0, q) * 0.4);
   }
+  else if (m >= 22 && m <= 28) {
+    float pos = uv.x;
+    if (m == 23) pos = 1.0 - uv.x;
+    else if (m == 24) pos = 1.0 - uv.y;
+    else if (m == 25) pos = uv.y;
+    else if (m == 26) pos = (uv.x + 1.0 - uv.y) * 0.5;
+    else if (m == 27) pos = atan(uv.x - 0.5, uv.y - 0.5) / 6.28318 + 0.5;
+    else if (m == 28) pos = abs(uv.x - 0.5) * 2.0;
+    c = tex(uv) * wv(pos, e);
+  }
+  else if (m == 29) {
+    float band = step(0.88, hash(vec2(floor(uv.y * 36.0), floor(uTime * 12.0))));
+    vec2 off = vec2((hash(vec2(floor(uv.y * 120.0), floor(uTime * 20.0))) - 0.5) * 0.06 * e * (0.4 + band * 2.0), 0.0);
+    float sp = 0.012 * e;
+    c = vec3(tex(uv + off + vec2(sp, 0.0)).r, tex(uv + off).g, tex(uv + off - vec2(sp, 0.0)).b);
+    c += (hash(uv * uRes + uTime) - 0.5) * 0.35 * e;
+    c = mix(c, vec3(dot(c, vec3(0.33))), e * 0.4) * (1.0 - 0.45 * e);
+  }
+  else if (m == 30) {
+    float v = (uv.y - 0.5) / max(1.0 - e, 0.015) + 0.5;
+    if (v < 0.0 || v > 1.0) c = vec3(0.0);
+    else c = tex(vec2(uv.x, v)) * (1.0 + e * e * 1.6) + vec3(e * e * 0.4);
+  }
+  else if (m == 31) {
+    c = blurDir(uv, vec2(e * 0.22, 0.0));
+    float streak = exp(-abs(uv.y - 0.5) * 16.0);
+    c += vec3(0.45, 0.7, 1.0) * streak * e * 1.5;
+    c *= 1.0 - 0.2 * e;
+  }
+  else if (m == 32) {
+    vec2 d = (uv - 0.5) * vec2(asp, 1.0);
+    float r = length(d);
+    vec2 off = normalize(d + vec2(0.00001)) * sin(r * 42.0 - uTime * 10.0) * 0.022 * e;
+    c = tex(uv + off / vec2(asp, 1.0)) * (1.0 - e * 0.4);
+  }
+  else if (m == 33) {
+    vec2 d = uv - 0.5;
+    float r = length(d);
+    float f = 1.0 - e * 1.3 * (0.7 - min(r, 0.7));
+    c = tex(0.5 + d * f) * (1.0 - e * 0.45);
+  }
+  else if (m == 34) {
+    float rr = e * 0.08;
+    c = (blurDir(uv, vec2(rr, 0.0)) + blurDir(uv, vec2(0.0, rr * asp))) * 0.5;
+    c = c * (1.0 + e * 1.2) + vec3(e * e * 0.5);
+  }
+  else { c = tex(uv); }
   gl_FragColor = vec4(clamp(c, 0.0, 1.0), 1.0);
 }
 """
