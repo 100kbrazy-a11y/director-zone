@@ -70,6 +70,7 @@ jobs:
       - uses: gradle/actions/setup-gradle@v4
       - name: Generate test clips (A red / B green / C blue, 5s each) and a 15s tone
         run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg fonts-dejavu-core >/dev/null
           mkdir -p ci_assets/dztest
           FONT=/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf
           mk() { ffmpeg -y -loglevel error -f lavfi -i "color=c=$2:s=1280x720:r=30:d=5" -vf "drawtext=fontfile=$FONT:text='$1  %{pts\\:hms}':fontsize=110:fontcolor=white:x=60:y=60,drawtext=fontfile=$FONT:text='frame %{n}':fontsize=70:fontcolor=white:x=60:y=220" -c:v libx264 -pix_fmt yuv420p -g 15 -an ci_assets/dztest/$1.mp4; }
@@ -96,5 +97,5 @@ jobs:
         if: always()
         env: { GH_TOKEN: "${{ github.token }}" }
         run: |
-          mkdir -p /tmp/pub && cp -r results/* /tmp/pub/ 2>/dev/null || true
+          mkdir -p /tmp/pub && cp -r results/* /tmp/pub/ 2>/dev/null || true; echo ${{ github.sha }} > /tmp/pub/sha.txt
           cd /tmp/pub && git init -q && git checkout -q -b ci-results && git add -A && git -c user.name=ci -c user.email=ci@example.com commit -q -m "playback test results ${{ github.sha }}" && git push -q -f "https://x-access-token:${GH_TOKEN}@github.com/${{ github.repository }}" ci-results
