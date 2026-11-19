@@ -29,8 +29,9 @@ class PreviewEngine(private val ctx: Context, private val scope: CoroutineScope)
     /** authoritative playhead */
     var timelineMs by mutableStateOf(0L); private set
     var durationMs = 0L; private set
-    var loop = false
-    var previewShortSide = 540
+    /** loop comes from Settings > Playback; previewShortSide (0 = use the Settings proxy resolution) is only overridden by the self-test */
+    var previewShortSide = 0
+    private val loop get() = com.directorzone.data.Prefs.loop
     /** the PlayerView currently showing the player (used by the self-test to grab real frames) */
     var hostView: androidx.media3.ui.PlayerView? = null
 
@@ -58,7 +59,7 @@ class PreviewEngine(private val ctx: Context, private val scope: CoroutineScope)
             building = true
             try {
                 val t0 = SystemClock.elapsedRealtime()
-                val comp = withContext(Dispatchers.Default) { ProjectBuilder.build(ctx, p, previewShortSide, 30) }
+                val comp = withContext(Dispatchers.Default) { ProjectBuilder.build(ctx, p, if (previewShortSide > 0) previewShortSide else com.directorzone.data.Prefs.previewSide, com.directorzone.data.Prefs.previewFps) }
                 val resumeAt = timelineMs.coerceIn(0, endClamp(p.durationMs))
                 val resume = wantPlay
                 val myGen = ++gen

@@ -10,7 +10,7 @@ data class Adjust(
     val exposure: Float = 0f, val contrast: Float = 0f, val saturation: Float = 0f,
     val warmth: Float = 0f, val tint: Float = 0f, val highlights: Float = 0f, val shadows: Float = 0f,
     val vignette: Float = 0f, val grain: Float = 0f, val fade: Float = 0f, val hue: Float = 0f,
-    val glow: Float = 0f, val chroma: Float = 0f,
+    val glow: Float = 0f, val chroma: Float = 0f, val sharpen: Float = 0f,
 )
 
 @Serializable
@@ -51,6 +51,13 @@ data class TextItem(
     val shadow: Boolean = true,
     val sticker: Boolean = false,    // emoji sticker
     val rotation: Float = 0f,
+    val align: String = "center",   // left | center | right
+    val letterSp: Float = 0f,       // extra tracking, fraction of font size
+    val lineSp: Float = 1.18f,      // line height multiplier
+    val outlineW: Float = 0f,       // outline width, fraction of font size (0 = off)
+    val outlineColor: String = "000000",
+    val glow: Float = 0f,           // 0..1 coloured glow in the text colour
+    val bgAlpha: Float = 0.92f,
 )
 
 @Serializable
@@ -76,6 +83,12 @@ data class PhoneCfg(
     val scale: Float = 1f,
     val shadow: Boolean = true,
     val tempo: Float = 1f,
+    val yaw: Float = 0f, val pitch: Float = 0f, val roll: Float = 0f,   // static rotation offsets, degrees
+    val motion: Float = 1f,         // movement intensity of the animation preset
+    val depth: Float = 1f,          // phone thickness
+    val glare: Float = 1f,          // screen reflection
+    val light: Float = 1f,          // body lighting
+    val offX: Float = 0f, val offY: Float = 0f,
 )
 
 @Serializable
@@ -89,6 +102,11 @@ data class Project(
     val ratio: String = "9:16",
     val fit: Boolean = false,       // fit (letterbox) instead of fill (crop)
     val autoSfx: Boolean = true,    // drop a matching whoosh on every transition
+    val favorite: Boolean = false,
+    val folder: String = "",
+    val lockV: Boolean = false, val lockT: Boolean = false, val hideT: Boolean = false,
+    val lockA: Boolean = false, val muteA: Boolean = false,
+    val exports: Int = 0,
     val updated: Long = System.currentTimeMillis(),
 ) {
     val durationMs: Long get() = clips.sumOf { it.lengthMs }

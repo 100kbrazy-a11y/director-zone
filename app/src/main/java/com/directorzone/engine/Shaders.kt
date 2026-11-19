@@ -22,7 +22,7 @@ vec3 tex(vec2 uv) { return texture2D(uTexSampler, mirrorUv(uv)).rgb; }
 """
 
     val GRADE = COMMON + """
-uniform float uExposure, uContrast, uSat, uWarm, uTint, uHigh, uShad, uVig, uGrain, uFade, uHue, uGlow, uChroma, uKen, uFx, uDuo;
+uniform float uExposure, uContrast, uSat, uWarm, uTint, uHigh, uShad, uVig, uGrain, uFade, uHue, uGlow, uChroma, uKen, uFx, uDuo, uSharp;
 uniform vec3 uDuoA, uDuoB;
 vec3 hueRot(vec3 c, float a) {
   float cs = cos(a), sn = sin(a);
@@ -51,6 +51,11 @@ void main() {
     }
     g /= 16.0;
     c += uGlow * max(g - 0.45, 0.0) * 1.3;
+  }
+  if (uSharp > 0.0) {
+    vec2 px = 1.0 / uRes;
+    vec3 bl = (tex(uv + vec2(px.x, 0.0)) + tex(uv - vec2(px.x, 0.0)) + tex(uv + vec2(0.0, px.y)) + tex(uv - vec2(0.0, px.y))) * 0.25;
+    c += (c - bl) * uSharp * 2.2;
   }
   c *= pow(2.0, uExposure);
   c.r += uWarm * 0.09; c.b -= uWarm * 0.09;
@@ -192,8 +197,8 @@ void main() {
 
     val PHONE = COMMON + """
 uniform vec3 uRot, uPos, uFrame, uBack, uBg1, uBg2, uBg3;
-uniform float uScale, uVid, uIsland, uCorner, uBezel, uBgMode, uShadow;
-const float TH = 0.062;
+uniform float uScale, uVid, uIsland, uCorner, uBezel, uBgMode, uShadow, uDepth, uGlare, uLight;
+#define TH (0.062 * uDepth)
 const float PW = 0.243;
 mat3 rotY(float a) { float c = cos(a), s = sin(a); return mat3(c, 0.0, -s, 0.0, 1.0, 0.0, s, 0.0, c); }
 mat3 rotX(float a) { float c = cos(a), s = sin(a); return mat3(1.0, 0.0, 0.0, 0.0, c, s, 0.0, -s, c); }
@@ -303,13 +308,13 @@ void main() {
       float sa = bs.x / bs.y;
       if (uVid > sa) su.x = (su.x - 0.5) * (sa / uVid) + 0.5; else su.y = (su.y - 0.5) * (uVid / sa) + 0.5;
       vec3 sc = texture2D(uTexSampler, clamp(su, 0.0, 1.0)).rgb;
-      sc += 0.05 * smoothstep(0.35, 1.0, (p.x / bs.x) * 0.55 - (p.y / bs.y) * 0.35 + 0.5 + uRot.x * 0.3) * 0.7;
+      sc += 0.05 * uGlare * smoothstep(0.35, 1.0, (p.x / bs.x) * 0.55 - (p.y / bs.y) * 0.35 + 0.5 + uRot.x * 0.3) * 0.7;
       if (uIsland > 0.5 && uIsland < 1.5) sc = mix(sc, vec3(0.0), cov(rr(p - vec2(0.0, bs.y - 0.032), vec2(0.052, 0.0135), 0.0135), aa));
       if (uIsland > 1.5 && uIsland < 2.5) sc = mix(sc, vec3(0.0), cov(rr(p - vec2(0.0, bs.y - 0.012), vec2(0.085, 0.0175), 0.014), aa));
       if (uIsland > 2.5) sc = mix(sc, vec3(0.0), cov(length(p - vec2(0.0, bs.y - 0.03)) - 0.0105, aa));
       pc = mix(pc, sc, cov(ds, aa));
     } else if (fi > 13.5 && !frontSeen) {
-      pc = uBack * (0.9 + 0.1 * (p.y + 0.5));
+      pc = uBack * (1.0 + (0.9 + 0.1 * (p.y + 0.5) - 1.0) * uLight);
       float bump = rr(p - vec2(0.105, 0.365), vec2(0.088), 0.045);
       pc = mix(pc, uBack * 0.72, cov(bump, aa));
       for (int k = 0; k < 3; k++) {
@@ -320,7 +325,7 @@ void main() {
       }
       pc = mix(uFrame * 0.9, pc, cov(so + 0.004, aa));
     } else {
-      float sh = 0.62 + 0.38 * cos(fi * 0.45 + p.y * 3.0 + uRot.x);
+      float sh = 1.0 + (0.62 + 0.38 * cos(fi * 0.45 + p.y * 3.0 + uRot.x) - 1.0) * uLight;
       pc = uFrame * sh + 0.07 * smoothstep(-0.006, 0.0, so);
     }
     col = mix(col, pc, cv);

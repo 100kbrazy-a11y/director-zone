@@ -83,6 +83,7 @@ class GradeEffect(private val filter: FilterDef, private val amount: Float, priv
                 p.u("uHue", adj.hue * 3.14159f)
                 p.u("uGlow", f.glow * a + adj.glow)
                 p.u("uChroma", f.chroma * a + adj.chroma)
+                p.u("uSharp", adj.sharpen)
                 p.u("uFx", filter.fx.toFloat())
                 p.u("uDuo", filter.duo * a)
                 p.setFloatsUniformIfPresent("uDuoA", argb3(filter.duoA))
@@ -115,8 +116,13 @@ class PhoneEffect(private val cfg: PhoneCfg, private val canvas: Size, private v
             val bz = bezelById(cfg.bezel); val bg = bgById(cfg.bg); val anim = phoneAnimById(cfg.anim)
             override fun uniforms(p: GlProgram, t: Float) {
                 val pose = PhoneMotion.pose(anim.code, t * cfg.tempo)
-                p.u("uRot", pose.yaw, pose.pitch, pose.roll)
-                p.u("uPos", pose.x, pose.y, pose.z)
+                val m = cfg.motion
+                val d2r = 0.0174533f
+                p.u("uRot", pose.yaw * m + cfg.yaw * d2r, pose.pitch * m + cfg.pitch * d2r, pose.roll * m + cfg.roll * d2r)
+                p.u("uPos", pose.x * m + cfg.offX * 0.5f, pose.y * m + cfg.offY * 0.5f, pose.z)
+                p.u("uDepth", cfg.depth)
+                p.u("uGlare", cfg.glare)
+                p.u("uLight", cfg.light)
                 p.u("uScale", pose.scale * cfg.scale)
                 p.u("uVid", inW.toFloat() / inH.toFloat())
                 p.setFloatsUniformIfPresent("uFrame", argb3(bz.frame))

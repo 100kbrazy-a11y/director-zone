@@ -144,7 +144,7 @@ class EditorVM(app: Application) : AndroidViewModel(app) {
 
     // ---------- sounds
     fun addSound(m: SoundMeta) {
-        val isBed = m.cat == "Ambience" || m.cat == "Beats"
+        val isBed = m.loop
         val s = SoundItem(name = m.name, source = m.assetUri, kind = if (isBed) "music" else "sfx", startMs = posMs, durMs = m.ms.toLong(), volume = if (isBed) 0.45f else 0.9f, loop = isBed, fadeOutMs = if (isBed) 800 else 0)
         edit { it.copy(sounds = it.sounds + s) }
         selSound = s.id; selText = null

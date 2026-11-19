@@ -77,8 +77,8 @@ object ProjectBuilder {
 
         // ---- sound lanes
         val total = p.durationMs
-        val sounds = ArrayList<SoundItem>(p.sounds)
-        if (p.autoSfx) {
+        val sounds = ArrayList<SoundItem>(if (p.muteA) emptyList() else p.sounds)
+        if (p.autoSfx && !p.muteA) {
             var t = 0L
             p.clips.forEachIndexed { i, c ->
                 if (i > 0) {
@@ -123,7 +123,7 @@ object ProjectBuilder {
             sequences.add(b.build())
         }
         val vfx = ArrayList<Effect>()
-        if (p.texts.isNotEmpty()) vfx.add(OverlayEffect(ImmutableList.of<androidx.media3.effect.TextureOverlay>(TextBitmapOverlay(p.texts, canvas.width, canvas.height))))
+        if (p.texts.isNotEmpty() && !p.hideT) vfx.add(OverlayEffect(ImmutableList.of<androidx.media3.effect.TextureOverlay>(TextBitmapOverlay(p.texts, canvas.width, canvas.height))))
         return Composition.Builder(sequences)
             .setEffects(Effects(ImmutableList.of<AudioProcessor>(), vfx))
             .experimentalSetForceAudioTrack(true)

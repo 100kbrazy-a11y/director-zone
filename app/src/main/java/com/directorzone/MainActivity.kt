@@ -21,6 +21,7 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        com.directorzone.data.Prefs.init(applicationContext)
         enableEdgeToEdge()
         if (savedInstanceState == null && intent.getBooleanExtra("dztest", false) && DzTest.available(this)) {
             window.decorView.postDelayed({ DzTest.run(this, vm) }, 2500)

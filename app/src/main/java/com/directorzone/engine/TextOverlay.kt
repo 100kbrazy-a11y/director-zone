@@ -56,7 +56,7 @@ object TextPainter {
         val maxW = lines.maxOf { p.measureText(it) }
         if (maxW > W * 0.92f) fit = W * 0.92f / maxW
         p.textSize = px * fit
-        val lineH = p.textSize * 1.18f
+        val lineH = p.textSize * t.lineSp
         val total = lines.size * lineH
         val cx = t.x * W; val cy = t.y * H
         val outA = ((t.durMs - local) / 280f).coerceIn(0f, 1f)
@@ -70,25 +70,33 @@ object TextPainter {
         if (t.pill && !t.sticker) {
             val bw = lines.maxOf { p.measureText(it) } + p.textSize * 0.9f
             val bh = total + p.textSize * 0.35f
-            val bp = Paint(Paint.ANTI_ALIAS_FLAG).apply { this.color = parse(t.pillColor); alpha = (235 * baseA).toInt() }
+            val bp = Paint(Paint.ANTI_ALIAS_FLAG).apply { this.color = parse(t.pillColor); alpha = (255 * t.bgAlpha * baseA).toInt().coerceIn(0, 255) }
             c.drawRoundRect(cx - bw / 2, cy - bh / 2, cx + bw / 2, cy + bh / 2, bh * 0.35f, bh * 0.35f, bp)
         }
         var idx = 0
         val totalUnits = if (perWord) t.text.split(Regex("\\s+")).size else t.text.replace("\n", "").length
-        for ((li, line) in lines.withIndex()) {
+        val track = t.letterSp * p.textSize
+        val laid = ArrayList<Pair<List<Glyph>, Float>>()
+        for (line in lines) {
             val units = ArrayList<Glyph>()
             if (perWord) {
                 var x = 0f
                 val words = line.split(" ")
-                for ((i, wd) in words.withIndex()) { val s = if (i < words.size - 1) "$wd " else wd; val wi = p.measureText(s); units.add(Glyph(s, x, wi)); x += wi }
+                for ((i, wd) in words.withIndex()) { val s = if (i < words.size - 1) "$wd " else wd; val wi = p.measureText(s); units.add(Glyph(s, x, wi)); x += wi + track }
             } else {
                 var x = 0f
-                for (ch in line) { val s = ch.toString(); val wi = p.measureText(s); units.add(Glyph(s, x, wi)); x += wi }
+                for (ch in line) { val s = ch.toString(); val wi = p.measureText(s); units.add(Glyph(s, x, wi)); x += wi + track }
             }
             val lw = if (units.isEmpty()) 0f else units.last().x + units.last().w
+            laid.add(units to lw)
+        }
+        val blockW = laid.maxOfOrNull { it.second } ?: 0f
+        for ((li, pair) in laid.withIndex()) {
+            val (units, lw) = pair
             val baseY = cy - total / 2 + li * lineH + lineH * 0.78f
+            val left = when (t.align) { "left" -> cx - blockW / 2; "right" -> cx + blockW / 2 - lw; else -> cx - lw / 2 }
             for (u in units) {
-                val ux = cx - lw / 2 + u.x
+                val ux = left + u.x
                 drawUnit(c, p, t, u.s, ux, baseY, u.w, idx, totalUnits, local, color, baseA, W, H)
                 idx++
             }
@@ -129,6 +137,7 @@ object TextPainter {
             if (t.anim == "bounce") dy = -abs(sin(lt / 240f)) * H * 0.04f
             if (t.anim == "wave") rot = sin(lt / 300f) * 14f
         }
+        if (!t.sticker && t.glow > 0f) glow = maxOf(glow, t.glow * p.textSize * 0.55f)
         if (a <= 0.003f) return
         c.save()
         val px = x + uw / 2 + dx; val py = y + dy
@@ -145,6 +154,15 @@ object TextPainter {
                 p.color = Color.argb((190 * a).toInt(), 40, 240, 255); c.drawText(s, 5f, 0f, p)
             }
         } else p.clearShadowLayer()
+        if (!t.sticker && t.outlineW > 0f) {
+            p.style = Paint.Style.STROKE; p.strokeJoin = Paint.Join.ROUND; p.strokeWidth = p.textSize * t.outlineW
+            p.color = parse(t.outlineColor); p.alpha = (255 * a).toInt().coerceIn(0, 255)
+            p.clearShadowLayer()
+            c.drawText(s, 0f, 0f, p)
+            p.style = Paint.Style.FILL
+            if (glow > 0f) p.setShadowLayer(glow, 0f, 0f, color)
+            else if (t.shadow && blur == 0f) p.setShadowLayer(p.textSize * 0.12f, 0f, p.textSize * 0.05f, Color.argb((150 * a).toInt(), 0, 0, 0))
+        }
         p.color = if (t.sticker) Color.WHITE else color
         p.alpha = (255 * a).toInt().coerceIn(0, 255)
         c.drawText(s, 0f, 0f, p)
