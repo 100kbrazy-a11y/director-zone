@@ -230,7 +230,7 @@ object DzTest {
         val mainProj = vm.project
         suspend fun probeExport(label: String, pr: Project) {
             vm.openProject(pr); settle(vm); vm.startExport(); val s0 = System.currentTimeMillis()
-            while (System.currentTimeMillis() - s0 < 40000 && vm.export.file == null && vm.export.error == null) delay(500)
+            while (System.currentTimeMillis() - s0 < 35000 && vm.export.file == null && vm.export.error == null) delay(500)
             log("EXPORTPROBE $label ok=${vm.export.file != null} err=${vm.export.error} took=${System.currentTimeMillis() - s0}ms")
             if (vm.export.file == null) vm.cancelExport()
         }
@@ -239,6 +239,10 @@ object DzTest {
         probeExport("B-noir", Project(name = "e4", ratio = "16:9", clips = listOf(b.copy(filter = "noir")), autoSfx = false))
         probeExport("C-flash", Project(name = "e5", ratio = "16:9", clips = listOf(c.copy(transition = "flash", transitionMs = 1000)), autoSfx = false))
         probeExport("A+B-flash", Project(name = "e6", ratio = "16:9", clips = listOf(a, b.copy(transition = "flash", transitionMs = 1000)), autoSfx = false))
+        probeExport("B-noir+in-flash", Project(name = "e7", ratio = "16:9", clips = listOf(b.copy(filter = "noir", transition = "flash", transitionMs = 1000)), autoSfx = false))
+        probeExport("B+C-flash(out on B)", Project(name = "e8", ratio = "16:9", clips = listOf(b, c.copy(transition = "flash", transitionMs = 1000)), autoSfx = false))
+        probeExport("A+B-noir+C", Project(name = "e9", ratio = "16:9", clips = listOf(a, b.copy(filter = "noir"), c), autoSfx = false))
+        probeExport("A+B+C-flash", Project(name = "e10", ratio = "16:9", clips = listOf(a, b, c.copy(transition = "flash", transitionMs = 1000)), autoSfx = false))
         probeExport("main-without-tone", mainProj.copy(sounds = emptyList()))
         probeExport("A-with-tone", Project(name = "e3", ratio = "16:9", clips = listOf(a), sounds = listOf(tone.copy(durMs = 5000)), autoSfx = false))
         vm.openProject(mainProj); settle(vm)
