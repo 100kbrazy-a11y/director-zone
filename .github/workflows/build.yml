@@ -73,7 +73,7 @@ jobs:
           sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg fonts-dejavu-core >/dev/null
           mkdir -p ci_assets/dztest
           FONT=/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf
-          mk() { ffmpeg -y -loglevel error -f lavfi -i "color=c=$2:s=1280x720:r=30:d=5" -vf "drawtext=fontfile=$FONT:text='$1  %{pts\\:hms}':fontsize=110:fontcolor=white:x=60:y=60,drawtext=fontfile=$FONT:text='frame %{n}':fontsize=70:fontcolor=white:x=60:y=220" -c:v libx264 -pix_fmt yuv420p -g 15 -an ci_assets/dztest/$1.mp4; }
+          mk() { ffmpeg -y -loglevel error -f lavfi -i "color=c=$2:s=1280x720:r=30:d=5" -vf "drawtext=fontfile=$FONT:text='$1  %{pts\\:hms}':fontsize=110:fontcolor=white:x=60:y=60,geq=lum='if(gt(Y,H*0.88)*lt(X,W*T/5),255,lum(X,Y))':cb='if(gt(Y,H*0.88)*lt(X,W*T/5),128,cb(X,Y))':cr='if(gt(Y,H*0.88)*lt(X,W*T/5),128,cr(X,Y))'" -c:v libx264 -pix_fmt yuv420p -g 15 -an ci_assets/dztest/$1.mp4; }
           mk A 0xD02020; mk B 0x20B030; mk C 0x2050E0
           ffmpeg -y -loglevel error -f lavfi -i "sine=frequency=440:duration=15" -c:a aac -b:a 96k ci_assets/dztest/tone.m4a
           ls -la ci_assets/dztest

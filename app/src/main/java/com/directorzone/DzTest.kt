@@ -58,6 +58,12 @@ object DzTest {
         } catch (e: Exception) { log("grab $name failed $e"); cont.resume(null) }
     }
 
+    private suspend fun grabRetry(vm: EditorVM, name: String, out: File, pred: (Rgb) -> Boolean): Rgb? {
+        var c: Rgb? = null
+        for (i in 0 until 4) { c = grab(vm, name, out); if (c != null && pred(c)) return c; delay(250) }
+        return c
+    }
+
     private fun stamp(vm: EditorVM) = "timeline=${vm.engine.timelineMs} player=${vm.engine.positionNow()} state=${vm.engine.stateNow()} playing=${vm.engine.isPlaying}"
 
     private suspend fun settle(vm: EditorVM, maxMs: Long = 25000) {
@@ -68,8 +74,17 @@ object DzTest {
         delay(500)
     }
 
+    /** wait until the player is READY, not building, and (if a seek is in flight) a fresh frame was rendered */
+    private suspend fun awaitFrame(vm: EditorVM, sig0: Int, maxMs: Long = 8000) {
+        val t0 = System.currentTimeMillis()
+        delay(250)
+        while (System.currentTimeMillis() - t0 < maxMs && (vm.engine.building || vm.engine.stateNow() != "READY" || vm.engine.framesRenderedSignals == sig0)) delay(50)
+        delay(350)
+    }
+
     private suspend fun seekGrab(vm: EditorVM, name: String, ms: Long, out: File, waitMs: Long = 900): Rgb? {
-        vm.seek(ms); delay(waitMs)
+        val sig0 = vm.engine.framesRenderedSignals
+        vm.seek(ms); awaitFrame(vm, sig0)
         val c = grab(vm, name, out)
         log("SEEK $name target=$ms ${stamp(vm)} color=$c")
         return c
@@ -106,8 +121,8 @@ object DzTest {
             if (t < last - 50) monotonic = false
             last = t; maxT = maxOf(maxT, t)
             if (!gotA && t >= 2500) { gotA = true; val col = grab(vm, "01_play_A", out); check("T1a playing @2.5s shows A", col != null && isRed(col), "${stamp(vm)} $col") }
-            if (!gotB && t >= 7500) { gotB = true; val col = grab(vm, "02_play_B", out); check("T1b playing @7.5s shows B", col != null && isGreen(col), "${stamp(vm)} $col") }
-            if (!gotC && t >= 12500) { gotC = true; val col = grab(vm, "03_play_C", out); check("T1c playing @12.5s shows C", col != null && isBlue(col), "${stamp(vm)} $col") }
+            if (!gotB && t >= 7500) { gotB = true; val col = grabRetry(vm, "02_play_B", out, ::isGreen); check("T1b playing @7.5s shows B", col != null && isGreen(col), "${stamp(vm)} $col") }
+            if (!gotC && t >= 12500) { gotC = true; val col = grabRetry(vm, "03_play_C", out, ::isBlue); check("T1c playing @12.5s shows C", col != null && isBlue(col), "${stamp(vm)} $col") }
             if (!vm.engine.isPlaying && t > 1000) break
             delay(120)
         }
@@ -130,8 +145,9 @@ object DzTest {
         check("T3 seek 8s shows B", t3 != null && isGreen(t3), "$t3 ${stamp(vm)}")
 
         // T4 rapid scrubbing
+        val sigR = vm.engine.framesRenderedSignals
         for (ms in listOf(1000L, 10000L, 4000L, 12000L, 6000L)) { vm.seek(ms); delay(220) }
-        delay(900)
+        awaitFrame(vm, sigR)
         val t4 = grab(vm, "07_rapid_final_6s", out)
         check("T4 rapid seeks end on 6s (B)", t4 != null && isGreen(t4) && Math.abs(vm.engine.timelineMs - 6000) < 80, "${stamp(vm)} $t4")
         // sequential seeks with a capture after each

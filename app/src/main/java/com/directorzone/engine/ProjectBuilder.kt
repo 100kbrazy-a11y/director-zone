@@ -51,7 +51,9 @@ object ProjectBuilder {
             } else {
                 fx.add(Presentation.createForWidthAndHeight(canvas.width, canvas.height, if (p.fit) Presentation.LAYOUT_SCALE_TO_FIT else Presentation.LAYOUT_SCALE_TO_FIT_WITH_CROP))
             }
-            fx.add(GradeEffect(filterById(clip.filter), clip.filterAmount, clip.adjust, clip.kenBurns || clip.isImage, clipSec))
+            // skip the colour pass entirely when it would be an identity (keeps preview light)
+            if (clip.filter != "none" || clip.adjust != Adjust() || clip.kenBurns || clip.isImage)
+                fx.add(GradeEffect(filterById(clip.filter), clip.filterAmount, clip.adjust, clip.kenBurns || clip.isImage, clipSec))
             if (p.phone.enabled) fx.add(PhoneEffect(p.phone, canvas, clipSec))
             // transition halves
             val tIn = if (i > 0) transitionById(clip.transition) else TRANSITIONS[0]
