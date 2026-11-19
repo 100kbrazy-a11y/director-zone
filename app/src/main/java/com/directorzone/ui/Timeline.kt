@@ -213,8 +213,8 @@ private fun ClipTile(vm: EditorVM, c: Clip, index: Int, startMs: Long, dpPerMs: 
         Modifier.width(w).height(h).padding(end = 2.dp).onGloballyPositioned { coords = it }
             .pointerInput(c.id, locked) {
                 detectTapGestures(
-                    onTap = { vm.selectClip(c.id); haptic() },
-                    onLongPress = { vm.selectClip(c.id); haptic(); coords?.let { onMenu(MenuAnchor(ItemKind.Clip, c.id, it.boundsInWindow())) } },
+                    onTap = { vm.selectClip(c.id, moveHead = false); haptic() },
+                    onLongPress = { vm.selectClip(c.id, moveHead = false); haptic(); coords?.let { onMenu(MenuAnchor(ItemKind.Clip, c.id, it.boundsInWindow())) } },
                 )
             },
     ) {

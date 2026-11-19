@@ -16,6 +16,9 @@ import androidx.compose.material.icons.rounded.RotateRight
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
+import androidx.compose.material.icons.rounded.Refresh
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.sp
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -55,7 +58,13 @@ fun PreviewPane(vm: EditorVM, modifier: Modifier = Modifier) {
         )
         if (vm.project.clips.isEmpty()) Text("Add media to start", color = DZ.sub)
         if (eng.building) CircularProgressIndicator(Modifier.align(Alignment.TopEnd).padding(10.dp).size(18.dp), color = DZ.text, strokeWidth = 2.dp)
-        eng.error?.let { Text("Preview error: $it", color = DZ.danger, modifier = Modifier.padding(16.dp)) }
+        eng.error?.let { msg ->
+            Column(Modifier.padding(16.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+                Text("The preview stopped", color = DZ.text, fontWeight = FontWeight.SemiBold)
+                Text(msg, color = DZ.danger, fontSize = 11.sp, maxLines = 3, modifier = Modifier.padding(vertical = 6.dp))
+                BigButton("Reload preview", Icons.Rounded.Refresh, Modifier.width(190.dp)) { eng.reload() }
+            }
+        }
         // tap the preview: pause while playing; otherwise select the text/sticker under the finger, or deselect everything
         val arT = ratioById(vm.project.ratio).let { it.w.toFloat() / it.h }
         Box(Modifier.fillMaxSize().pointerInput(arT) {

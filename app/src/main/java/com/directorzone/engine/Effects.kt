@@ -98,7 +98,7 @@ class GradeEffect(private val filter: FilterDef, private val amount: Float, priv
 /** Plays one half of a transition: [isIn] eases the start of a clip, otherwise the tail. */
 class TransitionEffect(private val mode: Int, private val isIn: Boolean, private val durSec: Float, private val clipSec: Float, private val canvas: Size? = null) : GlEffect {
     override fun toGlShaderProgram(context: Context, useHdr: Boolean): BaseGlShaderProgram =
-        object : FxProgram(Shaders.TRANSITION, { w, h -> Size(w, h) }) {
+        object : FxProgram(Shaders.transition(mode), { w, h -> Size(w, h) }) {
             override fun uniforms(p: GlProgram, t: Float) {
                 val q = if (isIn) 1f - t / durSec else (t - (clipSec - durSec)) / durSec
                 p.u("uMode", mode.toFloat())

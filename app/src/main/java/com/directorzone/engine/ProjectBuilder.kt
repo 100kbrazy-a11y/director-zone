@@ -83,7 +83,7 @@ object ProjectBuilder {
         if (p.autoSfx && !p.muteA) {
             var t = 0L
             p.clips.forEachIndexed { i, c ->
-                if (i > 0) {
+                if (i > 0 && !c.transitionMute) {
                     val tr = transitionById(c.transition)
                     val sn = tr.sound?.let { SoundLib.byName(it) }
                     if (sn != null) sounds.add(SoundItem(name = sn.name, source = sn.assetUri, startMs = max(0, t - 160), durMs = sn.ms.toLong(), volume = 0.8f))

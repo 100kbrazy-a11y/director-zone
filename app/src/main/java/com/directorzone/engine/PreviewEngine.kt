@@ -44,6 +44,11 @@ class PreviewEngine(private val ctx: Context, private val scope: CoroutineScope)
     private var lastSeekAt = 0L
     private var seekJob: Job? = null
     private var gen = 0
+    private var lastProject: Project? = null
+    private var autoRetries = 0
+    private var seekInFlight = false
+    private var pendingSeek = -1L
+    private var seekWatch: Job? = null
 
     // ---- loading ---------------------------------------------------------------------------------
     /** (Re)builds the composition. Cheap to call repeatedly: debounced; keeps playhead + play state. */
@@ -52,6 +57,7 @@ class PreviewEngine(private val ctx: Context, private val scope: CoroutineScope)
 
     fun load(p: Project, debounceMs: Long = 250) {
         buildJob?.cancel()
+        lastProject = p
         durationMs = p.durationMs
         if (p.clips.isEmpty()) { release(); return }
         buildJob = scope.launch {
@@ -63,6 +69,7 @@ class PreviewEngine(private val ctx: Context, private val scope: CoroutineScope)
                 val resumeAt = timelineMs.coerceIn(0, endClamp(p.durationMs))
                 val resume = wantPlay
                 val myGen = ++gen
+                seekInFlight = false; pendingSeek = -1L; seekWatch?.cancel()
                 val np = CompositionPlayer.Builder(ctx).build()
                 np.addListener(listener(np, myGen))
                 np.setComposition(comp)
@@ -87,10 +94,17 @@ class PreviewEngine(private val ctx: Context, private val scope: CoroutineScope)
         override fun onPlayerError(e: PlaybackException) {
             if (myGen != gen) return
             Log.e(TAG, "PLAYER ERROR ${e.errorCodeName}: ${e.message}", e)
-            error = "${e.errorCodeName}: ${e.message}"; isPlaying = false
+            isPlaying = false
+            // a failed player never recovers on its own: rebuild it automatically a couple of times before showing the error
+            val lp = lastProject
+            if (lp != null && autoRetries < 2) {
+                autoRetries++
+                scope.launch { delay(350); if (myGen == gen) load(lp, 0) }
+            } else error = "${e.errorCodeName}: ${e.message}"
         }
         override fun onPlaybackStateChanged(state: Int) {
             if (myGen != gen) return
+            if (state == Player.STATE_READY) finishSeek()
             Log.i(TAG, "state=${stateName(state)} pos=${pl.currentPosition} dur=${pl.duration}")
             if (state == Player.STATE_ENDED) {
                 if (loop) { pl.seekTo(0); pl.playWhenReady = true } else { wantPlay = false; isPlaying = false; timelineMs = durationMs.coerceAtLeast(0) }
@@ -104,7 +118,7 @@ class PreviewEngine(private val ctx: Context, private val scope: CoroutineScope)
         }
         override fun onRenderedFirstFrame() {
             if (myGen != gen) return
-            frameRendered = true; framesRenderedSignals++
+            frameRendered = true; framesRenderedSignals++; autoRetries = 0
             Log.i(TAG, "FIRST_FRAME pos=${pl.currentPosition}")
         }
         override fun onPositionDiscontinuity(old: Player.PositionInfo, new: Player.PositionInfo, reason: Int) {
@@ -146,19 +160,40 @@ class PreviewEngine(private val ctx: Context, private val scope: CoroutineScope)
 
     fun toggle() { if (isPlaying || wantPlay) pause() else play() }
 
-    /** User-driven seek (scrub, tap, skip). Updates the single clock immediately and renders that frame. */
+    /**
+     * User-driven seek (scrub, tap, skip). Updates the single clock immediately. Seeks are sent one at a time: a new one goes out as soon as the
+     * previous frame has landed (or after a short timeout), always with the latest position, so the preview follows the finger live while scrubbing
+     * instead of being starved by a flood of cancelled seeks.
+     */
     fun seek(ms: Long) {
         val target = ms.coerceIn(0, endClamp(durationMs))
         timelineMs = target
-        val pl = player ?: return
-        val now = SystemClock.elapsedRealtime()
-        seekJob?.cancel()
-        if (now - lastSeekAt >= 45) { lastSeekAt = now; pl.seekTo(target) }
-        else seekJob = scope.launch { delay(45); lastSeekAt = SystemClock.elapsedRealtime(); player?.seekTo(timelineMs) }
+        pendingSeek = target
+        pumpSeek()
     }
 
+    private fun pumpSeek() {
+        val pl = player ?: return
+        if (seekInFlight) return
+        val t = pendingSeek; if (t < 0) return
+        pendingSeek = -1L; seekInFlight = true
+        pl.seekTo(t)
+        seekWatch?.cancel()
+        seekWatch = scope.launch { delay(280); finishSeek() }
+    }
+
+    private fun finishSeek() {
+        seekWatch?.cancel()
+        if (!seekInFlight) return
+        seekInFlight = false
+        if (pendingSeek >= 0) scope.launch { delay(16); pumpSeek() }
+    }
+
+    /** Rebuilds the preview from the current project (used by the "Reload preview" button). */
+    fun reload() { val p = lastProject ?: return; autoRetries = 0; error = null; load(p, 0) }
+
     fun release() {
-        buildJob?.cancel(); tickJob?.cancel(); seekJob?.cancel()
+        buildJob?.cancel(); tickJob?.cancel(); seekJob?.cancel(); seekWatch?.cancel(); seekInFlight = false; pendingSeek = -1L
         gen++
         try { player?.release() } catch (_: Exception) {}
         player = null; isPlaying = false; wantPlay = false

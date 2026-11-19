@@ -32,6 +32,7 @@ data class Clip(
     val adjust: Adjust = Adjust(),
     val transition: String = "none",   // transition INTO this clip from the previous one
     val transitionMs: Int = 600,
+    val transitionMute: Boolean = false,   // no auto whoosh for this transition
     val kenBurns: Boolean = false,
     val effect: String = "none",       // look preset from the Effects sheet, stacked on top of filter + adjust
     val effectAmount: Float = 0.7f,

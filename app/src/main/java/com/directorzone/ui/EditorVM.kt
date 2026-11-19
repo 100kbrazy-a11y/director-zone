@@ -136,8 +136,10 @@ class EditorVM(app: Application) : AndroidViewModel(app) {
     fun deselectAll() { selClip = null; selText = null; selSound = null }
     fun selectText(id: String) { selText = id; selClip = null; selSound = null }
 
-    fun selectClip(id: String) {
+    /** Selects a clip. [moveHead] jumps the playhead into it (menus/tools); tapping a clip on the timeline just selects it. */
+    fun selectClip(id: String, moveHead: Boolean = true) {
         selClip = id; selText = null; selSound = null
+        if (!moveHead) return
         val st = clipStart(id); val c = project.clips.firstOrNull { it.id == id } ?: return
         if (posMs < st || posMs >= st + c.lengthMs) seek(st + 1)
     }

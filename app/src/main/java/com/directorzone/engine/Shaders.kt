@@ -97,6 +97,9 @@ void main() {
 }
 """
 
+    /** The shader for one transition: the mode is baked in as a constant so drivers drop every other branch (smaller, faster, far less likely to fail on phone GPUs). */
+    fun transition(mode: Int) = TRANSITION.replace("int m = int(uMode + 0.5);", "const int m = $mode;")
+
     val TRANSITION = COMMON + """
 uniform float uMode, uQ, uIn;
 vec3 blurDir(vec2 uv, vec2 dir) {

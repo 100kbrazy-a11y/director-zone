@@ -68,6 +68,17 @@ fun TransitionsSheet(vm: EditorVM, close: () -> Unit) {
             Text(fmtSecs(cl.transitionMs.toLong()), color = DZ.text, fontSize = 14.sp, modifier = Modifier.width(48.dp))
             Icon(Icons.Rounded.PlayCircle, null, tint = DZ.text, modifier = Modifier.size(34.dp).clip(CircleShape).clickable { vm.previewTransition() })
         }
+        Row(Modifier.fillMaxWidth().padding(horizontal = 18.dp).padding(bottom = 6.dp), verticalAlignment = Alignment.CenterVertically) {
+            Text("Sound", color = DZ.text, fontSize = 15.sp, modifier = Modifier.width(80.dp))
+            Text(if (!vm.project.autoSfx) "All transition sounds are muted" else if (cl.transitionMute) "This transition is muted" else "Whoosh plays on this transition", color = DZ.sub, fontSize = 12.sp, modifier = Modifier.weight(1f), maxLines = 1)
+            DzSwitch(vm.project.autoSfx && !cl.transitionMute) { on ->
+                if (on && !vm.project.autoSfx) vm.edit { it.copy(autoSfx = true) }
+                vm.updateClip(cl.id) { it.copy(transitionMute = !on) }
+            }
+            Spacer(Modifier.width(10.dp))
+            Text(if (vm.project.autoSfx) "Mute all" else "Unmute all", color = DZ.accent, fontSize = 13.sp, fontWeight = FontWeight.Medium,
+                modifier = Modifier.clip(RoundedCornerShape(8.dp)).clickable { vm.edit { it.copy(autoSfx = !it.autoSfx) } }.padding(6.dp))
+        }
     }
 }
 
