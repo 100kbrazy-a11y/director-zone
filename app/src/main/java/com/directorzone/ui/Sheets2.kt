@@ -63,7 +63,7 @@ fun TransitionsSheet(vm: EditorVM, close: () -> Unit) {
         }
         Row(Modifier.fillMaxWidth().padding(horizontal = 18.dp).padding(bottom = 6.dp), verticalAlignment = Alignment.CenterVertically) {
             Text("Duration", color = DZ.text, fontSize = 15.sp, modifier = Modifier.width(80.dp))
-            Slider(cl.transitionMs / 1000f, { v -> vm.updateClip(cl.id) { it.copy(transitionMs = (v * 1000).toInt()) } }, valueRange = 0.2f..1.5f, modifier = Modifier.weight(1f).height(30.dp), enabled = cl.transition != "none",
+            Slider(cl.transitionMs / 1000f, { v -> vm.updateClip(cl.id) { it.copy(transitionMs = (v * 1000).toInt()) } }, valueRange = 0.2f..1.5f, modifier = Modifier.weight(1f), enabled = cl.transition != "none",
                 colors = SliderDefaults.colors(thumbColor = DZ.accent, activeTrackColor = DZ.accent, inactiveTrackColor = DZ.card2))
             Text(fmtSecs(cl.transitionMs.toLong()), color = DZ.text, fontSize = 14.sp, modifier = Modifier.width(48.dp))
             Icon(Icons.Rounded.PlayCircle, null, tint = DZ.text, modifier = Modifier.size(34.dp).clip(CircleShape).clickable { vm.previewTransition() })
