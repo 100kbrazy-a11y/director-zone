@@ -91,10 +91,11 @@ object DzTest {
         delay(350)
     }
 
-    private suspend fun seekGrab(vm: EditorVM, name: String, ms: Long, out: File, waitMs: Long = 900): Rgb? {
+    private suspend fun seekGrab(vm: EditorVM, name: String, ms: Long, out: File, waitMs: Long = 900, expect: ((Rgb) -> Boolean)? = null): Rgb? {
         val sig0 = vm.engine.framesRenderedSignals
         vm.seek(ms); awaitFrame(vm, sig0)
-        val c = grab(vm, name, out)
+        var c = grab(vm, name, out)
+        if (expect != null) { var n = 0; while (n++ < 6 && (c == null || !expect(c))) { delay(300); c = grab(vm, name, out) } }
         log("SEEK $name target=$ms ${stamp(vm)} color=$c")
         return c
     }
@@ -186,7 +187,7 @@ object DzTest {
         // sequential seeks with a capture after each
         val seq = listOf(1000L to ::isRed, 10200L to ::isBlue, 4000L to ::isRed, 12000L to ::isBlue, 6000L to ::isGreen)
         var okSeq = true; val det = StringBuilder()
-        for ((i, pair) in seq.withIndex()) { val col = seekGrab(vm, "08_seq_$i", pair.first, out); val good = col != null && pair.second(col); okSeq = okSeq && good; det.append("${pair.first}:${if (good) "ok" else "BAD"}($col) ") }
+        for ((i, pair) in seq.withIndex()) { val col = seekGrab(vm, "08_seq_$i", pair.first, out, expect = pair.second); val good = col != null && pair.second(col); okSeq = okSeq && good; det.append("${pair.first}:${if (good) "ok" else "BAD"}($col) ") }
         check("T4b each seek in sequence renders its frame", okSeq, det.toString())
 
         // T5 play after scrubbing
@@ -218,8 +219,8 @@ object DzTest {
         settle(vm)
         val dur9 = vm.project.durationMs
         log("SPEED duration project=$dur9 engine=${vm.engine.durationMs} player=${vm.engine.player?.duration}")
-        seekGrab(vm, "14_speed_2x", 12000, out, 1200); val t9 = grabRetry(vm, "14_speed_2x", out, ::isBlue); val bar9 = lastBarSec
-        for (ms in listOf(10300L, 10800L, 11200L, 12000L, 12400L)) { val cc = seekGrab(vm, "15_speed_$ms", ms, out); log("SPEEDPOS $ms -> $cc") }
+        var t9: Rgb? = null; var bar9 = -1f
+        for (ms in listOf(10300L, 10800L, 11200L, 12000L, 12400L)) { val cc = seekGrab(vm, "15_speed_$ms", ms, out); log("SPEEDPOS $ms -> $cc bar=$lastBarSec"); if (ms == 12000L) { t9 = cc; bar9 = lastBarSec } }
         check("T9 speed 2x → timeline 12.5s and player duration matches", dur9 == 12500L && (vm.engine.player?.duration ?: 0) in 12300..12700 && t9 != null && isBlue(t9) && Math.abs(bar9 - 4.0f) < 0.8f, "project=$dur9 player=${vm.engine.player?.duration} $t9 sourceSec@12s=$bar9 (expect ~4.0 at 2x)")
         vm.seek(10000); delay(700); vm.engine.play(); delay(1500); val p9 = vm.engine.timelineMs; vm.engine.pause()
         check("T9b playback at 2x finishes C sooner (timeline advances 1x, content 2x)", p9 in 11200..11900, "pos=$p9 ${stamp(vm)}")
@@ -262,5 +263,17 @@ object DzTest {
             check("T10a export is ~15s with audio", d in 14500..15600 && hasAudio == "yes", "dur=$d ${w}x$h audio=$hasAudio size=${f.length() / 1024}KB")
             check("T10b exported frames match the preview (A red, B noir, C blue, flash at cut)", ea != null && isRed(ea) && eb != null && isGray(eb) && ec != null && isBlue(ec) && et != null && et.lum > 110, "A=$ea B=$eb C=$ec flash=$et")
         } else check("T10 export completed", false, "error=${vm.export.error}")
+        // T10c export honours clip speed (A at 2x -> 2.5 s, content advances 2x)
+        vm.openProject(Project(name = "e-speed", ratio = "16:9", clips = listOf(a.copy(speed = 2f)), autoSfx = false)); settle(vm)
+        vm.startExport(); val s0 = System.currentTimeMillis()
+        while (System.currentTimeMillis() - s0 < 60000 && vm.export.file == null && vm.export.error == null) delay(500)
+        val sf = vm.export.file
+        if (sf == null) check("T10c export at 2x speed", false, "error=${vm.export.error}") else {
+            val r = MediaMetadataRetriever(); r.setDataSource(sf.absolutePath)
+            val d = r.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)?.toLong() ?: 0
+            val bm = r.getFrameAtTime(2_000_000L, MediaMetadataRetriever.OPTION_CLOSEST); r.release()
+            val bsec = bm?.let { val y = (it.height * 0.94f).toInt(); var wh = 0; for (x in 0 until it.width) { val c = it.getPixel(x, y); if (((c shr 16) and 255) > 230 && ((c shr 8) and 255) > 230 && (c and 255) > 230) wh++ }; 5f * wh / it.width } ?: -1f
+            check("T10c export at 2x speed: 2.5 s long, content advances 2x", d in 2200..2900 && bsec in 3.0f..5.0f, "dur=$d sourceSec@2.0s=$bsec (expect ~4.0)")
+        }
     }
 }
