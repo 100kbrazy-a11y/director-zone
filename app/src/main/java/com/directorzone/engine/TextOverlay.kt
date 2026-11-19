@@ -34,14 +34,11 @@ object TextPainter {
     /** set once from the Application so bundled fonts can be loaded from assets/fonts */
     var assets: android.content.res.AssetManager? = null
     private val cache = HashMap<String, Typeface>()
-    val FILES = mapOf("anton" to "anton", "bebas" to "bebas", "pacifico" to "pacifico", "arcade" to "arcade", "righteous" to "righteous", "bangers" to "bangers",
-        "lobster" to "lobster", "poppins" to "poppins", "abril" to "abril", "monoton" to "monoton", "fugaz" to "fugaz", "playfair" to "playfair",
-        "montserrat" to "montserrat", "oswald" to "oswald", "orbitron" to "orbitron", "caveat" to "caveat")
+    private val BUILTIN = setOf("bold", "black", "light", "serif", "mono", "script", "condensed", "medium")
 
     fun typeface(font: String): Typeface = cache.getOrPut(font) {
-        val f = FILES[font]
         val am = assets
-        if (f != null && am != null) try { Typeface.createFromAsset(am, "fonts/$f.ttf") } catch (e: Exception) { Typeface.DEFAULT_BOLD }
+        if (font !in BUILTIN && am != null) try { Typeface.createFromAsset(am, "fonts/$font.ttf") } catch (e: Exception) { Typeface.DEFAULT_BOLD }
         else when (font) {
             "black" -> Typeface.create("sans-serif-black", Typeface.NORMAL)
             "light" -> Typeface.create("sans-serif-light", Typeface.NORMAL)
