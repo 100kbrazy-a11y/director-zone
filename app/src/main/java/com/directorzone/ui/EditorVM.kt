@@ -311,6 +311,7 @@ class EditorVM(app: Application) : AndroidViewModel(app) {
     }
 
     var downloading by mutableStateOf<String?>(null)
+    var audioTab by mutableIntStateOf(1)
 
     /** Downloads a free-to-use track from the open library and drops it on the timeline at the playhead. */
     fun addOpenTrack(t: OpenAudio.Track) {

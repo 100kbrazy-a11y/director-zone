@@ -135,7 +135,7 @@ object Previewer {
 @Composable
 fun AudioSheet(vm: EditorVM, close: () -> Unit) {
     val ctx = LocalContext.current
-    var tab by remember { mutableIntStateOf(1) }
+    var tab by vm::audioTab
     var search by remember { mutableStateOf(false) }
     var query by remember { mutableStateOf("") }
     var cat by remember { mutableStateOf("All") }

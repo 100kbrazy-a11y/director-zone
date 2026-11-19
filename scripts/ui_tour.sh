@@ -13,7 +13,7 @@ for i in $(seq 1 400); do
     if [ -z "${got[$s]}" ]; then
       got[$s]=1
       adb exec-out screencap -p > results/ui/$s.png
-      if command -v convert >/dev/null; then convert results/ui/$s.png -resize 540x results/ui/$s.png; fi
+      case $s in *_full) ;; *) if command -v convert >/dev/null; then convert results/ui/$s.png -resize 540x results/ui/$s.png; fi;; esac
       echo "shot $s"
     fi
   done

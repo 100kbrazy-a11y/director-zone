@@ -60,6 +60,13 @@ object UiTour {
             vm.sheetExpanded = false; vm.sheet = s
             step("1${(i + 10).toString().padStart(2, '0')}_sheet_${s.name.lowercase()}")
         }
+        for ((n, t) in listOf("free_music" to 2, "free_sfx" to 3, "your_music" to 4)) { vm.audioTab = t; vm.sheetExpanded = false; vm.sheet = Sheet.Audio; step("13${t}_audio_$n", if (t < 4) 6000 else 1400) }
+        vm.audioTab = 1
+        vm.selectClip(a.id); vm.seek(1000)
+        vm.updateClip(a.id) { it.copy(adjust = Adjust(grain = 1f)) }
+        vm.sheet = null; vm.sheetExpanded = false
+        step("140_grain_full", 2500)
+        vm.updateClip(a.id) { it.copy(adjust = Adjust()) }
         vm.sheetExpanded = true; vm.sheet = Sheet.Color
         step("200_sheet_color_expanded")
         vm.sheet = Sheet.Text; step("201_sheet_text_expanded")
