@@ -105,6 +105,14 @@ fun ExportScreen(vm: EditorVM) {
                     Spacer(Modifier.height(18.dp))
                     Row { Text("Bitrate", color = DZ.text, fontSize = 16.sp, modifier = Modifier.weight(1f)); Text("${if (o.bitrateMbps < 8) "Standard" else if (o.bitrateMbps < 20) "High" else "Ultra"} · ${o.bitrateMbps} Mbps", color = DZ.sub, fontSize = 14.sp) }
                     Slider(o.bitrateMbps.toFloat(), { vm.exportOpts = o.copy(bitrateMbps = it.toInt()) }, valueRange = 3f..60f, colors = SliderDefaults.colors(thumbColor = DZ.accent, activeTrackColor = DZ.accent, inactiveTrackColor = DZ.card2))
+                    Spacer(Modifier.height(8.dp))
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Column(Modifier.weight(1f)) {
+                            Text("Safe decoding", color = DZ.text, fontSize = 16.sp)
+                            Text("Fixes green flashing frames. Export takes a little longer.", color = DZ.sub, fontSize = 12.sp)
+                        }
+                        DzSwitch(com.directorzone.data.Prefs.safeDecode) { com.directorzone.data.Prefs.put("safedecode", it) }
+                    }
                     val credits = p.sounds.map { it.credit }.filter { it.isNotBlank() }.distinct()
                     if (credits.isNotEmpty()) {
                         Spacer(Modifier.height(14.dp))

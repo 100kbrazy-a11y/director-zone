@@ -25,7 +25,19 @@ class Exporter(private val ctx: Context) {
         val enc = DefaultEncoderFactory.Builder(ctx)
             .setRequestedVideoEncoderSettings(VideoEncoderSettings.Builder().setBitrate(o.bitrateMbps * 1_000_000).build())
             .setEnableFallback(true).build()
+        val loaderBuilder: Transformer.Builder.() -> Transformer.Builder = {
+            if (com.directorzone.data.Prefs.safeDecode) {
+                val sel = androidx.media3.exoplayer.mediacodec.MediaCodecSelector { mime, secure, tunneling ->
+                    val all = androidx.media3.exoplayer.mediacodec.MediaCodecSelector.DEFAULT.getDecoderInfos(mime, secure, tunneling)
+                    val sw = all.filter { it.softwareOnly }
+                    if (sw.isNotEmpty()) sw else all
+                }
+                val df = androidx.media3.transformer.DefaultDecoderFactory.Builder(ctx).setEnableDecoderFallback(true).setMediaCodecSelector(sel).build()
+                setAssetLoaderFactory(androidx.media3.transformer.DefaultAssetLoaderFactory(ctx, df, androidx.media3.common.util.Clock.DEFAULT))
+            } else this
+        }
         val t = Transformer.Builder(ctx)
+            .loaderBuilder()
             .setVideoMimeType(if (o.hevc) MimeTypes.VIDEO_H265 else MimeTypes.VIDEO_H264)
             .setAudioMimeType(MimeTypes.AUDIO_AAC)
             .setMaxDelayBetweenMuxerSamplesMs(90_000)

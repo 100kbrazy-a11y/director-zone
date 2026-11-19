@@ -85,6 +85,8 @@ fun SettingsScreen(vm: EditorVM) {
                 SettingRow("Default Codec", if (Prefs.exportHevc) "HEVC (H.265)" else "H.264", onClick = { dlg = "excodec" })
                 HorizontalDivider(color = DZ.line)
                 SettingRow("Default Bitrate", "${Prefs.exportMbps} Mbps", onClick = { dlg = "exmbps" })
+                HorizontalDivider(color = DZ.line)
+                SettingRow("Safe decoding", subtitle = "Decodes clips in software while exporting. Slower, but fixes green flashing frames on phones whose hardware decoder misbehaves", trailing = { DzSwitch(Prefs.safeDecode) { Prefs.put("safedecode", it) } })
             }
             SettingGroup("Storage & Cache") {
                 Column(Modifier.fillMaxWidth().padding(horizontal = 18.dp, vertical = 14.dp)) {

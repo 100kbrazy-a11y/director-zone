@@ -35,6 +35,8 @@ object Prefs {
     // Editing
     val defaultClipMs get() = int("clipms", 3000)
     val snapping get() = bool("snap", true)
+    /** export decodes the source clips in software (slower, but immune to hardware decoders that hand back blank green frames) */
+    val safeDecode get() = bool("safedecode", true)
     val autoSave get() = bool("autosave", true)
     val defaultTransMs get() = int("transms", 600)
     // Export
