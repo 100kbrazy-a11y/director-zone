@@ -197,8 +197,8 @@ object DzTest {
 
         // T6 select clip
         vm.seek(1000); delay(500)
-        vm.selectClip(b.id); delay(900)
-        val t6 = grab(vm, "10_select_B", out)
+        vm.selectClip(b.id); delay(900); grabRetry(vm, "10_select_B", out, ::isGreen)
+        val t6 = grabRetry(vm, "10_select_B", out, ::isGreen)
         check("T6 selecting clip B moves the playhead into B and the preview follows", vm.engine.timelineMs in 5000..9999 && t6 != null && isGreen(t6), "${stamp(vm)} $t6")
 
         // T7 effect
@@ -211,16 +211,16 @@ object DzTest {
         settle(vm); val t8 = seekGrab(vm, "12_transition_flash", 10200, out, 1200)
         check("T8 Flash transition brightens the first frames of C", t8 != null && t8.lum > 110, "$t8 ${stamp(vm)}")
         val t8b = seekGrab(vm, "13_after_transition", 13000, out, 1000)
-        check("T8b C is back to normal after the transition", t8b != null && isBlue(t8b), "$t8b")
+        check("T8b C is back to normal after the transition, content time matches position", t8b != null && isBlue(t8b) && Math.abs(lastBarSec - 3.0f) < 0.8f, "$t8b sourceSec@13s=$lastBarSec (expect ~3.0)")
 
         // T9 speed
         vm.updateClip(c.id) { it.copy(speed = 2f) }
         settle(vm)
         val dur9 = vm.project.durationMs
         log("SPEED duration project=$dur9 engine=${vm.engine.durationMs} player=${vm.engine.player?.duration}")
-        val t9 = seekGrab(vm, "14_speed_2x", 11500, out, 1200)
+        seekGrab(vm, "14_speed_2x", 12000, out, 1200); val t9 = grabRetry(vm, "14_speed_2x", out, ::isBlue); val bar9 = lastBarSec
         for (ms in listOf(10300L, 10800L, 11200L, 12000L, 12400L)) { val cc = seekGrab(vm, "15_speed_$ms", ms, out); log("SPEEDPOS $ms -> $cc") }
-        check("T9 speed 2x → timeline 12.5s and player duration matches", dur9 == 12500L && (vm.engine.player?.duration ?: 0) in 12300..12700 && t9 != null && isBlue(t9), "project=$dur9 player=${vm.engine.player?.duration} $t9")
+        check("T9 speed 2x → timeline 12.5s and player duration matches", dur9 == 12500L && (vm.engine.player?.duration ?: 0) in 12300..12700 && t9 != null && isBlue(t9) && Math.abs(bar9 - 4.0f) < 0.8f, "project=$dur9 player=${vm.engine.player?.duration} $t9 sourceSec@12s=$bar9 (expect ~4.0 at 2x)")
         vm.seek(10000); delay(700); vm.engine.play(); delay(1500); val p9 = vm.engine.timelineMs; vm.engine.pause()
         check("T9b playback at 2x finishes C sooner (timeline advances 1x, content 2x)", p9 in 11200..11900, "pos=$p9 ${stamp(vm)}")
         vm.updateClip(c.id) { it.copy(speed = 1f) }; settle(vm)

@@ -9,7 +9,7 @@ import androidx.media3.common.MediaItem
 import androidx.media3.common.audio.AudioProcessor
 import androidx.media3.effect.OverlayEffect
 import androidx.media3.effect.Presentation
-import androidx.media3.effect.SpeedChangeEffect
+import androidx.media3.effect.TimestampAdjustment
 import androidx.media3.transformer.Composition
 import androidx.media3.transformer.EditedMediaItem
 import androidx.media3.transformer.EditedMediaItemSequence
@@ -43,7 +43,9 @@ object ProjectBuilder {
             val fx = ArrayList<Effect>()
             val audio = ArrayList<AudioProcessor>()
             if (!clip.isImage && clip.speed != 1f) {
-                fx.add(SpeedChangeEffect(clip.speed))
+                // TimestampAdjustment (not SpeedChangeEffect) is the speed effect CompositionPlayer supports for live preview
+                val sp = clip.speed
+                fx.add(TimestampAdjustment({ inUs, out -> out.onTimestamp((inUs / sp).toLong()) }, ConstantSpeed(sp)))
                 audio.add(SpeedChangingAudioProcessor(ConstantSpeed(clip.speed)))
             }
             if (p.phone.enabled) {
