@@ -113,7 +113,7 @@ fun SettingRow(title: String, value: String? = null, subtitle: String? = null, t
         }
         if (value != null) Text(value, color = DZ.sub, fontSize = 15.sp)
         if (trailing != null) { Spacer(Modifier.width(8.dp)); trailing() }
-        if (onClick != null && trailing == null) Icon(androidx.compose.material.icons.Icons.AutoMirrored.Rounded.KeyboardArrowRight, null, tint = DZ.sub, modifier = Modifier.size(20.dp))
+        if (onClick != null && trailing == null) Icon(androidx.compose.material.icons.Icons.Rounded.ChevronRight, null, tint = DZ.sub, modifier = Modifier.size(20.dp))
     }
 }
 

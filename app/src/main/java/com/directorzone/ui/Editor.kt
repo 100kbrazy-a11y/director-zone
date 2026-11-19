@@ -196,7 +196,7 @@ private fun ContextMenu(vm: EditorVM, a: MenuAnchor, onDismiss: () -> Unit) {
                 Item(Icons.Rounded.ContentCut, "Trim") { vm.sheetExpanded = false; vm.sheet = Sheet.Trim },
                 Item(Icons.Rounded.CallSplit, "Split") { vm.splitAtPlayhead() },
                 Item(Icons.Rounded.Speed, "Speed") { if (img) vm.toast = "Images have no speed" else { vm.sheetExpanded = false; vm.sheet = Sheet.Speed } },
-                Item(Icons.AutoMirrored.Rounded.VolumeUp, "Volume") { if (img) vm.toast = "Images have no audio" else { vm.sheetExpanded = false; vm.sheet = Sheet.Volume } },
+                Item(Icons.Rounded.VolumeUp, "Volume") { if (img) vm.toast = "Images have no audio" else { vm.sheetExpanded = false; vm.sheet = Sheet.Volume } },
                 Item(Icons.Rounded.ContentCopy, "Duplicate") { vm.duplicateClip() },
                 Item(Icons.Rounded.Delete, "Delete", true) { vm.deleteClip() },
                 Item(Icons.Rounded.MoreHoriz, "More") { vm.sheetExpanded = false; vm.sheet = Sheet.ClipMore },
@@ -209,7 +209,7 @@ private fun ContextMenu(vm: EditorVM, a: MenuAnchor, onDismiss: () -> Unit) {
             Item(Icons.Rounded.Delete, "Delete", true) { vm.deleteText() },
         )
         ItemKind.Sound -> listOf(
-            Item(Icons.AutoMirrored.Rounded.VolumeUp, "Volume") { vm.sheetExpanded = false; vm.sheet = Sheet.Audio },
+            Item(Icons.Rounded.VolumeUp, "Volume") { vm.sheetExpanded = false; vm.sheet = Sheet.Audio },
             Item(Icons.Rounded.CallSplit, "Split") { vm.splitSound() },
             Item(Icons.Rounded.ContentCopy, "Duplicate") { vm.duplicateSound() },
             Item(Icons.Rounded.Delete, "Delete", true) { vm.deleteSound() },

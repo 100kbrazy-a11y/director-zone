@@ -115,7 +115,7 @@ fun Timeline(vm: EditorVM, dpPerSec: Float, onMenu: (MenuAnchor) -> Unit, onAddM
                     Spacer(Modifier.height(4.dp))
                 }
                 repeat(aLanes) { i ->
-                    if (i == 0) HeaderCell(aH, if (p.lockA) Icons.Rounded.Lock else Icons.Rounded.LockOpen, if (p.muteA) Icons.AutoMirrored.Rounded.VolumeOff else Icons.AutoMirrored.Rounded.VolumeUp, "A1", p.lockA, p.muteA, { vm.edit { it.copy(muteA = !it.muteA) } }) { vm.edit { it.copy(lockA = !it.lockA) } }
+                    if (i == 0) HeaderCell(aH, if (p.lockA) Icons.Rounded.Lock else Icons.Rounded.LockOpen, if (p.muteA) Icons.Rounded.VolumeOff else Icons.Rounded.VolumeUp, "A1", p.lockA, p.muteA, { vm.edit { it.copy(muteA = !it.muteA) } }) { vm.edit { it.copy(lockA = !it.lockA) } }
                     else Spacer(Modifier.height(aH))
                     Spacer(Modifier.height(4.dp))
                 }

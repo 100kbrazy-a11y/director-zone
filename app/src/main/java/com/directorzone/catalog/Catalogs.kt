@@ -181,7 +181,7 @@ private val EXTRA_TEMPLATES = listOf(
     TemplateDef("runway", "Runway", "Matte grade, clean wipes", "👗", 0xFFE5B7B0, false, "titanium", "float", "aurora", "matte", "wipel", "4:5", "SS/26", "slideup", "Chill Groove", listOf("Swipe Right"), 2600, "Fashion"),
     TemplateDef("levelup", "Level Up", "Glitch cuts, arcade energy", "🎮", 0xFF9B4DFF, false, "titanium", "float", "aurora", "cyber", "glitch", "16:9", "LEVEL UP", "glitch", "Trap Beat", listOf("Level Up", "Power Up"), 2400, "Gaming"),
     TemplateDef("sale", "Sale Blast", "Phone drop + flash cuts", "🏷️", 0xFFFFC857, true, "gold", "popspin", "rays", "vivid", "flash", "9:16", "50% OFF", "pop", "House Beat", listOf("Coin", "Hit"), 3500, "Promotional"),
-    TemplateDef("quiet", "Quiet Frame", "Soft fades, no title, no fuss", "◻️", 0xFFC9C3B8, false, "titanium", "float", "aurora", "matte", "fade", null, "fade", "Calm Pad", emptyList(), 4000, "Minimal"),
+    TemplateDef("quiet", "Quiet Frame", "Soft fades, no title, no fuss", "◻️", 0xFFC9C3B8, false, "titanium", "float", "aurora", "matte", "fade", "16:9", null, "fade", "Calm Pad", emptyList(), 4000, "Minimal"),
     TemplateDef("super8", "Super 8", "Grainy 4:3 film, TV-off cuts", "📽️", 0xFFCB8F3E, false, "titanium", "float", "aurora", "retro", "oldtv", "4:3", "1984", "typewriter", "Lofi Beat", listOf("Rewind", "Tick"), 3000, "Retro"),
     TemplateDef("diary", "Video Diary", "Warm film, typed captions", "📖", 0xFFE8A55B, false, "titanium", "float", "aurora", "film", "wipel", "9:16", "dear diary", "typewriter", "Lofi Beat", listOf("Typewriter"), 3000, "Vlog"),
 )

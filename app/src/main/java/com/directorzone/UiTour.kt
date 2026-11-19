@@ -6,6 +6,7 @@ import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.directorzone.catalog.*
 import com.directorzone.data.*
+import com.directorzone.engine.SoundLib
 import com.directorzone.ui.*
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch

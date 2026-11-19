@@ -158,7 +158,7 @@ fun MoreSheet(vm: EditorVM, pickMedia: () -> Unit, close: () -> Unit) {
         Entry(Icons.Rounded.Dashboard, "Templates", toSheet(Sheet.Templates)),
         Entry(Icons.Rounded.ContentCut, "Trim clip") { if (hasClip) vm.sheet = Sheet.Trim },
         Entry(Icons.Rounded.Speed, "Speed") { if (hasClip) vm.sheet = Sheet.Speed },
-        Entry(Icons.AutoMirrored.Rounded.VolumeUp, "Clip volume") { if (hasClip) vm.sheet = Sheet.Volume },
+        Entry(Icons.Rounded.VolumeUp, "Clip volume") { if (hasClip) vm.sheet = Sheet.Volume },
         Entry(Icons.Rounded.Tune, "Clip options", toSheet(Sheet.ClipMore)),
         Entry(Icons.Rounded.CallSplit, "Split") { if (hasClip) { vm.splitAtPlayhead(); vm.sheet = null } },
         Entry(Icons.Rounded.FileUpload, "Export") { vm.sheet = null; vm.openExport() },
