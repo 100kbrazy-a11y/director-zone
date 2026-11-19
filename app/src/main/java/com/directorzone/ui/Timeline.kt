@@ -21,8 +21,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.directorzone.catalog.transitionById
 import com.directorzone.data.SoundItem
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.snapshotFlow
+import androidx.compose.runtime.snapshotFlow
 
 fun fmt(ms: Long): String { val s = ms / 1000; val d = (ms % 1000) / 100; return "%d:%02d.%d".format(s / 60, s % 60, d) }
 

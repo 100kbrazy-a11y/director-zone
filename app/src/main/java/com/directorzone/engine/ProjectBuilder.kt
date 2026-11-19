@@ -2,7 +2,7 @@ package com.directorzone.engine
 
 import android.content.Context
 import android.net.Uri
-import android.util.Size
+import androidx.media3.common.util.Size
 import androidx.media3.common.C
 import androidx.media3.common.Effect
 import androidx.media3.common.MediaItem
@@ -119,7 +119,7 @@ object ProjectBuilder {
             sequences.add(b.build())
         }
         val vfx = ArrayList<Effect>()
-        if (p.texts.isNotEmpty()) vfx.add(OverlayEffect(ImmutableList.of(TextBitmapOverlay(p.texts, canvas.width, canvas.height))))
+        if (p.texts.isNotEmpty()) vfx.add(OverlayEffect(ImmutableList.of<androidx.media3.effect.TextureOverlay>(TextBitmapOverlay(p.texts, canvas.width, canvas.height))))
         return Composition.Builder(sequences)
             .setEffects(Effects(ImmutableList.of<AudioProcessor>(), vfx))
             .experimentalSetForceAudioTrack(true)
