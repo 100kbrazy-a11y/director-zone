@@ -46,6 +46,9 @@ class PreviewEngine(private val ctx: Context, private val scope: CoroutineScope)
 
     // ---- loading ---------------------------------------------------------------------------------
     /** (Re)builds the composition. Cheap to call repeatedly: debounced; keeps playhead + play state. */
+    /** never park the player within the last ~120 ms: audio EOS with no buffer delivered crashes Media3's AudioGraphInputAudioSink */
+    private fun endClamp(d: Long) = (d - 120).coerceAtLeast(0)
+
     fun load(p: Project, debounceMs: Long = 250) {
         buildJob?.cancel()
         durationMs = p.durationMs
@@ -56,7 +59,7 @@ class PreviewEngine(private val ctx: Context, private val scope: CoroutineScope)
             try {
                 val t0 = SystemClock.elapsedRealtime()
                 val comp = withContext(Dispatchers.Default) { ProjectBuilder.build(ctx, p, previewShortSide, 30) }
-                val resumeAt = timelineMs.coerceIn(0, (p.durationMs - 1).coerceAtLeast(0))
+                val resumeAt = timelineMs.coerceIn(0, endClamp(p.durationMs))
                 val resume = wantPlay
                 val myGen = ++gen
                 val np = CompositionPlayer.Builder(ctx).build()
@@ -144,7 +147,7 @@ class PreviewEngine(private val ctx: Context, private val scope: CoroutineScope)
 
     /** User-driven seek (scrub, tap, skip). Updates the single clock immediately and renders that frame. */
     fun seek(ms: Long) {
-        val target = ms.coerceIn(0, (durationMs - 1).coerceAtLeast(0))
+        val target = ms.coerceIn(0, endClamp(durationMs))
         timelineMs = target
         val pl = player ?: return
         val now = SystemClock.elapsedRealtime()
