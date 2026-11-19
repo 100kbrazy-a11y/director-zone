@@ -22,6 +22,9 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        if (savedInstanceState == null && intent.getBooleanExtra("dztest", false) && DzTest.available(this)) {
+            window.decorView.postDelayed({ DzTest.run(this, vm) }, 2500)
+        }
         setContent {
             DirectorTheme {
                 Box(Modifier.fillMaxSize().background(DZ.bg)) {

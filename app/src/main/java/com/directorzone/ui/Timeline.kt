@@ -33,16 +33,29 @@ fun Timeline(vm: EditorVM, dpPerSec: Float, modifier: Modifier = Modifier) {
     val dpPerMs = dpPerSec / 1000f
     fun pxPerMs() = with(density) { dpPerMs.dp.toPx() }
 
-    val prog = remember { booleanArrayOf(false) }
-    // scrub -> seek (only for the user's own drags / flings)
-    LaunchedEffect(dpPerSec) {
-        snapshotFlow { scroll.value }.collect { v ->
-            if (scroll.isScrollInProgress && !prog[0]) { vm.playing = false; vm.seek((v / pxPerMs()).toLong()) }
+    // User scrolling is detected from real drag interactions; programmatic scrollTo never emits them.
+    var userScrolling by remember { mutableStateOf(false) }
+    var resumeAfter by remember { mutableStateOf(false) }
+    LaunchedEffect(scroll) {
+        scroll.interactionSource.interactions.collect { i ->
+            when (i) {
+                is androidx.compose.foundation.interaction.DragInteraction.Start -> { resumeAfter = vm.engine.isPlaying; vm.engine.pause(); userScrolling = true }
+                else -> {}
+            }
         }
+    }
+    LaunchedEffect(scroll) {
+        snapshotFlow { scroll.isScrollInProgress }.collect { moving ->
+            if (!moving && userScrolling) { userScrolling = false; if (resumeAfter) { resumeAfter = false; vm.engine.play() } }
+        }
+    }
+    // scrub -> seek
+    LaunchedEffect(dpPerSec) {
+        snapshotFlow { scroll.value }.collect { v -> if (userScrolling) vm.seek((v / pxPerMs()).toLong()) }
     }
     // playback / external seeks -> scroll
     LaunchedEffect(vm.posMs, dpPerSec) {
-        if (!scroll.isScrollInProgress) { prog[0] = true; scroll.scrollTo((vm.posMs * pxPerMs()).toInt()); prog[0] = false }
+        if (!userScrolling) scroll.scrollTo((vm.posMs * pxPerMs()).toInt())
     }
 
     val totalMs = maxOf(p.durationMs, p.texts.maxOfOrNull { it.startMs + it.durMs } ?: 0L, p.sounds.maxOfOrNull { it.startMs + it.durMs.coerceAtMost(60000) } ?: 0L) + 800
@@ -59,7 +72,7 @@ fun Timeline(vm: EditorVM, dpPerSec: Float, modifier: Modifier = Modifier) {
                         Box(
                             Modifier.width(w).fillMaxHeight().padding(end = 1.dp).clip(RoundedCornerShape(8.dp)).background(DZ.card2)
                                 .border(if (sel) 2.dp else 0.dp, if (sel) Color.White else Color.Transparent, RoundedCornerShape(8.dp))
-                                .clickable { vm.selClip = c.id; vm.selText = null; vm.selSound = null; if (vm.tool == null) vm.tool = Tool.Clip },
+                                .clickable { vm.selectClip(c.id); if (vm.tool == null) vm.tool = Tool.Clip },
                         ) {
                             vm.thumbs[c.uri]?.let { Image(it, null, Modifier.fillMaxSize(), contentScale = ContentScale.Crop, alpha = 0.85f) }
                             Text(if (c.speed != 1f) "${"%.2g".format(c.speed)}×" else "", color = Color.White, fontSize = 10.sp, fontWeight = FontWeight.Bold, modifier = Modifier.align(Alignment.BottomEnd).padding(4.dp))

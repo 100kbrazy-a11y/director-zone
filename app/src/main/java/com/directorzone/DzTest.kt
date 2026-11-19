@@ -1,0 +1,197 @@
+package com.directorzone
+
+import android.content.Context
+import android.graphics.Bitmap
+import android.media.MediaMetadataRetriever
+import android.net.Uri
+import android.os.Handler
+import android.os.Looper
+import android.util.Log
+import android.view.PixelCopy
+import android.view.SurfaceView
+import androidx.lifecycle.viewModelScope
+import com.directorzone.data.*
+import com.directorzone.ui.EditorVM
+import kotlinx.coroutines.*
+import java.io.File
+import kotlin.coroutines.resume
+
+/**
+ * Reproducible on-device playback test (run by CI on an emulator; see scripts/playback_test.sh).
+ * Timeline: A (5s red) → B (5s green) → C (5s blue), plus a 15s tone. Every check grabs the REAL preview frame
+ * (PixelCopy of the player surface) and compares it with what the timeline says should be on screen.
+ */
+object DzTest {
+    private const val T = "DZTEST"
+    private val results = ArrayList<String>()
+
+    fun available(ctx: Context) = try { ctx.assets.list("dztest")?.isNotEmpty() == true } catch (e: Exception) { false }
+    private fun log(s: String) { Log.i(T, s) }
+    private fun check(name: String, ok: Boolean, detail: String) { results.add("${if (ok) "PASS" else "FAIL"} $name  $detail"); log("RESULT ${if (ok) "PASS" else "FAIL"} $name  $detail") }
+
+    private class Rgb(val r: Int, val g: Int, val b: Int) { val lum get() = (0.299 * r + 0.587 * g + 0.114 * b).toInt(); override fun toString() = "rgb($r,$g,$b)" }
+    private fun isRed(c: Rgb) = c.r > c.g + 40 && c.r > c.b + 40
+    private fun isGreen(c: Rgb) = c.g > c.r + 30 && c.g > c.b + 30
+    private fun isBlue(c: Rgb) = c.b > c.r + 30 && c.b > c.g + 30
+    private fun isGray(c: Rgb) = Math.abs(c.r - c.g) < 14 && Math.abs(c.g - c.b) < 14
+
+    private fun median(bmp: Bitmap): Rgb {
+        val rs = ArrayList<Int>(); val gs = ArrayList<Int>(); val bs = ArrayList<Int>()
+        for (y in 4 until bmp.height step maxOf(1, bmp.height / 36)) for (x in 4 until bmp.width step maxOf(1, bmp.width / 36)) {
+            val p = bmp.getPixel(x, y); rs.add((p shr 16) and 255); gs.add((p shr 8) and 255); bs.add(p and 255)
+        }
+        rs.sort(); gs.sort(); bs.sort(); val m = rs.size / 2
+        return Rgb(rs[m], gs[m], bs[m])
+    }
+
+    private suspend fun grab(vm: EditorVM, name: String, out: File): Rgb? = suspendCancellableCoroutine { cont ->
+        val sv = vm.engine.hostView?.videoSurfaceView as? SurfaceView
+        if (sv == null || sv.width == 0 || sv.height == 0) { log("grab $name: no surface"); cont.resume(null); return@suspendCancellableCoroutine }
+        val bmp = Bitmap.createBitmap(sv.width, sv.height, Bitmap.Config.ARGB_8888)
+        try {
+            PixelCopy.request(sv, bmp, { r ->
+                if (r == PixelCopy.SUCCESS) {
+                    try { File(out, "$name.png").outputStream().use { bmp.compress(Bitmap.CompressFormat.PNG, 90, it) } } catch (_: Exception) {}
+                    cont.resume(median(bmp))
+                } else { log("grab $name: PixelCopy result=$r"); cont.resume(null) }
+            }, Handler(Looper.getMainLooper()))
+        } catch (e: Exception) { log("grab $name failed $e"); cont.resume(null) }
+    }
+
+    private fun stamp(vm: EditorVM) = "timeline=${vm.engine.timelineMs} player=${vm.engine.positionNow()} state=${vm.engine.stateNow()} playing=${vm.engine.isPlaying}"
+
+    private suspend fun settle(vm: EditorVM, maxMs: Long = 25000) {
+        // wait for the (debounced) rebuild to finish and a frame to be on screen
+        val t0 = System.currentTimeMillis()
+        delay(600)
+        while (System.currentTimeMillis() - t0 < maxMs && (vm.engine.building || vm.engine.player == null || !vm.engine.frameRendered)) delay(100)
+        delay(500)
+    }
+
+    private suspend fun seekGrab(vm: EditorVM, name: String, ms: Long, out: File, waitMs: Long = 900): Rgb? {
+        vm.seek(ms); delay(waitMs)
+        val c = grab(vm, name, out)
+        log("SEEK $name target=$ms ${stamp(vm)} color=$c")
+        return c
+    }
+
+    fun run(ctx: Context, vm: EditorVM) {
+        vm.viewModelScope.launch {
+            try { script(ctx, vm) } catch (e: Throwable) { log("SCRIPT CRASH $e"); Log.e(T, "crash", e) }
+            log("SUMMARY\n" + results.joinToString("\n"))
+            log("DONE")
+        }
+    }
+
+    private suspend fun script(ctx: Context, vm: EditorVM) {
+        val out = File(ctx.getExternalFilesDir(null), "dztest_out").apply { deleteRecursively(); mkdirs() }
+        val work = File(ctx.filesDir, "dztest").apply { mkdirs() }
+        for (n in ctx.assets.list("dztest")!!) ctx.assets.open("dztest/$n").use { i -> File(work, n).outputStream().use { o -> i.copyTo(o) } }
+        fun clip(n: String) = Clip(uri = Uri.fromFile(File(work, "$n.mp4")).toString(), srcDurMs = 5000, outMs = 5000)
+        val a = clip("A"); val b = clip("B"); val c = clip("C")
+        val tone = SoundItem(name = "tone", source = Uri.fromFile(File(work, "tone.m4a")).toString(), kind = "music", startMs = 0, durMs = 15000)
+        vm.openProject(Project(name = "DZ test", clips = listOf(a, b, c), sounds = listOf(tone), autoSfx = false))
+        log("PROJECT duration=${vm.project.durationMs}")
+        settle(vm)
+        log("READY ${stamp(vm)} error=${vm.engine.error} frameRendered=${vm.engine.frameRendered}")
+        val first = grab(vm, "00_initial", out)
+        check("T0 initial frame shows clip A", first != null && isRed(first), "$first")
+
+        // T1 play A -> B -> C
+        vm.engine.play()
+        val t0 = System.currentTimeMillis()
+        var gotA = false; var gotB = false; var gotC = false; var maxT = 0L; var monotonic = true; var last = -1L
+        while (System.currentTimeMillis() - t0 < 19000) {
+            val t = vm.engine.timelineMs
+            if (t < last - 50) monotonic = false
+            last = t; maxT = maxOf(maxT, t)
+            if (!gotA && t >= 2500) { gotA = true; val col = grab(vm, "01_play_A", out); check("T1a playing @2.5s shows A", col != null && isRed(col), "${stamp(vm)} $col") }
+            if (!gotB && t >= 7500) { gotB = true; val col = grab(vm, "02_play_B", out); check("T1b playing @7.5s shows B", col != null && isGreen(col), "${stamp(vm)} $col") }
+            if (!gotC && t >= 12500) { gotC = true; val col = grab(vm, "03_play_C", out); check("T1c playing @12.5s shows C", col != null && isBlue(col), "${stamp(vm)} $col") }
+            if (!vm.engine.isPlaying && t > 1000) break
+            delay(120)
+        }
+        val wall = System.currentTimeMillis() - t0
+        check("T1d timeline advanced in real time and reached the end", maxT >= 14500 && monotonic, "maxT=$maxT wall=${wall}ms monotonic=$monotonic ${stamp(vm)}")
+        delay(500)
+
+        // T2 pause at ~3s
+        vm.seek(0); delay(800); vm.engine.play()
+        val t2s = System.currentTimeMillis()
+        while (vm.engine.timelineMs < 3000 && System.currentTimeMillis() - t2s < 15000) delay(25)
+        vm.engine.pause(); delay(900)
+        val p1 = grab(vm, "04_pause_3s_a", out); val tl1 = vm.engine.timelineMs
+        delay(1200)
+        val p2 = grab(vm, "05_pause_3s_b", out); val tl2 = vm.engine.timelineMs
+        check("T2 pause holds frame (A) and playhead", p1 != null && p2 != null && isRed(p1) && Math.abs(p1.r - p2.r) < 6 && tl1 == tl2 && tl1 in 2900..3600, "tl=$tl1/$tl2 $p1 $p2 ${stamp(vm)}")
+
+        // T3 drag to 8s -> B
+        val t3 = seekGrab(vm, "06_seek_8s", 8000, out)
+        check("T3 seek 8s shows B", t3 != null && isGreen(t3), "$t3 ${stamp(vm)}")
+
+        // T4 rapid scrubbing
+        for (ms in listOf(1000L, 10000L, 4000L, 12000L, 6000L)) { vm.seek(ms); delay(220) }
+        delay(900)
+        val t4 = grab(vm, "07_rapid_final_6s", out)
+        check("T4 rapid seeks end on 6s (B)", t4 != null && isGreen(t4) && Math.abs(vm.engine.timelineMs - 6000) < 80, "${stamp(vm)} $t4")
+        // sequential seeks with a capture after each
+        val seq = listOf(1000L to ::isRed, 10200L to ::isBlue, 4000L to ::isRed, 12000L to ::isBlue, 6000L to ::isGreen)
+        var okSeq = true; val det = StringBuilder()
+        for ((i, pair) in seq.withIndex()) { val col = seekGrab(vm, "08_seq_$i", pair.first, out); val good = col != null && pair.second(col); okSeq = okSeq && good; det.append("${pair.first}:${if (good) "ok" else "BAD"}($col) ") }
+        check("T4b each seek in sequence renders its frame", okSeq, det.toString())
+
+        // T5 play after scrubbing
+        vm.seek(6000); delay(700); vm.engine.play(); delay(1600)
+        val t5 = grab(vm, "09_play_after_scrub", out); val pos5 = vm.engine.timelineMs
+        check("T5 play resumes from the scrubbed position", pos5 in 7000..8500 && t5 != null && isGreen(t5), "${stamp(vm)} $t5")
+        vm.engine.pause(); delay(500)
+
+        // T6 select clip
+        vm.seek(1000); delay(500)
+        vm.selectClip(b.id); delay(900)
+        val t6 = grab(vm, "10_select_B", out)
+        check("T6 selecting clip B moves the playhead into B and the preview follows", vm.engine.timelineMs in 5000..9999 && t6 != null && isGreen(t6), "${stamp(vm)} $t6")
+
+        // T7 effect
+        vm.updateClip(b.id) { it.copy(filter = "noir") }
+        settle(vm); val t7 = seekGrab(vm, "11_filter_noir", 7000, out, 1200)
+        check("T7 Noir filter on B is visible in the preview (grayscale)", t7 != null && isGray(t7), "$t7 ${stamp(vm)}")
+
+        // T8 transition
+        vm.updateClip(c.id) { it.copy(transition = "flash", transitionMs = 1000) }
+        settle(vm); val t8 = seekGrab(vm, "12_transition_flash", 10200, out, 1200)
+        check("T8 Flash transition brightens the first frames of C", t8 != null && t8.lum > 110, "$t8 ${stamp(vm)}")
+        val t8b = seekGrab(vm, "13_after_transition", 13000, out, 1000)
+        check("T8b C is back to normal after the transition", t8b != null && isBlue(t8b), "$t8b")
+
+        // T9 speed
+        vm.updateClip(c.id) { it.copy(speed = 2f) }
+        settle(vm)
+        val dur9 = vm.project.durationMs
+        log("SPEED duration project=$dur9 engine=${vm.engine.durationMs} player=${vm.engine.player?.duration}")
+        val t9 = seekGrab(vm, "14_speed_2x", 11500, out, 1200)
+        check("T9 speed 2x → timeline 12.5s and player duration matches", dur9 == 12500L && (vm.engine.player?.duration ?: 0) in 12300..12700 && t9 != null && isBlue(t9), "project=$dur9 player=${vm.engine.player?.duration} $t9")
+        vm.seek(10000); delay(700); vm.engine.play(); delay(1500); val p9 = vm.engine.timelineMs; vm.engine.pause()
+        check("T9b playback at 2x finishes C sooner (timeline advances 1x, content 2x)", p9 in 11200..11900, "pos=$p9 ${stamp(vm)}")
+        vm.updateClip(c.id) { it.copy(speed = 1f) }; settle(vm)
+
+        // T10 export
+        vm.exportOpts = ExportOptions(shortSide = 720, fps = 30, bitrateMbps = 8, hevc = false)
+        vm.startExport()
+        val e0 = System.currentTimeMillis()
+        while (System.currentTimeMillis() - e0 < 300000 && vm.export.file == null && vm.export.error == null) { delay(500) }
+        val f = vm.export.file
+        log("EXPORT file=$f error=${vm.export.error} took=${System.currentTimeMillis() - e0}ms size=${f?.length()}")
+        if (f != null) {
+            val r = MediaMetadataRetriever(); r.setDataSource(f.absolutePath)
+            val d = r.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)?.toLong() ?: 0
+            val w = r.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_WIDTH); val h = r.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_HEIGHT)
+            val hasAudio = r.extractMetadata(MediaMetadataRetriever.METADATA_KEY_HAS_AUDIO)
+            fun fr(ms: Long, n: String): Rgb? { val bm = r.getFrameAtTime(ms * 1000, MediaMetadataRetriever.OPTION_CLOSEST) ?: return null; File(out, "$n.png").outputStream().use { bm.compress(Bitmap.CompressFormat.PNG, 90, it) }; return median(bm) }
+            val ea = fr(2500, "20_export_A"); val eb = fr(7000, "21_export_B"); val ec = fr(13000, "22_export_C"); val et = fr(10200, "23_export_transition")
+            r.release()
+            check("T10a export is ~15s with audio", d in 14500..15600 && hasAudio == "yes", "dur=$d ${w}x$h audio=$hasAudio size=${f.length() / 1024}KB")
+            check("T10b exported frames match the preview (A red, B noir, C blue, flash at cut)", ea != null && isRed(ea) && eb != null && isGray(eb) && ec != null && isBlue(ec) && et != null && et.lum > 110, "A=$ea B=$eb C=$ec flash=$et")
+        } else check("T10 export completed", false, "error=${vm.export.error}")
+    }
+}

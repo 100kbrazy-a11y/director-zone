@@ -32,6 +32,7 @@ android {
     kotlinOptions { jvmTarget = "17"; freeCompilerArgs += listOf("-opt-in=androidx.media3.common.util.UnstableApi") }
     buildFeatures { compose = true }
     composeOptions { kotlinCompilerExtensionVersion = "1.5.14" }
+    if (project.hasProperty("dzTest")) sourceSets.getByName("main").assets.srcDir(file("../ci_assets"))
     packaging { resources.excludes += "/META-INF/{AL2.0,LGPL2.1}" }
     androidResources { noCompress += listOf("wav", "json") }
 }

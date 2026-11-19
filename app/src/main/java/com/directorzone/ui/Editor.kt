@@ -56,14 +56,14 @@ fun EditorScreen(vm: EditorVM) {
             }
             IconButton(onClick = { vm.undo() }, enabled = vm.canUndo) { Icon(Icons.AutoMirrored.Rounded.Undo, null, tint = if (vm.canUndo) DZ.text else DZ.card2) }
             IconButton(onClick = { vm.redo() }, enabled = vm.canRedo) { Icon(Icons.AutoMirrored.Rounded.Redo, null, tint = if (vm.canRedo) DZ.text else DZ.card2) }
-            GradientButton("Export", Icons.Rounded.FileUpload, enabled = p.clips.isNotEmpty()) { vm.playing = false; showExport = true }
+            GradientButton("Export", Icons.Rounded.FileUpload, enabled = p.clips.isNotEmpty()) { vm.engine.pause(); showExport = true }
             Spacer(Modifier.width(6.dp))
         }
         // preview
         PreviewPane(vm, Modifier.weight(1f).fillMaxWidth())
         // transport
         Row(Modifier.fillMaxWidth().background(DZ.panel).padding(horizontal = 8.dp), verticalAlignment = Alignment.CenterVertically) {
-            IconButton(onClick = { vm.playing = !vm.playing }) { Icon(if (vm.playing) Icons.Rounded.Pause else Icons.Rounded.PlayArrow, null, tint = Color.White) }
+            IconButton(onClick = { vm.togglePlay() }) { Icon(if (vm.playing) Icons.Rounded.Pause else Icons.Rounded.PlayArrow, null, tint = Color.White) }
             IconButton(onClick = { vm.seek(0) }) { Icon(Icons.Rounded.SkipPrevious, null, tint = DZ.sub) }
             Spacer(Modifier.weight(1f))
             Icon(Icons.Rounded.ZoomOut, null, tint = DZ.sub, modifier = Modifier.size(18.dp))

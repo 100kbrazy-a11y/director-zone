@@ -31,9 +31,10 @@ class EditorVM(app: Application) : AndroidViewModel(app) {
     var selText by mutableStateOf<String?>(null)
     var selSound by mutableStateOf<String?>(null)
     var tool by mutableStateOf<Tool?>(null)
-    var posMs by mutableLongStateOf(0L)
-    var playing by mutableStateOf(false)
-    var scrubTick by mutableIntStateOf(0)
+    /** The one preview player + the one authoritative playhead. */
+    val engine = PreviewEngine(app, viewModelScope)
+    val posMs: Long get() = engine.timelineMs
+    val playing: Boolean get() = engine.isPlaying
     var importing by mutableStateOf(false)
     var toast by mutableStateOf<String?>(null)
     var export by mutableStateOf(ExportUi())
@@ -53,11 +54,11 @@ class EditorVM(app: Application) : AndroidViewModel(app) {
     fun newProject(): Project { openProject(Project(name = "Project ${recents.size + 1}")); return project }
     fun openProject(p: Project) {
         project = p; undo.clear(); redo.clear(); canUndo = false; canRedo = false
-        selClip = p.clips.firstOrNull()?.id; selText = null; selSound = null; tool = null; posMs = 0; playing = false; inEditor = true
+        selClip = p.clips.firstOrNull()?.id; selText = null; selSound = null; tool = null; inEditor = true; engine.pause(); engine.seek(0); engine.load(p, 0)
         export = ExportUi()
         p.clips.forEach { loadThumb(it) }
     }
-    fun closeEditor() { save(); inEditor = false; playing = false; refreshRecents() }
+    fun closeEditor() { save(); inEditor = false; engine.pause(); engine.release(); refreshRecents() }
     fun save() { if (project.clips.isNotEmpty() || project.texts.isNotEmpty()) viewModelScope.launch(Dispatchers.IO) { Store.save(ctx, project) } }
     fun deleteProject(id: String) { viewModelScope.launch { withContext(Dispatchers.IO) { Store.delete(ctx, id) }; refreshRecents() } }
 
@@ -68,9 +69,10 @@ class EditorVM(app: Application) : AndroidViewModel(app) {
         lastPush = now
         project = f(project)
         canUndo = undo.isNotEmpty(); canRedo = redo.isNotEmpty()
+        engine.load(project)
     }
-    fun undo() { if (undo.isEmpty()) return; redo.add(project); project = undo.removeAt(undo.size - 1); fixSel(); canUndo = undo.isNotEmpty(); canRedo = redo.isNotEmpty(); lastPush = 0 }
-    fun redo() { if (redo.isEmpty()) return; undo.add(project); project = redo.removeAt(redo.size - 1); fixSel(); canUndo = undo.isNotEmpty(); canRedo = redo.isNotEmpty(); lastPush = 0 }
+    fun undo() { if (undo.isEmpty()) return; redo.add(project); project = undo.removeAt(undo.size - 1); fixSel(); engine.load(project); canUndo = undo.isNotEmpty(); canRedo = redo.isNotEmpty(); lastPush = 0 }
+    fun redo() { if (redo.isEmpty()) return; undo.add(project); project = redo.removeAt(redo.size - 1); fixSel(); engine.load(project); canUndo = undo.isNotEmpty(); canRedo = redo.isNotEmpty(); lastPush = 0 }
     private fun fixSel() {
         if (project.clips.none { it.id == selClip }) selClip = project.clips.firstOrNull()?.id
         if (project.texts.none { it.id == selText }) selText = null
@@ -81,7 +83,15 @@ class EditorVM(app: Application) : AndroidViewModel(app) {
     val text get() = project.texts.firstOrNull { it.id == selText }
     val sound get() = project.sounds.firstOrNull { it.id == selSound }
 
-    fun seek(ms: Long) { posMs = ms.coerceIn(0, project.durationMs); scrubTick++ }
+    fun seek(ms: Long) = engine.seek(ms)
+    fun togglePlay() = engine.toggle()
+
+    /** Selecting a clip also makes the preview show it: playhead jumps into the clip if it isn't already inside. */
+    fun selectClip(id: String) {
+        selClip = id; selText = null; selSound = null
+        val st = clipStart(id); val c = project.clips.firstOrNull { it.id == id } ?: return
+        if (posMs < st || posMs >= st + c.lengthMs) seek(st + 1)
+    }
 
     fun updateClip(id: String, f: (Clip) -> Clip) = edit { p -> p.copy(clips = p.clips.map { if (it.id == id) f(it) else it }) }
     fun updateSelClip(f: (Clip) -> Clip) { selClip?.let { updateClip(it, f) } }
@@ -113,7 +123,7 @@ class EditorVM(app: Application) : AndroidViewModel(app) {
         val c = clip ?: return
         edit { p -> p.copy(clips = p.clips.filter { it.id != c.id }) }
         selClip = project.clips.firstOrNull()?.id
-        if (posMs > project.durationMs) posMs = project.durationMs
+        if (posMs > project.durationMs) engine.seek(project.durationMs)
     }
     fun moveClip(dir: Int) {
         val c = clip ?: return
@@ -219,13 +229,13 @@ class EditorVM(app: Application) : AndroidViewModel(app) {
             p.copy(clips = clips, texts = texts, sounds = sounds, ratio = t.ratio, fit = false,
                 phone = PhoneCfg(enabled = t.phone, bezel = t.bezel, anim = t.anim, bg = t.bg))
         }
-        posMs = 0; scrubTick++
+        engine.seek(0)
     }
 
     // ---------- export
     fun startExport() {
         if (project.clips.isEmpty()) return
-        playing = false
+        engine.pause()
         export = ExportUi(0f, true)
         exporter.export(project, exportOpts, { pr -> export = ExportUi(pr, true) }) { r ->
             r.onSuccess { export = ExportUi(1f, false, it) }.onFailure { export = ExportUi(0f, false, null, it.message ?: "Export failed") }
