@@ -101,31 +101,31 @@ void main() {
   float sg = uIn > 0.5 ? -1.0 : 1.0;
   float asp = uRes.x / uRes.y;
   int m = int(uMode + 0.5);
-  vec3 c = vec3(0.0);
+  vec3 c = tex(uv);
   if (m == 0) { c = tex(uv); }
-  else if (m == 1) { c = tex(uv) * (1.0 - e); }
-  else if (m == 2) { c = mix(tex(uv), vec3(1.0), e * e); }
-  else if (m == 3) {
+  if (m == 1) { c = tex(uv) * (1.0 - e); }
+  if (m == 2) { c = mix(tex(uv), vec3(1.0), e * e); }
+  if (m == 3) {
     vec2 d = uv - 0.5; vec3 s = vec3(0.0);
     for (int i = 0; i < 10; i++) { float k = float(i) / 9.0; s += tex(0.5 + d * (1.0 - e * 0.55 * k)); }
     c = mix(s / 10.0, vec3(1.0), e * e * 0.5);
   }
-  else if (m == 4) {
+  if (m == 4) {
     vec2 d = uv - 0.5; vec3 s = vec3(0.0);
     for (int i = 0; i < 10; i++) { float k = float(i) / 9.0; s += tex(0.5 + d * (1.0 + e * 0.6 * k)); }
     c = s / 10.0 * (1.0 - e * 0.5);
   }
-  else if (m >= 5 && m <= 8) {
+  if (m >= 5 && m <= 8) {
     vec2 dir = m == 5 ? vec2(-1.0, 0.0) : (m == 6 ? vec2(1.0, 0.0) : (m == 7 ? vec2(0.0, 1.0) : vec2(0.0, -1.0)));
     c = blurDir(uv - dir * sg * e * 0.5, dir * e * 0.35);
   }
-  else if (m == 9) {
+  if (m == 9) {
     vec2 p = (uv - 0.5) * vec2(asp, 1.0);
     p = rot(p, sg * e * 2.4) / (1.0 + e * 0.7);
     vec2 u2 = p / vec2(asp, 1.0) + 0.5;
     c = blurDir(u2, rot(vec2(0.05, 0.0), uv.x * 6.0) * e) * (1.0 - e * 0.4);
   }
-  else if (m == 10) {
+  if (m == 10) {
     float by = floor(uv.y * 16.0);
     float r = hash(vec2(by, floor(uTime * 24.0)));
     float on = step(0.55, r) * e;
@@ -134,34 +134,34 @@ void main() {
     c = vec3(tex(uv + off + vec2(sp, 0.0)).r, tex(uv + off).g, tex(uv + off - vec2(sp, 0.0)).b);
     c += step(0.97, hash(uv * uRes * 0.05 + uTime)) * e * 0.5;
   }
-  else if (m == 11) {
+  if (m == 11) {
     vec2 d = vec2(e * 0.06, 0.0);
     c = vec3(tex(uv + d).r, tex(uv).g, tex(uv - d).b);
     c = mix(c, c.gbr * 1.2, e * 0.2) * (1.0 - e * 0.25);
   }
-  else if (m == 12) {
+  if (m == 12) {
     float rr = e * 0.07;
     c = (blurDir(uv, vec2(rr, 0.0)) + blurDir(uv, vec2(0.0, rr * asp))) * 0.5 * (1.0 - e * 0.35);
   }
-  else if (m == 13) {
+  if (m == 13) {
     float blk = mix(1.0, 70.0, e);
     vec2 pu = (floor(uv * uRes / blk) + 0.5) * blk / uRes;
     c = mix(tex(pu), vec3(1.0), e * e * 0.3);
   }
-  else if (m == 14) {
+  if (m == 14) {
     float f = floor(uTime * 30.0);
     vec2 off = vec2(hash(vec2(f, 1.0)) - 0.5, hash(vec2(f, 2.0)) - 0.5) * e * 0.14;
     c = blurDir(uv + off, off * 0.8);
     c = mix(c, vec3(1.0), smoothstep(0.75, 1.0, q) * 0.6);
   }
-  else if (m == 15) {
+  if (m == 15) {
     vec2 p = (uv - 0.5) * vec2(asp, 1.0);
     float r = length(p);
     float a = sg * e * 5.0 * clamp(1.0 - r / 0.8, 0.0, 1.0);
     p = rot(p, a);
     c = tex(p / vec2(asp, 1.0) + 0.5) * (1.0 - e * 0.5);
   }
-  else if (m == 16) {
+  if (m == 16) {
     vec2 d = (uv - 0.5) * vec2(asp, 1.0);
     float a = atan(d.y, d.x), r = length(d);
     float seg = 6.28318 / 6.0;
@@ -170,34 +170,34 @@ void main() {
     vec2 u2 = mix(d, k, e) / vec2(asp, 1.0) + 0.5;
     c = tex(u2) * (1.0 - e * 0.3);
   }
-  else if (m == 17) {
+  if (m == 17) {
     c = tex(uv);
     float n = 0.5 + 0.5 * sin(uv.y * 5.0 + uTime * 6.0) * sin(uv.x * 3.0 - uTime * 4.0);
     c += vec3(1.0, 0.42, 0.08) * e * (0.6 + n) * 1.3;
     c = mix(c, vec3(1.0, 0.85, 0.6), e * e);
   }
-  else if (m == 18) {
+  if (m == 18) {
     vec2 p = (uv - 0.5) * vec2(asp, 1.0);
     float rad = (1.0 - e) * (asp > 1.0 ? 1.2 : 0.95 * 1.25);
     float mk = smoothstep(rad, rad - 0.03, length(p));
     c = tex(uv) * mk;
   }
-  else if (m == 19) {
+  if (m == 19) {
     vec2 u2 = uv - vec2(-1.0, 0.0) * sg * e;
     c = (u2.x >= 0.0 && u2.x <= 1.0) ? texture2D(uTexSampler, u2).rgb : vec3(0.0);
   }
-  else if (m == 20) {
+  if (m == 20) {
     c = tex(uv);
     float band = 0.5 + 0.5 * sin(uv.x * 2.5 + uv.y * 1.5 + uTime * 2.0);
     vec3 leak = mix(vec3(1.0, 0.35, 0.1), vec3(1.0, 0.8, 0.4), band);
     c += leak * e * (0.5 + 0.5 * (1.0 - uv.y)) * 1.1;
   }
-  else if (m == 21) {
+  if (m == 21) {
     vec2 u2 = vec2(uv.x, 0.5 + (uv.y - 0.5) * (1.0 + e * 1.4));
     c = tex(u2) * (1.0 - e * 0.55);
     c = mix(c, vec3(1.0), smoothstep(0.85, 1.0, q) * 0.4);
   }
-  else if (m >= 22 && m <= 28) {
+  if (m >= 22 && m <= 28) {
     float pos = uv.x;
     if (m == 23) pos = 1.0 - uv.x;
     else if (m == 24) pos = 1.0 - uv.y;
@@ -207,7 +207,7 @@ void main() {
     else if (m == 28) pos = abs(uv.x - 0.5) * 2.0;
     c = tex(uv) * wv(pos, e);
   }
-  else if (m == 29) {
+  if (m == 29) {
     float band = step(0.88, hash(vec2(floor(uv.y * 36.0), floor(uTime * 12.0))));
     vec2 off = vec2((hash(vec2(floor(uv.y * 120.0), floor(uTime * 20.0))) - 0.5) * 0.06 * e * (0.4 + band * 2.0), 0.0);
     float sp = 0.012 * e;
@@ -215,35 +215,34 @@ void main() {
     c += (hash(uv * uRes + uTime) - 0.5) * 0.35 * e;
     c = mix(c, vec3(dot(c, vec3(0.33))), e * 0.4) * (1.0 - 0.45 * e);
   }
-  else if (m == 30) {
+  if (m == 30) {
     float v = (uv.y - 0.5) / max(1.0 - e, 0.015) + 0.5;
     if (v < 0.0 || v > 1.0) c = vec3(0.0);
     else c = tex(vec2(uv.x, v)) * (1.0 + e * e * 1.6) + vec3(e * e * 0.4);
   }
-  else if (m == 31) {
+  if (m == 31) {
     c = blurDir(uv, vec2(e * 0.22, 0.0));
     float streak = exp(-abs(uv.y - 0.5) * 16.0);
     c += vec3(0.45, 0.7, 1.0) * streak * e * 1.5;
     c *= 1.0 - 0.2 * e;
   }
-  else if (m == 32) {
+  if (m == 32) {
     vec2 d = (uv - 0.5) * vec2(asp, 1.0);
     float r = length(d);
     vec2 off = normalize(d + vec2(0.00001)) * sin(r * 42.0 - uTime * 10.0) * 0.022 * e;
     c = tex(uv + off / vec2(asp, 1.0)) * (1.0 - e * 0.4);
   }
-  else if (m == 33) {
+  if (m == 33) {
     vec2 d = uv - 0.5;
     float r = length(d);
     float f = 1.0 - e * 1.3 * (0.7 - min(r, 0.7));
     c = tex(0.5 + d * f) * (1.0 - e * 0.45);
   }
-  else if (m == 34) {
+  if (m == 34) {
     float rr = e * 0.08;
     c = (blurDir(uv, vec2(rr, 0.0)) + blurDir(uv, vec2(0.0, rr * asp))) * 0.5;
     c = c * (1.0 + e * 1.2) + vec3(e * e * 0.5);
   }
-  else { c = tex(uv); }
   gl_FragColor = vec4(clamp(c, 0.0, 1.0), 1.0);
 }
 """
