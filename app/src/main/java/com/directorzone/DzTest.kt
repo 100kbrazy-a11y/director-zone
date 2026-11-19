@@ -37,7 +37,7 @@ object DzTest {
 
     private fun median(bmp: Bitmap): Rgb {
         val rs = ArrayList<Int>(); val gs = ArrayList<Int>(); val bs = ArrayList<Int>()
-        for (y in 4 until bmp.height step maxOf(1, bmp.height / 36)) for (x in 4 until bmp.width step maxOf(1, bmp.width / 36)) {
+        for (y in (bmp.height * 0.42f).toInt() until (bmp.height * 0.58f).toInt() step maxOf(1, bmp.height / 120)) for (x in 4 until bmp.width step maxOf(1, bmp.width / 36)) {
             val p = bmp.getPixel(x, y); rs.add((p shr 16) and 255); gs.add((p shr 8) and 255); bs.add(p and 255)
         }
         rs.sort(); gs.sort(); bs.sort(); val m = rs.size / 2
@@ -46,7 +46,7 @@ object DzTest {
 
     private var lastBarSec = -1f
     private fun barSec(b: Bitmap): Float {
-        val y = (b.height * 0.935f).toInt().coerceIn(0, b.height - 1); var white = 0; var vid = 0
+        val vh = b.width * 9f / 16f; val y = (b.height / 2f + 0.44f * vh).toInt().coerceIn(0, b.height - 1); var white = 0; var vid = 0
         for (x in 0 until b.width step 2) { val c = b.getPixel(x, y); val r = (c shr 16) and 255; val g = (c shr 8) and 255; val bl = c and 255
             if (r + g + bl > 60) vid++; if (r > 230 && g > 230 && bl > 230) white++ }
         return if (vid == 0) -1f else 5f * white / vid
