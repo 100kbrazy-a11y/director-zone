@@ -123,6 +123,18 @@ object DzTest {
         val first = grab(vm, "00_initial", out)
         check("T0 initial frame shows clip A", first != null && isRed(first), "$first")
 
+        // baseline: how fast does the emulator render video at all? (single clip, no audio) vs the full project
+        suspend fun rate(label: String, pr: Project) {
+            vm.openProject(pr); settle(vm); val t0 = System.currentTimeMillis(); vm.seek(0); delay(600); vm.engine.play()
+            val w0 = System.currentTimeMillis()
+            while (System.currentTimeMillis() - w0 < 4500) { delay(550); val c = grab(vm, "rate", out, false); log("RATE $label wall=${System.currentTimeMillis() - w0} tl=${vm.engine.timelineMs} videoSec=$lastBarSec") }
+            vm.engine.pause(); delay(300)
+        }
+        rate("single-A-noaudio", Project(name = "r1", ratio = "16:9", clips = listOf(a), autoSfx = false))
+        rate("ABC-noaudio", Project(name = "r2", ratio = "16:9", clips = listOf(a, b, c), autoSfx = false))
+        vm.openProject(Project(name = "DZ test", ratio = "16:9", clips = listOf(a, b, c), sounds = listOf(tone), autoSfx = false)); settle(vm)
+        vm.seek(0); delay(800)
+
         // T1 play A -> B -> C
         vm.engine.play()
         val t0 = System.currentTimeMillis()

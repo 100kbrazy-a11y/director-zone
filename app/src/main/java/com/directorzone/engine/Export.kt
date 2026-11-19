@@ -28,6 +28,7 @@ class Exporter(private val ctx: Context) {
         val t = Transformer.Builder(ctx)
             .setVideoMimeType(if (o.hevc) MimeTypes.VIDEO_H265 else MimeTypes.VIDEO_H264)
             .setAudioMimeType(MimeTypes.AUDIO_AAC)
+            .setMaxDelayBetweenMuxerSamplesMs(90_000)
             .setEncoderFactory(enc)
             .addListener(object : Transformer.Listener {
                 override fun onCompleted(composition: Composition, exportResult: ExportResult) {

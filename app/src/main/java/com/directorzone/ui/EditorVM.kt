@@ -235,13 +235,16 @@ class EditorVM(app: Application) : AndroidViewModel(app) {
     // ---------- export
     fun startExport() {
         if (project.clips.isEmpty()) return
-        engine.pause()
+        val resumeAt = engine.timelineMs
+        // free the preview decoders/GL while the encoder runs (low-end devices have few codec instances)
+        engine.release()
         export = ExportUi(0f, true)
         exporter.export(project, exportOpts, { pr -> export = ExportUi(pr, true) }) { r ->
             r.onSuccess { export = ExportUi(1f, false, it) }.onFailure { export = ExportUi(0f, false, null, it.message ?: "Export failed") }
+            engine.load(project, 0); engine.seek(resumeAt)
         }
     }
-    fun cancelExport() { exporter.cancel(); export = ExportUi() }
+    fun cancelExport() { exporter.cancel(); export = ExportUi(); engine.load(project, 0) }
     fun saveExport() {
         val f = export.file ?: return
         viewModelScope.launch { val u = withContext(Dispatchers.IO) { Exporter.saveToGallery(ctx, f) }; toast = if (u != null) "Saved to Movies/Director Zone" else "Couldn't save" }
